@@ -17,6 +17,11 @@ import (
 	"unicode/utf8"
 )
 
+const (
+	defaultReps  = 8
+	repThreshold = 20
+)
+
 func toIfaceSlice(v any) []any {
 	if v == nil {
 		return nil
@@ -38,27 +43,80 @@ func titleCase(s string) string {
 	return strings.Join(words, " ")
 }
 
+func toInt(s string) int {
+	n, _ := strconv.Atoi(s)
+	return n
+}
+
+func isWeight(n int) bool {
+	return n > repThreshold
+}
+
+type token struct {
+	kind  string // "reps", "weight", "note"
+	value int
+	text  string
+}
+
+func buildSets(tokens []token) []Set {
+	var sets []Set
+	var pendingReps []int
+	var lastWeight int
+
+	for _, tok := range tokens {
+		switch tok.kind {
+		case "weight":
+			if len(pendingReps) > 0 {
+				// Apply all pending reps to this weight
+				for _, r := range pendingReps {
+					sets = append(sets, Set{Reps: r, Weight: tok.value})
+				}
+				pendingReps = nil
+			} else {
+				// No pending reps, use default
+				sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
+			}
+			lastWeight = tok.value
+		case "reps":
+			pendingReps = append(pendingReps, tok.value)
+		case "note":
+			if len(sets) > 0 {
+				sets[len(sets)-1].Note = strings.TrimSpace(tok.text)
+			}
+		}
+	}
+
+	// Handle trailing reps (inherit last weight)
+	for _, r := range pendingReps {
+		if lastWeight > 0 {
+			sets = append(sets, Set{Reps: r, Weight: lastWeight})
+		}
+	}
+
+	return sets
+}
+
 var g = &grammar{
 	rules: []*rule{
 		{
 			name: "Input",
-			pos:  position{line: 30, col: 1, offset: 394},
+			pos:  position{line: 89, col: 1, offset: 1524},
 			expr: &actionExpr{
-				pos: position{line: 30, col: 10, offset: 403},
+				pos: position{line: 89, col: 10, offset: 1533},
 				run: (*parser).callonInput1,
 				expr: &seqExpr{
-					pos: position{line: 30, col: 10, offset: 403},
+					pos: position{line: 89, col: 10, offset: 1533},
 					exprs: []any{
 						&labeledExpr{
-							pos:   position{line: 30, col: 10, offset: 403},
+							pos:   position{line: 89, col: 10, offset: 1533},
 							label: "exercises",
 							expr: &ruleRefExpr{
-								pos:  position{line: 30, col: 20, offset: 413},
+								pos:  position{line: 89, col: 20, offset: 1543},
 								name: "ExerciseList",
 							},
 						},
 						&ruleRefExpr{
-							pos:  position{line: 30, col: 33, offset: 426},
+							pos:  position{line: 89, col: 33, offset: 1556},
 							name: "EOF",
 						},
 					},
@@ -67,35 +125,35 @@ var g = &grammar{
 		},
 		{
 			name: "ExerciseList",
-			pos:  position{line: 34, col: 1, offset: 458},
+			pos:  position{line: 93, col: 1, offset: 1588},
 			expr: &actionExpr{
-				pos: position{line: 34, col: 17, offset: 474},
+				pos: position{line: 93, col: 17, offset: 1604},
 				run: (*parser).callonExerciseList1,
 				expr: &seqExpr{
-					pos: position{line: 34, col: 17, offset: 474},
+					pos: position{line: 93, col: 17, offset: 1604},
 					exprs: []any{
 						&labeledExpr{
-							pos:   position{line: 34, col: 17, offset: 474},
+							pos:   position{line: 93, col: 17, offset: 1604},
 							label: "first",
 							expr: &ruleRefExpr{
-								pos:  position{line: 34, col: 23, offset: 480},
+								pos:  position{line: 93, col: 23, offset: 1610},
 								name: "Exercise",
 							},
 						},
 						&labeledExpr{
-							pos:   position{line: 34, col: 32, offset: 489},
+							pos:   position{line: 93, col: 32, offset: 1619},
 							label: "rest",
 							expr: &zeroOrMoreExpr{
-								pos: position{line: 34, col: 37, offset: 494},
+								pos: position{line: 93, col: 37, offset: 1624},
 								expr: &seqExpr{
-									pos: position{line: 34, col: 38, offset: 495},
+									pos: position{line: 93, col: 38, offset: 1625},
 									exprs: []any{
 										&ruleRefExpr{
-											pos:  position{line: 34, col: 38, offset: 495},
+											pos:  position{line: 93, col: 38, offset: 1625},
 											name: "Delimiter",
 										},
 										&ruleRefExpr{
-											pos:  position{line: 34, col: 48, offset: 505},
+											pos:  position{line: 93, col: 48, offset: 1635},
 											name: "Exercise",
 										},
 									},
@@ -108,11 +166,11 @@ var g = &grammar{
 		},
 		{
 			name: "Delimiter",
-			pos:  position{line: 43, col: 1, offset: 708},
+			pos:  position{line: 102, col: 1, offset: 1838},
 			expr: &oneOrMoreExpr{
-				pos: position{line: 43, col: 14, offset: 721},
+				pos: position{line: 102, col: 14, offset: 1851},
 				expr: &charClassMatcher{
-					pos:        position{line: 43, col: 14, offset: 721},
+					pos:        position{line: 102, col: 14, offset: 1851},
 					val:        "[.\\n]",
 					chars:      []rune{'.', '\n'},
 					ignoreCase: false,
@@ -122,38 +180,38 @@ var g = &grammar{
 		},
 		{
 			name: "Exercise",
-			pos:  position{line: 45, col: 1, offset: 729},
+			pos:  position{line: 104, col: 1, offset: 1859},
 			expr: &actionExpr{
-				pos: position{line: 45, col: 13, offset: 741},
+				pos: position{line: 104, col: 13, offset: 1871},
 				run: (*parser).callonExercise1,
 				expr: &seqExpr{
-					pos: position{line: 45, col: 13, offset: 741},
+					pos: position{line: 104, col: 13, offset: 1871},
 					exprs: []any{
 						&ruleRefExpr{
-							pos:  position{line: 45, col: 13, offset: 741},
+							pos:  position{line: 104, col: 13, offset: 1871},
 							name: "_",
 						},
 						&labeledExpr{
-							pos:   position{line: 45, col: 15, offset: 743},
+							pos:   position{line: 104, col: 15, offset: 1873},
 							label: "name",
 							expr: &ruleRefExpr{
-								pos:  position{line: 45, col: 20, offset: 748},
+								pos:  position{line: 104, col: 20, offset: 1878},
 								name: "ExerciseName",
 							},
 						},
 						&labeledExpr{
-							pos:   position{line: 45, col: 33, offset: 761},
-							label: "data",
+							pos:   position{line: 104, col: 33, offset: 1891},
+							label: "tokens",
 							expr: &zeroOrMoreExpr{
-								pos: position{line: 45, col: 38, offset: 766},
+								pos: position{line: 104, col: 40, offset: 1898},
 								expr: &ruleRefExpr{
-									pos:  position{line: 45, col: 38, offset: 766},
-									name: "SetData",
+									pos:  position{line: 104, col: 40, offset: 1898},
+									name: "Token",
 								},
 							},
 						},
 						&ruleRefExpr{
-							pos:  position{line: 45, col: 47, offset: 775},
+							pos:  position{line: 104, col: 47, offset: 1905},
 							name: "_",
 						},
 					},
@@ -162,34 +220,34 @@ var g = &grammar{
 		},
 		{
 			name: "ExerciseName",
-			pos:  position{line: 51, col: 1, offset: 875},
+			pos:  position{line: 115, col: 1, offset: 2121},
 			expr: &actionExpr{
-				pos: position{line: 51, col: 17, offset: 891},
+				pos: position{line: 115, col: 17, offset: 2137},
 				run: (*parser).callonExerciseName1,
 				expr: &labeledExpr{
-					pos:   position{line: 51, col: 17, offset: 891},
+					pos:   position{line: 115, col: 17, offset: 2137},
 					label: "chars",
 					expr: &oneOrMoreExpr{
-						pos: position{line: 51, col: 23, offset: 897},
+						pos: position{line: 115, col: 23, offset: 2143},
 						expr: &seqExpr{
-							pos: position{line: 51, col: 24, offset: 898},
+							pos: position{line: 115, col: 24, offset: 2144},
 							exprs: []any{
 								&notExpr{
-									pos: position{line: 51, col: 24, offset: 898},
+									pos: position{line: 115, col: 24, offset: 2144},
 									expr: &ruleRefExpr{
-										pos:  position{line: 51, col: 25, offset: 899},
+										pos:  position{line: 115, col: 25, offset: 2145},
 										name: "Digit",
 									},
 								},
 								&notExpr{
-									pos: position{line: 51, col: 31, offset: 905},
+									pos: position{line: 115, col: 31, offset: 2151},
 									expr: &ruleRefExpr{
-										pos:  position{line: 51, col: 32, offset: 906},
+										pos:  position{line: 115, col: 32, offset: 2152},
 										name: "Delimiter",
 									},
 								},
 								&anyMatcher{
-									line: 51, col: 42, offset: 916,
+									line: 115, col: 42, offset: 2162,
 								},
 							},
 						},
@@ -198,28 +256,32 @@ var g = &grammar{
 			},
 		},
 		{
-			name: "SetData",
-			pos:  position{line: 59, col: 1, offset: 1072},
+			name: "Token",
+			pos:  position{line: 123, col: 1, offset: 2318},
 			expr: &actionExpr{
-				pos: position{line: 59, col: 12, offset: 1083},
-				run: (*parser).callonSetData1,
+				pos: position{line: 123, col: 10, offset: 2327},
+				run: (*parser).callonToken1,
 				expr: &seqExpr{
-					pos: position{line: 59, col: 12, offset: 1083},
+					pos: position{line: 123, col: 10, offset: 2327},
 					exprs: []any{
 						&ruleRefExpr{
-							pos:  position{line: 59, col: 12, offset: 1083},
+							pos:  position{line: 123, col: 10, offset: 2327},
 							name: "_",
 						},
-						&choiceExpr{
-							pos: position{line: 59, col: 15, offset: 1086},
-							alternatives: []any{
-								&ruleRefExpr{
-									pos:  position{line: 59, col: 15, offset: 1086},
-									name: "Number",
-								},
-								&ruleRefExpr{
-									pos:  position{line: 59, col: 24, offset: 1095},
-									name: "NoteText",
+						&labeledExpr{
+							pos:   position{line: 123, col: 12, offset: 2329},
+							label: "t",
+							expr: &choiceExpr{
+								pos: position{line: 123, col: 15, offset: 2332},
+								alternatives: []any{
+									&ruleRefExpr{
+										pos:  position{line: 123, col: 15, offset: 2332},
+										name: "Number",
+									},
+									&ruleRefExpr{
+										pos:  position{line: 123, col: 24, offset: 2341},
+										name: "NoteText",
+									},
 								},
 							},
 						},
@@ -229,28 +291,36 @@ var g = &grammar{
 		},
 		{
 			name: "NoteText",
-			pos:  position{line: 63, col: 1, offset: 1127},
-			expr: &oneOrMoreExpr{
-				pos: position{line: 63, col: 13, offset: 1139},
-				expr: &seqExpr{
-					pos: position{line: 63, col: 14, offset: 1140},
-					exprs: []any{
-						&notExpr{
-							pos: position{line: 63, col: 14, offset: 1140},
-							expr: &ruleRefExpr{
-								pos:  position{line: 63, col: 15, offset: 1141},
-								name: "Digit",
+			pos:  position{line: 127, col: 1, offset: 2371},
+			expr: &actionExpr{
+				pos: position{line: 127, col: 13, offset: 2383},
+				run: (*parser).callonNoteText1,
+				expr: &labeledExpr{
+					pos:   position{line: 127, col: 13, offset: 2383},
+					label: "chars",
+					expr: &oneOrMoreExpr{
+						pos: position{line: 127, col: 19, offset: 2389},
+						expr: &seqExpr{
+							pos: position{line: 127, col: 20, offset: 2390},
+							exprs: []any{
+								&notExpr{
+									pos: position{line: 127, col: 20, offset: 2390},
+									expr: &ruleRefExpr{
+										pos:  position{line: 127, col: 21, offset: 2391},
+										name: "Digit",
+									},
+								},
+								&notExpr{
+									pos: position{line: 127, col: 27, offset: 2397},
+									expr: &ruleRefExpr{
+										pos:  position{line: 127, col: 28, offset: 2398},
+										name: "Delimiter",
+									},
+								},
+								&anyMatcher{
+									line: 127, col: 38, offset: 2408,
+								},
 							},
-						},
-						&notExpr{
-							pos: position{line: 63, col: 21, offset: 1147},
-							expr: &ruleRefExpr{
-								pos:  position{line: 63, col: 22, offset: 1148},
-								name: "Delimiter",
-							},
-						},
-						&anyMatcher{
-							line: 63, col: 32, offset: 1158,
 						},
 					},
 				},
@@ -258,24 +328,28 @@ var g = &grammar{
 		},
 		{
 			name: "Number",
-			pos:  position{line: 65, col: 1, offset: 1163},
+			pos:  position{line: 136, col: 1, offset: 2605},
 			expr: &actionExpr{
-				pos: position{line: 65, col: 11, offset: 1173},
+				pos: position{line: 136, col: 11, offset: 2615},
 				run: (*parser).callonNumber1,
-				expr: &oneOrMoreExpr{
-					pos: position{line: 65, col: 11, offset: 1173},
-					expr: &ruleRefExpr{
-						pos:  position{line: 65, col: 11, offset: 1173},
-						name: "Digit",
+				expr: &labeledExpr{
+					pos:   position{line: 136, col: 11, offset: 2615},
+					label: "digits",
+					expr: &oneOrMoreExpr{
+						pos: position{line: 136, col: 18, offset: 2622},
+						expr: &ruleRefExpr{
+							pos:  position{line: 136, col: 18, offset: 2622},
+							name: "Digit",
+						},
 					},
 				},
 			},
 		},
 		{
 			name: "Digit",
-			pos:  position{line: 69, col: 1, offset: 1213},
+			pos:  position{line: 145, col: 1, offset: 2780},
 			expr: &charClassMatcher{
-				pos:        position{line: 69, col: 10, offset: 1222},
+				pos:        position{line: 145, col: 10, offset: 2789},
 				val:        "[0-9]",
 				ranges:     []rune{'0', '9'},
 				ignoreCase: false,
@@ -284,11 +358,11 @@ var g = &grammar{
 		},
 		{
 			name: "_",
-			pos:  position{line: 71, col: 1, offset: 1229},
+			pos:  position{line: 147, col: 1, offset: 2796},
 			expr: &zeroOrMoreExpr{
-				pos: position{line: 71, col: 6, offset: 1234},
+				pos: position{line: 147, col: 6, offset: 2801},
 				expr: &charClassMatcher{
-					pos:        position{line: 71, col: 6, offset: 1234},
+					pos:        position{line: 147, col: 6, offset: 2801},
 					val:        "[ \\t]",
 					chars:      []rune{' ', '\t'},
 					ignoreCase: false,
@@ -298,11 +372,11 @@ var g = &grammar{
 		},
 		{
 			name: "EOF",
-			pos:  position{line: 73, col: 1, offset: 1242},
+			pos:  position{line: 149, col: 1, offset: 2809},
 			expr: &notExpr{
-				pos: position{line: 73, col: 8, offset: 1249},
+				pos: position{line: 149, col: 8, offset: 2816},
 				expr: &anyMatcher{
-					line: 73, col: 9, offset: 1250,
+					line: 149, col: 9, offset: 2817,
 				},
 			},
 		},
@@ -334,16 +408,21 @@ func (p *parser) callonExerciseList1() (any, error) {
 	return p.cur.onExerciseList1(stack["first"], stack["rest"])
 }
 
-func (c *current) onExercise1(name, data any) (any, error) {
-	ex := Exercise{Name: titleCase(name.(string))}
-	// For now, ignore set data
-	return ex, nil
+func (c *current) onExercise1(name, tokens any) (any, error) {
+	toks := []token{}
+	for _, t := range toIfaceSlice(tokens) {
+		if t != nil {
+			toks = append(toks, t.(token))
+		}
+	}
+	sets := buildSets(toks)
+	return Exercise{Name: titleCase(name.(string)), Sets: sets}, nil
 }
 
 func (p *parser) callonExercise1() (any, error) {
 	stack := p.vstack[len(p.vstack)-1]
 	_ = stack
-	return p.cur.onExercise1(stack["name"], stack["data"])
+	return p.cur.onExercise1(stack["name"], stack["tokens"])
 }
 
 func (c *current) onExerciseName1(chars any) (any, error) {
@@ -360,24 +439,44 @@ func (p *parser) callonExerciseName1() (any, error) {
 	return p.cur.onExerciseName1(stack["chars"])
 }
 
-func (c *current) onSetData1() (any, error) {
-	return nil, nil
+func (c *current) onToken1(t any) (any, error) {
+	return t, nil
 }
 
-func (p *parser) callonSetData1() (any, error) {
+func (p *parser) callonToken1() (any, error) {
 	stack := p.vstack[len(p.vstack)-1]
 	_ = stack
-	return p.cur.onSetData1()
+	return p.cur.onToken1(stack["t"])
 }
 
-func (c *current) onNumber1() (any, error) {
-	return string(c.text), nil
+func (c *current) onNoteText1(chars any) (any, error) {
+	var sb strings.Builder
+	for _, c := range toIfaceSlice(chars) {
+		sb.WriteString(string(toIfaceSlice(c)[2].([]byte)))
+	}
+	text := sb.String()
+	return token{kind: "note", text: text}, nil
+}
+
+func (p *parser) callonNoteText1() (any, error) {
+	stack := p.vstack[len(p.vstack)-1]
+	_ = stack
+	return p.cur.onNoteText1(stack["chars"])
+}
+
+func (c *current) onNumber1(digits any) (any, error) {
+	s := string(c.text)
+	n := toInt(s)
+	if isWeight(n) {
+		return token{kind: "weight", value: n}, nil
+	}
+	return token{kind: "reps", value: n}, nil
 }
 
 func (p *parser) callonNumber1() (any, error) {
 	stack := p.vstack[len(p.vstack)-1]
 	_ = stack
-	return p.cur.onNumber1()
+	return p.cur.onNumber1(stack["digits"])
 }
 
 var (

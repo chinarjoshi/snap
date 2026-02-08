@@ -2,7 +2,13 @@
 package parser
 
 import (
+	"strconv"
 	"strings"
+)
+
+const (
+	defaultReps = 8
+	repThreshold = 20
 )
 
 func toIfaceSlice(v any) []any {
@@ -25,6 +31,59 @@ func titleCase(s string) string {
 	}
 	return strings.Join(words, " ")
 }
+
+func toInt(s string) int {
+	n, _ := strconv.Atoi(s)
+	return n
+}
+
+func isWeight(n int) bool {
+	return n > repThreshold
+}
+
+type token struct {
+	kind  string // "reps", "weight", "note"
+	value int
+	text  string
+}
+
+func buildSets(tokens []token) []Set {
+	var sets []Set
+	var pendingReps []int
+	var lastWeight int
+
+	for _, tok := range tokens {
+		switch tok.kind {
+		case "weight":
+			if len(pendingReps) > 0 {
+				// Apply all pending reps to this weight
+				for _, r := range pendingReps {
+					sets = append(sets, Set{Reps: r, Weight: tok.value})
+				}
+				pendingReps = nil
+			} else {
+				// No pending reps, use default
+				sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
+			}
+			lastWeight = tok.value
+		case "reps":
+			pendingReps = append(pendingReps, tok.value)
+		case "note":
+			if len(sets) > 0 {
+				sets[len(sets)-1].Note = strings.TrimSpace(tok.text)
+			}
+		}
+	}
+
+	// Handle trailing reps (inherit last weight)
+	for _, r := range pendingReps {
+		if lastWeight > 0 {
+			sets = append(sets, Set{Reps: r, Weight: lastWeight})
+		}
+	}
+
+	return sets
+}
 }
 
 Input <- exercises:ExerciseList EOF {
@@ -42,10 +101,15 @@ ExerciseList <- first:Exercise rest:(Delimiter Exercise)* {
 
 Delimiter <- [.\n]+
 
-Exercise <- _ name:ExerciseName data:SetData* _ {
-	ex := Exercise{Name: titleCase(name.(string))}
-	// For now, ignore set data
-	return ex, nil
+Exercise <- _ name:ExerciseName tokens:Token* _ {
+	toks := []token{}
+	for _, t := range toIfaceSlice(tokens) {
+		if t != nil {
+			toks = append(toks, t.(token))
+		}
+	}
+	sets := buildSets(toks)
+	return Exercise{Name: titleCase(name.(string)), Sets: sets}, nil
 }
 
 ExerciseName <- chars:(!Digit !Delimiter .)+ {
@@ -56,14 +120,26 @@ ExerciseName <- chars:(!Digit !Delimiter .)+ {
 	return sb.String(), nil
 }
 
-SetData <- _ (Number / NoteText) {
-	return nil, nil
+Token <- _ t:(Number / NoteText) {
+	return t, nil
 }
 
-NoteText <- (!Digit !Delimiter .)+
+NoteText <- chars:(!Digit !Delimiter .)+ {
+	var sb strings.Builder
+	for _, c := range toIfaceSlice(chars) {
+		sb.WriteString(string(toIfaceSlice(c)[2].([]byte)))
+	}
+	text := sb.String()
+	return token{kind: "note", text: text}, nil
+}
 
-Number <- Digit+ {
-	return string(c.text), nil
+Number <- digits:Digit+ {
+	s := string(c.text)
+	n := toInt(s)
+	if isWeight(n) {
+		return token{kind: "weight", value: n}, nil
+	}
+	return token{kind: "reps", value: n}, nil
 }
 
 Digit <- [0-9]
