@@ -53,6 +53,12 @@ type multiplierToken struct {
 	weight int // 0 if not specified
 }
 
+type byToken struct {
+	sets   int
+	reps   int
+	weight int
+}
+
 func buildSets(tokens []any) []Set {
 	var sets []Set
 	var pendingReps []int
@@ -60,6 +66,11 @@ func buildSets(tokens []any) []Set {
 
 	for _, t := range tokens {
 		switch tok := t.(type) {
+		case byToken:
+			for i := 0; i < tok.sets; i++ {
+				sets = append(sets, Set{Reps: tok.reps, Weight: tok.weight})
+			}
+			lastWeight = tok.weight
 		case multiplierToken:
 			if tok.weight > 0 {
 				// Full multiplier: 3x8x135
@@ -139,7 +150,7 @@ ExerciseName <- chars:(!Digit !Delimiter .)+ {
 	return sb.String(), nil
 }
 
-Token <- _ t:(Multiplier / Number / NoteText) {
+Token <- _ t:(ByExpression / Multiplier / Number / NoteText) {
 	return t, nil
 }
 
@@ -150,6 +161,21 @@ NoteText <- chars:(!Digit !Delimiter .)+ {
 	}
 	text := sb.String()
 	return token{kind: "note", text: text}, nil
+}
+
+ByExpression <- first:Digits _ "by"i _ second:Digits third:(_ "by"i _ Digits)? {
+	f := toInt(first.(string))
+	s := toInt(second.(string))
+
+	if third != nil {
+		// S by R by W format
+		parts := toIfaceSlice(third)
+		w := toInt(parts[3].(string))
+		return byToken{sets: f, reps: s, weight: w}, nil
+	}
+
+	// R by W format (default 3 sets)
+	return byToken{sets: 3, reps: f, weight: s}, nil
 }
 
 Multiplier <- sets:Digits [xX] reps:Digits weight:([xX] Digits)? {
