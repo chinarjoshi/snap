@@ -91,3 +91,31 @@ func TestParseMultipleRepsOneWeight(t *testing.T) {
 		}
 	}
 }
+
+func TestParseTrailingReps(t *testing.T) {
+	input := "leg press 8 315 7 250 7"
+	got, err := Parse("test", []byte(input))
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
+
+	log := got.(*WorkoutLog)
+	ex := log.Exercises[0]
+
+	expected := []Set{
+		{Reps: 8, Weight: 315},
+		{Reps: 7, Weight: 250},
+		{Reps: 7, Weight: 250},
+	}
+
+	if len(ex.Sets) != len(expected) {
+		t.Fatalf("expected %d sets, got %d", len(expected), len(ex.Sets))
+	}
+
+	for i, want := range expected {
+		got := ex.Sets[i]
+		if got.Reps != want.Reps || got.Weight != want.Weight {
+			t.Errorf("set %d: expected %d@%d, got %d@%d", i, want.Reps, want.Weight, got.Reps, got.Weight)
+		}
+	}
+}
