@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
-	"github.com/chijoshi/workoutliner/parser"
 )
 
 const (
@@ -16,7 +15,7 @@ const (
 
 type ParseResult struct {
 	ProseLines []string
-	Exercises  []parser.Exercise
+	Exercises  []Exercise
 }
 
 func (r *ParseResult) HasExercises() bool {
@@ -45,7 +44,7 @@ func (v *ParagraphASTVisitor) VisitParagraph(ctx *ParagraphContext) interface{} 
 		switch lr := lineResult.(type) {
 		case string:
 			result.ProseLines = append(result.ProseLines, lr)
-		case parser.Exercise:
+		case Exercise:
 			if len(lr.Sets) > 0 {
 				result.Exercises = append(result.Exercises, lr)
 			} else {
@@ -72,7 +71,7 @@ func (v *ParagraphASTVisitor) VisitExerciseLine(ctx *ExerciseLineContext) interf
 	name := v.extractName(words, numericToken)
 	sets := v.buildSetsFromExercise(numericToken, tokens)
 
-	return parser.Exercise{Name: name, Sets: sets}
+	return Exercise{Name: name, Sets: sets}
 }
 
 func (v *ParagraphASTVisitor) VisitProseLine(ctx *ProseLineContext) interface{} {
@@ -94,7 +93,7 @@ func (v *ParagraphASTVisitor) extractName(words []antlr.TerminalNode, numericTok
 	return titleCase(strings.Join(nameWords, " "))
 }
 
-func (v *ParagraphASTVisitor) buildSetsFromExercise(numericToken INumericTokenContext, tokens []ITokenContext) []parser.Set {
+func (v *ParagraphASTVisitor) buildSetsFromExercise(numericToken INumericTokenContext, tokens []ITokenContext) []Set {
 	var allTokenResults []tokenResult
 
 	numResult := v.Visit(numericToken)
@@ -114,7 +113,7 @@ func (v *ParagraphASTVisitor) buildSetsFromExercise(numericToken INumericTokenCo
 
 type tokenResult struct {
 	kind        string
-	sets        []parser.Set
+	sets        []Set
 	value       int
 	text        string
 	pendingReps []int
@@ -147,9 +146,9 @@ func (v *ParagraphASTVisitor) VisitTwoPartBy(ctx *TwoPartByContext) interface{} 
 	reps := toInt(ctx.GetReps().GetText())
 	weight := toInt(ctx.GetWeight().GetText())
 
-	sets := make([]parser.Set, defaultSets)
+	sets := make([]Set, defaultSets)
 	for i := range sets {
-		sets[i] = parser.Set{Reps: reps, Weight: weight}
+		sets[i] = Set{Reps: reps, Weight: weight}
 	}
 	return tokenResult{kind: "sets", sets: sets}
 }
@@ -159,9 +158,9 @@ func (v *ParagraphASTVisitor) VisitThreePartBy(ctx *ThreePartByContext) interfac
 	reps := toInt(ctx.GetReps().GetText())
 	weight := toInt(ctx.GetWeight().GetText())
 
-	sets := make([]parser.Set, numSets)
+	sets := make([]Set, numSets)
 	for i := range sets {
-		sets[i] = parser.Set{Reps: reps, Weight: weight}
+		sets[i] = Set{Reps: reps, Weight: weight}
 	}
 	return tokenResult{kind: "sets", sets: sets}
 }
@@ -171,9 +170,9 @@ func (v *ParagraphASTVisitor) VisitFullMultiplier(ctx *FullMultiplierContext) in
 	reps := toInt(ctx.GetReps().GetText())
 	weight := toInt(ctx.GetWeight().GetText())
 
-	sets := make([]parser.Set, numSets)
+	sets := make([]Set, numSets)
 	for i := range sets {
-		sets[i] = parser.Set{Reps: reps, Weight: weight}
+		sets[i] = Set{Reps: reps, Weight: weight}
 	}
 	return tokenResult{kind: "sets", sets: sets}
 }
@@ -205,8 +204,8 @@ func (v *ParagraphASTVisitor) VisitNote(ctx *NoteContext) interface{} {
 	return tokenResult{kind: "note", text: strings.Join(words, " ")}
 }
 
-func (v *ParagraphASTVisitor) buildSetsFromResults(tokenResults []tokenResult) []parser.Set {
-	var sets []parser.Set
+func (v *ParagraphASTVisitor) buildSetsFromResults(tokenResults []tokenResult) []Set {
+	var sets []Set
 	var pendingReps []int
 	var lastWeight int
 
@@ -222,11 +221,11 @@ func (v *ParagraphASTVisitor) buildSetsFromResults(tokenResults []tokenResult) [
 		case "weight":
 			if len(pendingReps) > 0 {
 				for _, r := range pendingReps {
-					sets = append(sets, parser.Set{Reps: r, Weight: tok.value})
+					sets = append(sets, Set{Reps: r, Weight: tok.value})
 				}
 				pendingReps = nil
 			} else {
-				sets = append(sets, parser.Set{Reps: defaultReps, Weight: tok.value})
+				sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
 			}
 			lastWeight = tok.value
 		case "reps":
@@ -240,7 +239,7 @@ func (v *ParagraphASTVisitor) buildSetsFromResults(tokenResults []tokenResult) [
 
 	for _, r := range pendingReps {
 		if lastWeight > 0 {
-			sets = append(sets, parser.Set{Reps: r, Weight: lastWeight})
+			sets = append(sets, Set{Reps: r, Weight: lastWeight})
 		}
 	}
 

@@ -76,7 +76,7 @@ private func formatExercises(_ exercises: [Exercise]) -> String {
     // Header
     var header = "| " + "Exercise".padding(toLength: maxNameLen, withPad: " ", startingAt: 0) + "|"
     for i in 1...maxSets {
-        header += " Set \(i) |"
+        header += " " + String(i).padding(toLength: 5, withPad: " ", startingAt: 0) + " |"
     }
     if hasNotes {
         header += " " + "Notes".padding(toLength: maxNoteLen, withPad: " ", startingAt: 0) + "|"

@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/chijoshi/workoutliner/parser"
+	"github.com/chijoshi/workoutliner/paragraph"
 )
 
-func Format(log *parser.WorkoutLog) string {
-	return FormatExercises(log.Exercises)
-}
-
-func FormatExercises(exercises []parser.Exercise) string {
+func FormatExercises(exercises []paragraph.Exercise) string {
 	if len(exercises) == 0 {
 		return ""
 	}
@@ -31,7 +27,7 @@ func FormatExercises(exercises []parser.Exercise) string {
 	sb.WriteString(padRight("Exercise", maxNameLen))
 	sb.WriteString("|")
 	for i := 1; i <= maxSets; i++ {
-		sb.WriteString(fmt.Sprintf(" Set %d |", i))
+		sb.WriteString(fmt.Sprintf(" %-5d |", i))
 	}
 	if hasNotes {
 		sb.WriteString(" ")
@@ -77,11 +73,11 @@ func FormatExercises(exercises []parser.Exercise) string {
 	return strings.TrimSuffix(sb.String(), "\n")
 }
 
-func formatSet(s parser.Set) string {
+func formatSet(s paragraph.Set) string {
 	return fmt.Sprintf("%d@%d", s.Reps, s.Weight)
 }
 
-func maxSetsInExercises(exercises []parser.Exercise) int {
+func maxSetsInExercises(exercises []paragraph.Exercise) int {
 	max := 0
 	for _, ex := range exercises {
 		if len(ex.Sets) > max {
@@ -91,7 +87,7 @@ func maxSetsInExercises(exercises []parser.Exercise) int {
 	return max
 }
 
-func maxExerciseNameLenFromSlice(exercises []parser.Exercise) int {
+func maxExerciseNameLenFromSlice(exercises []paragraph.Exercise) int {
 	max := len("Exercise")
 	for _, ex := range exercises {
 		if len(ex.Name) > max {
@@ -101,7 +97,7 @@ func maxExerciseNameLenFromSlice(exercises []parser.Exercise) int {
 	return max
 }
 
-func exercisesHaveNotes(exercises []parser.Exercise) bool {
+func exercisesHaveNotes(exercises []paragraph.Exercise) bool {
 	for _, ex := range exercises {
 		for _, s := range ex.Sets {
 			if s.Note != "" {
@@ -112,7 +108,7 @@ func exercisesHaveNotes(exercises []parser.Exercise) bool {
 	return false
 }
 
-func maxNoteLenFromSlice(exercises []parser.Exercise) int {
+func maxNoteLenFromSlice(exercises []paragraph.Exercise) int {
 	max := len("Notes")
 	for _, ex := range exercises {
 		noteLen := len(collectNotes(ex.Sets))
@@ -123,7 +119,7 @@ func maxNoteLenFromSlice(exercises []parser.Exercise) int {
 	return max
 }
 
-func collectNotes(sets []parser.Set) string {
+func collectNotes(sets []paragraph.Set) string {
 	var notes []string
 	for _, s := range sets {
 		if s.Note != "" {

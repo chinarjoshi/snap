@@ -4,25 +4,23 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/chijoshi/workoutliner/parser"
+	"github.com/chijoshi/workoutliner/paragraph"
 )
 
 func TestTableOutput(t *testing.T) {
-	log := &parser.WorkoutLog{
-		Exercises: []parser.Exercise{
-			{Name: "Squat", Sets: []parser.Set{{Reps: 8, Weight: 135}, {Reps: 8, Weight: 135}}},
-			{Name: "Bench", Sets: []parser.Set{{Reps: 5, Weight: 185}}},
-		},
+	exercises := []paragraph.Exercise{
+		{Name: "Squat", Sets: []paragraph.Set{{Reps: 8, Weight: 135}, {Reps: 8, Weight: 135}}},
+		{Name: "Bench", Sets: []paragraph.Set{{Reps: 5, Weight: 185}}},
 	}
 
-	output := Format(log)
+	output := FormatExercises(exercises)
 
-	// Check header row
-	if !strings.Contains(output, "Set 1") {
-		t.Error("expected 'Set 1' in header")
+	// Check header row has column numbers
+	if !strings.Contains(output, "| 1") {
+		t.Error("expected column 1 in header")
 	}
-	if !strings.Contains(output, "Set 2") {
-		t.Error("expected 'Set 2' in header")
+	if !strings.Contains(output, "| 2") {
+		t.Error("expected column 2 in header")
 	}
 
 	// Check exercise rows
