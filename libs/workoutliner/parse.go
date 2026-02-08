@@ -1,13 +1,13 @@
-package paragraph
+package workoutliner
 
 import (
 	"github.com/antlr4-go/antlr/v4"
 )
 
 func Parse(input string) (*ParseResult, error) {
-	lexer := NewParagraphLexer(antlr.NewInputStream(input))
+	lexer := NewWorkoutlinerLexer(antlr.NewInputStream(input))
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-	p := NewParagraphParser(stream)
+	p := NewWorkoutlinerParser(stream)
 
 	p.RemoveErrorListeners()
 	errorListener := &errorCollector{}
@@ -19,7 +19,7 @@ func Parse(input string) (*ParseResult, error) {
 		return nil, errorListener.errors[0]
 	}
 
-	visitor := NewParagraphASTVisitor()
+	visitor := NewWorkoutlinerASTVisitor()
 	result := visitor.Visit(tree)
 
 	return result.(*ParseResult), nil

@@ -1,6 +1,6 @@
-// Code generated from ./Paragraph.g4 by ANTLR 4.13.2. DO NOT EDIT.
+// Code generated from Workoutliner.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
-package paragraph // Paragraph
+package workoutliner // Workoutliner
 import (
 	"fmt"
 	"strconv"
@@ -14,11 +14,11 @@ var _ = fmt.Printf
 var _ = strconv.Itoa
 var _ = sync.Once{}
 
-type ParagraphParser struct {
+type WorkoutlinerParser struct {
 	*antlr.BaseParser
 }
 
-var ParagraphParserStaticData struct {
+var WorkoutlinerParserStaticData struct {
 	once                   sync.Once
 	serializedATN          []int32
 	LiteralNames           []string
@@ -29,8 +29,8 @@ var ParagraphParserStaticData struct {
 	decisionToDFA          []*antlr.DFA
 }
 
-func paragraphParserInit() {
-	staticData := &ParagraphParserStaticData
+func workoutlinerParserInit() {
+	staticData := &WorkoutlinerParserStaticData
 	staticData.LiteralNames = []string{
 		"", "", "", "", "", "'\\n'",
 	}
@@ -90,53 +90,53 @@ func paragraphParserInit() {
 	}
 }
 
-// ParagraphParserInit initializes any static state used to implement ParagraphParser. By default the
+// WorkoutlinerParserInit initializes any static state used to implement WorkoutlinerParser. By default the
 // static state used to implement the parser is lazily initialized during the first call to
-// NewParagraphParser(). You can call this function if you wish to initialize the static state ahead
+// NewWorkoutlinerParser(). You can call this function if you wish to initialize the static state ahead
 // of time.
-func ParagraphParserInit() {
-	staticData := &ParagraphParserStaticData
-	staticData.once.Do(paragraphParserInit)
+func WorkoutlinerParserInit() {
+	staticData := &WorkoutlinerParserStaticData
+	staticData.once.Do(workoutlinerParserInit)
 }
 
-// NewParagraphParser produces a new parser instance for the optional input antlr.TokenStream.
-func NewParagraphParser(input antlr.TokenStream) *ParagraphParser {
-	ParagraphParserInit()
-	this := new(ParagraphParser)
+// NewWorkoutlinerParser produces a new parser instance for the optional input antlr.TokenStream.
+func NewWorkoutlinerParser(input antlr.TokenStream) *WorkoutlinerParser {
+	WorkoutlinerParserInit()
+	this := new(WorkoutlinerParser)
 	this.BaseParser = antlr.NewBaseParser(input)
-	staticData := &ParagraphParserStaticData
+	staticData := &WorkoutlinerParserStaticData
 	this.Interpreter = antlr.NewParserATNSimulator(this, staticData.atn, staticData.decisionToDFA, staticData.PredictionContextCache)
 	this.RuleNames = staticData.RuleNames
 	this.LiteralNames = staticData.LiteralNames
 	this.SymbolicNames = staticData.SymbolicNames
-	this.GrammarFileName = "Paragraph.g4"
+	this.GrammarFileName = "Workoutliner.g4"
 
 	return this
 }
 
-// ParagraphParser tokens.
+// WorkoutlinerParser tokens.
 const (
-	ParagraphParserEOF     = antlr.TokenEOF
-	ParagraphParserNUMBER  = 1
-	ParagraphParserX       = 2
-	ParagraphParserBY      = 3
-	ParagraphParserWORD    = 4
-	ParagraphParserNEWLINE = 5
-	ParagraphParserWS      = 6
+	WorkoutlinerParserEOF     = antlr.TokenEOF
+	WorkoutlinerParserNUMBER  = 1
+	WorkoutlinerParserX       = 2
+	WorkoutlinerParserBY      = 3
+	WorkoutlinerParserWORD    = 4
+	WorkoutlinerParserNEWLINE = 5
+	WorkoutlinerParserWS      = 6
 )
 
-// ParagraphParser rules.
+// WorkoutlinerParser rules.
 const (
-	ParagraphParserRULE_paragraph    = 0
-	ParagraphParserRULE_line         = 1
-	ParagraphParserRULE_exerciseLine = 2
-	ParagraphParserRULE_proseLine    = 3
-	ParagraphParserRULE_numericToken = 4
-	ParagraphParserRULE_token        = 5
-	ParagraphParserRULE_byExpr       = 6
-	ParagraphParserRULE_multiplier   = 7
-	ParagraphParserRULE_number       = 8
-	ParagraphParserRULE_note         = 9
+	WorkoutlinerParserRULE_paragraph    = 0
+	WorkoutlinerParserRULE_line         = 1
+	WorkoutlinerParserRULE_exerciseLine = 2
+	WorkoutlinerParserRULE_proseLine    = 3
+	WorkoutlinerParserRULE_numericToken = 4
+	WorkoutlinerParserRULE_token        = 5
+	WorkoutlinerParserRULE_byExpr       = 6
+	WorkoutlinerParserRULE_multiplier   = 7
+	WorkoutlinerParserRULE_number       = 8
+	WorkoutlinerParserRULE_note         = 9
 )
 
 // IParagraphContext is an interface to support dynamic dispatch.
@@ -163,13 +163,13 @@ type ParagraphContext struct {
 func NewEmptyParagraphContext() *ParagraphContext {
 	var p = new(ParagraphContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_paragraph
+	p.RuleIndex = WorkoutlinerParserRULE_paragraph
 	return p
 }
 
 func InitEmptyParagraphContext(p *ParagraphContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_paragraph
+	p.RuleIndex = WorkoutlinerParserRULE_paragraph
 }
 
 func (*ParagraphContext) IsParagraphContext() {}
@@ -180,7 +180,7 @@ func NewParagraphContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_paragraph
+	p.RuleIndex = WorkoutlinerParserRULE_paragraph
 
 	return p
 }
@@ -188,7 +188,7 @@ func NewParagraphContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 func (s *ParagraphContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *ParagraphContext) EOF() antlr.TerminalNode {
-	return s.GetToken(ParagraphParserEOF, 0)
+	return s.GetToken(WorkoutlinerParserEOF, 0)
 }
 
 func (s *ParagraphContext) AllLine() []ILineContext {
@@ -241,20 +241,20 @@ func (s *ParagraphContext) ToStringTree(ruleNames []string, recog antlr.Recogniz
 }
 
 func (s *ParagraphContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterParagraph(s)
 	}
 }
 
 func (s *ParagraphContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitParagraph(s)
 	}
 }
 
 func (s *ParagraphContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitParagraph(s)
 
 	default:
@@ -262,9 +262,9 @@ func (s *ParagraphContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
-func (p *ParagraphParser) Paragraph() (localctx IParagraphContext) {
+func (p *WorkoutlinerParser) Paragraph() (localctx IParagraphContext) {
 	localctx = NewParagraphContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 0, ParagraphParserRULE_paragraph)
+	p.EnterRule(localctx, 0, WorkoutlinerParserRULE_paragraph)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
@@ -275,7 +275,7 @@ func (p *ParagraphParser) Paragraph() (localctx IParagraphContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == ParagraphParserWORD {
+	for ok := true; ok; ok = _la == WorkoutlinerParserWORD {
 		{
 			p.SetState(20)
 			p.Line()
@@ -290,7 +290,7 @@ func (p *ParagraphParser) Paragraph() (localctx IParagraphContext) {
 	}
 	{
 		p.SetState(25)
-		p.Match(ParagraphParserEOF)
+		p.Match(WorkoutlinerParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
@@ -328,13 +328,13 @@ type LineContext struct {
 func NewEmptyLineContext() *LineContext {
 	var p = new(LineContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_line
+	p.RuleIndex = WorkoutlinerParserRULE_line
 	return p
 }
 
 func InitEmptyLineContext(p *LineContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_line
+	p.RuleIndex = WorkoutlinerParserRULE_line
 }
 
 func (*LineContext) IsLineContext() {}
@@ -345,7 +345,7 @@ func NewLineContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokin
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_line
+	p.RuleIndex = WorkoutlinerParserRULE_line
 
 	return p
 }
@@ -399,24 +399,24 @@ func (s *ExerciseLineAltContext) ExerciseLine() IExerciseLineContext {
 }
 
 func (s *ExerciseLineAltContext) NEWLINE() antlr.TerminalNode {
-	return s.GetToken(ParagraphParserNEWLINE, 0)
+	return s.GetToken(WorkoutlinerParserNEWLINE, 0)
 }
 
 func (s *ExerciseLineAltContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterExerciseLineAlt(s)
 	}
 }
 
 func (s *ExerciseLineAltContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitExerciseLineAlt(s)
 	}
 }
 
 func (s *ExerciseLineAltContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitExerciseLineAlt(s)
 
 	default:
@@ -459,24 +459,24 @@ func (s *ProseLineAltContext) ProseLine() IProseLineContext {
 }
 
 func (s *ProseLineAltContext) NEWLINE() antlr.TerminalNode {
-	return s.GetToken(ParagraphParserNEWLINE, 0)
+	return s.GetToken(WorkoutlinerParserNEWLINE, 0)
 }
 
 func (s *ProseLineAltContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterProseLineAlt(s)
 	}
 }
 
 func (s *ProseLineAltContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitProseLineAlt(s)
 	}
 }
 
 func (s *ProseLineAltContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitProseLineAlt(s)
 
 	default:
@@ -484,9 +484,9 @@ func (s *ProseLineAltContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 	}
 }
 
-func (p *ParagraphParser) Line() (localctx ILineContext) {
+func (p *WorkoutlinerParser) Line() (localctx ILineContext) {
 	localctx = NewLineContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 2, ParagraphParserRULE_line)
+	p.EnterRule(localctx, 2, WorkoutlinerParserRULE_line)
 	var _la int
 
 	p.SetState(35)
@@ -510,10 +510,10 @@ func (p *ParagraphParser) Line() (localctx ILineContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == ParagraphParserNEWLINE {
+		if _la == WorkoutlinerParserNEWLINE {
 			{
 				p.SetState(28)
-				p.Match(ParagraphParserNEWLINE)
+				p.Match(WorkoutlinerParserNEWLINE)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
@@ -536,10 +536,10 @@ func (p *ParagraphParser) Line() (localctx ILineContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == ParagraphParserNEWLINE {
+		if _la == WorkoutlinerParserNEWLINE {
 			{
 				p.SetState(32)
-				p.Match(ParagraphParserNEWLINE)
+				p.Match(WorkoutlinerParserNEWLINE)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
@@ -591,13 +591,13 @@ type ExerciseLineContext struct {
 func NewEmptyExerciseLineContext() *ExerciseLineContext {
 	var p = new(ExerciseLineContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_exerciseLine
+	p.RuleIndex = WorkoutlinerParserRULE_exerciseLine
 	return p
 }
 
 func InitEmptyExerciseLineContext(p *ExerciseLineContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_exerciseLine
+	p.RuleIndex = WorkoutlinerParserRULE_exerciseLine
 }
 
 func (*ExerciseLineContext) IsExerciseLineContext() {}
@@ -608,7 +608,7 @@ func NewExerciseLineContext(parser antlr.Parser, parent antlr.ParserRuleContext,
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_exerciseLine
+	p.RuleIndex = WorkoutlinerParserRULE_exerciseLine
 
 	return p
 }
@@ -632,11 +632,11 @@ func (s *ExerciseLineContext) NumericToken() INumericTokenContext {
 }
 
 func (s *ExerciseLineContext) AllWORD() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserWORD)
+	return s.GetTokens(WorkoutlinerParserWORD)
 }
 
 func (s *ExerciseLineContext) WORD(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserWORD, i)
+	return s.GetToken(WorkoutlinerParserWORD, i)
 }
 
 func (s *ExerciseLineContext) AllToken() []ITokenContext {
@@ -689,20 +689,20 @@ func (s *ExerciseLineContext) ToStringTree(ruleNames []string, recog antlr.Recog
 }
 
 func (s *ExerciseLineContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterExerciseLine(s)
 	}
 }
 
 func (s *ExerciseLineContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitExerciseLine(s)
 	}
 }
 
 func (s *ExerciseLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitExerciseLine(s)
 
 	default:
@@ -710,9 +710,9 @@ func (s *ExerciseLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 	}
 }
 
-func (p *ParagraphParser) ExerciseLine() (localctx IExerciseLineContext) {
+func (p *WorkoutlinerParser) ExerciseLine() (localctx IExerciseLineContext) {
 	localctx = NewExerciseLineContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, ParagraphParserRULE_exerciseLine)
+	p.EnterRule(localctx, 4, WorkoutlinerParserRULE_exerciseLine)
 	var _la int
 
 	var _alt int
@@ -725,10 +725,10 @@ func (p *ParagraphParser) ExerciseLine() (localctx IExerciseLineContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == ParagraphParserWORD {
+	for ok := true; ok; ok = _la == WorkoutlinerParserWORD {
 		{
 			p.SetState(37)
-			p.Match(ParagraphParserWORD)
+			p.Match(WorkoutlinerParserWORD)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -810,13 +810,13 @@ type ProseLineContext struct {
 func NewEmptyProseLineContext() *ProseLineContext {
 	var p = new(ProseLineContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_proseLine
+	p.RuleIndex = WorkoutlinerParserRULE_proseLine
 	return p
 }
 
 func InitEmptyProseLineContext(p *ProseLineContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_proseLine
+	p.RuleIndex = WorkoutlinerParserRULE_proseLine
 }
 
 func (*ProseLineContext) IsProseLineContext() {}
@@ -827,7 +827,7 @@ func NewProseLineContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_proseLine
+	p.RuleIndex = WorkoutlinerParserRULE_proseLine
 
 	return p
 }
@@ -835,11 +835,11 @@ func NewProseLineContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 func (s *ProseLineContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *ProseLineContext) AllWORD() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserWORD)
+	return s.GetTokens(WorkoutlinerParserWORD)
 }
 
 func (s *ProseLineContext) WORD(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserWORD, i)
+	return s.GetToken(WorkoutlinerParserWORD, i)
 }
 
 func (s *ProseLineContext) GetRuleContext() antlr.RuleContext {
@@ -851,20 +851,20 @@ func (s *ProseLineContext) ToStringTree(ruleNames []string, recog antlr.Recogniz
 }
 
 func (s *ProseLineContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterProseLine(s)
 	}
 }
 
 func (s *ProseLineContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitProseLine(s)
 	}
 }
 
 func (s *ProseLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitProseLine(s)
 
 	default:
@@ -872,9 +872,9 @@ func (s *ProseLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
-func (p *ParagraphParser) ProseLine() (localctx IProseLineContext) {
+func (p *WorkoutlinerParser) ProseLine() (localctx IProseLineContext) {
 	localctx = NewProseLineContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, ParagraphParserRULE_proseLine)
+	p.EnterRule(localctx, 6, WorkoutlinerParserRULE_proseLine)
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
@@ -889,7 +889,7 @@ func (p *ParagraphParser) ProseLine() (localctx IProseLineContext) {
 		case 1:
 			{
 				p.SetState(49)
-				p.Match(ParagraphParserWORD)
+				p.Match(WorkoutlinerParserWORD)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
@@ -946,13 +946,13 @@ type NumericTokenContext struct {
 func NewEmptyNumericTokenContext() *NumericTokenContext {
 	var p = new(NumericTokenContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_numericToken
+	p.RuleIndex = WorkoutlinerParserRULE_numericToken
 	return p
 }
 
 func InitEmptyNumericTokenContext(p *NumericTokenContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_numericToken
+	p.RuleIndex = WorkoutlinerParserRULE_numericToken
 }
 
 func (*NumericTokenContext) IsNumericTokenContext() {}
@@ -963,7 +963,7 @@ func NewNumericTokenContext(parser antlr.Parser, parent antlr.ParserRuleContext,
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_numericToken
+	p.RuleIndex = WorkoutlinerParserRULE_numericToken
 
 	return p
 }
@@ -1027,20 +1027,20 @@ func (s *NumericTokenContext) ToStringTree(ruleNames []string, recog antlr.Recog
 }
 
 func (s *NumericTokenContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterNumericToken(s)
 	}
 }
 
 func (s *NumericTokenContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitNumericToken(s)
 	}
 }
 
 func (s *NumericTokenContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitNumericToken(s)
 
 	default:
@@ -1048,9 +1048,9 @@ func (s *NumericTokenContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 	}
 }
 
-func (p *ParagraphParser) NumericToken() (localctx INumericTokenContext) {
+func (p *WorkoutlinerParser) NumericToken() (localctx INumericTokenContext) {
 	localctx = NewNumericTokenContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, ParagraphParserRULE_numericToken)
+	p.EnterRule(localctx, 8, WorkoutlinerParserRULE_numericToken)
 	p.SetState(57)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
@@ -1119,13 +1119,13 @@ type TokenContext struct {
 func NewEmptyTokenContext() *TokenContext {
 	var p = new(TokenContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_token
+	p.RuleIndex = WorkoutlinerParserRULE_token
 	return p
 }
 
 func InitEmptyTokenContext(p *TokenContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_token
+	p.RuleIndex = WorkoutlinerParserRULE_token
 }
 
 func (*TokenContext) IsTokenContext() {}
@@ -1136,7 +1136,7 @@ func NewTokenContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_token
+	p.RuleIndex = WorkoutlinerParserRULE_token
 
 	return p
 }
@@ -1184,20 +1184,20 @@ func (s *TokenContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) 
 }
 
 func (s *TokenContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterToken(s)
 	}
 }
 
 func (s *TokenContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitToken(s)
 	}
 }
 
 func (s *TokenContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitToken(s)
 
 	default:
@@ -1205,9 +1205,9 @@ func (s *TokenContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
-func (p *ParagraphParser) Token() (localctx ITokenContext) {
+func (p *WorkoutlinerParser) Token() (localctx ITokenContext) {
 	localctx = NewTokenContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, ParagraphParserRULE_token)
+	p.EnterRule(localctx, 10, WorkoutlinerParserRULE_token)
 	p.SetState(61)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
@@ -1215,14 +1215,14 @@ func (p *ParagraphParser) Token() (localctx ITokenContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ParagraphParserNUMBER:
+	case WorkoutlinerParserNUMBER:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(59)
 			p.NumericToken()
 		}
 
-	case ParagraphParserWORD:
+	case WorkoutlinerParserWORD:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(60)
@@ -1265,13 +1265,13 @@ type ByExprContext struct {
 func NewEmptyByExprContext() *ByExprContext {
 	var p = new(ByExprContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_byExpr
+	p.RuleIndex = WorkoutlinerParserRULE_byExpr
 	return p
 }
 
 func InitEmptyByExprContext(p *ByExprContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_byExpr
+	p.RuleIndex = WorkoutlinerParserRULE_byExpr
 }
 
 func (*ByExprContext) IsByExprContext() {}
@@ -1282,7 +1282,7 @@ func NewByExprContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_byExpr
+	p.RuleIndex = WorkoutlinerParserRULE_byExpr
 
 	return p
 }
@@ -1330,32 +1330,32 @@ func (s *TwoPartByContext) GetRuleContext() antlr.RuleContext {
 }
 
 func (s *TwoPartByContext) BY() antlr.TerminalNode {
-	return s.GetToken(ParagraphParserBY, 0)
+	return s.GetToken(WorkoutlinerParserBY, 0)
 }
 
 func (s *TwoPartByContext) AllNUMBER() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserNUMBER)
+	return s.GetTokens(WorkoutlinerParserNUMBER)
 }
 
 func (s *TwoPartByContext) NUMBER(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserNUMBER, i)
+	return s.GetToken(WorkoutlinerParserNUMBER, i)
 }
 
 func (s *TwoPartByContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterTwoPartBy(s)
 	}
 }
 
 func (s *TwoPartByContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitTwoPartBy(s)
 	}
 }
 
 func (s *TwoPartByContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitTwoPartBy(s)
 
 	default:
@@ -1397,36 +1397,36 @@ func (s *ThreePartByContext) GetRuleContext() antlr.RuleContext {
 }
 
 func (s *ThreePartByContext) AllBY() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserBY)
+	return s.GetTokens(WorkoutlinerParserBY)
 }
 
 func (s *ThreePartByContext) BY(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserBY, i)
+	return s.GetToken(WorkoutlinerParserBY, i)
 }
 
 func (s *ThreePartByContext) AllNUMBER() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserNUMBER)
+	return s.GetTokens(WorkoutlinerParserNUMBER)
 }
 
 func (s *ThreePartByContext) NUMBER(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserNUMBER, i)
+	return s.GetToken(WorkoutlinerParserNUMBER, i)
 }
 
 func (s *ThreePartByContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterThreePartBy(s)
 	}
 }
 
 func (s *ThreePartByContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitThreePartBy(s)
 	}
 }
 
 func (s *ThreePartByContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitThreePartBy(s)
 
 	default:
@@ -1434,9 +1434,9 @@ func (s *ThreePartByContext) Accept(visitor antlr.ParseTreeVisitor) interface{} 
 	}
 }
 
-func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
+func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 	localctx = NewByExprContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, ParagraphParserRULE_byExpr)
+	p.EnterRule(localctx, 12, WorkoutlinerParserRULE_byExpr)
 	p.SetState(71)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
@@ -1450,7 +1450,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		{
 			p.SetState(63)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*TwoPartByContext).reps = _m
 			if p.HasError() {
@@ -1460,7 +1460,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		}
 		{
 			p.SetState(64)
-			p.Match(ParagraphParserBY)
+			p.Match(WorkoutlinerParserBY)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1469,7 +1469,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		{
 			p.SetState(65)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*TwoPartByContext).weight = _m
 			if p.HasError() {
@@ -1484,7 +1484,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		{
 			p.SetState(66)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*ThreePartByContext).sets = _m
 			if p.HasError() {
@@ -1494,7 +1494,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		}
 		{
 			p.SetState(67)
-			p.Match(ParagraphParserBY)
+			p.Match(WorkoutlinerParserBY)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1503,7 +1503,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		{
 			p.SetState(68)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*ThreePartByContext).reps = _m
 			if p.HasError() {
@@ -1513,7 +1513,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		}
 		{
 			p.SetState(69)
-			p.Match(ParagraphParserBY)
+			p.Match(WorkoutlinerParserBY)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1522,7 +1522,7 @@ func (p *ParagraphParser) ByExpr() (localctx IByExprContext) {
 		{
 			p.SetState(70)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*ThreePartByContext).weight = _m
 			if p.HasError() {
@@ -1566,13 +1566,13 @@ type MultiplierContext struct {
 func NewEmptyMultiplierContext() *MultiplierContext {
 	var p = new(MultiplierContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_multiplier
+	p.RuleIndex = WorkoutlinerParserRULE_multiplier
 	return p
 }
 
 func InitEmptyMultiplierContext(p *MultiplierContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_multiplier
+	p.RuleIndex = WorkoutlinerParserRULE_multiplier
 }
 
 func (*MultiplierContext) IsMultiplierContext() {}
@@ -1583,7 +1583,7 @@ func NewMultiplierContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_multiplier
+	p.RuleIndex = WorkoutlinerParserRULE_multiplier
 
 	return p
 }
@@ -1631,32 +1631,32 @@ func (s *PartialMultiplierContext) GetRuleContext() antlr.RuleContext {
 }
 
 func (s *PartialMultiplierContext) X() antlr.TerminalNode {
-	return s.GetToken(ParagraphParserX, 0)
+	return s.GetToken(WorkoutlinerParserX, 0)
 }
 
 func (s *PartialMultiplierContext) AllNUMBER() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserNUMBER)
+	return s.GetTokens(WorkoutlinerParserNUMBER)
 }
 
 func (s *PartialMultiplierContext) NUMBER(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserNUMBER, i)
+	return s.GetToken(WorkoutlinerParserNUMBER, i)
 }
 
 func (s *PartialMultiplierContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterPartialMultiplier(s)
 	}
 }
 
 func (s *PartialMultiplierContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitPartialMultiplier(s)
 	}
 }
 
 func (s *PartialMultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitPartialMultiplier(s)
 
 	default:
@@ -1698,36 +1698,36 @@ func (s *FullMultiplierContext) GetRuleContext() antlr.RuleContext {
 }
 
 func (s *FullMultiplierContext) AllX() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserX)
+	return s.GetTokens(WorkoutlinerParserX)
 }
 
 func (s *FullMultiplierContext) X(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserX, i)
+	return s.GetToken(WorkoutlinerParserX, i)
 }
 
 func (s *FullMultiplierContext) AllNUMBER() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserNUMBER)
+	return s.GetTokens(WorkoutlinerParserNUMBER)
 }
 
 func (s *FullMultiplierContext) NUMBER(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserNUMBER, i)
+	return s.GetToken(WorkoutlinerParserNUMBER, i)
 }
 
 func (s *FullMultiplierContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterFullMultiplier(s)
 	}
 }
 
 func (s *FullMultiplierContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitFullMultiplier(s)
 	}
 }
 
 func (s *FullMultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitFullMultiplier(s)
 
 	default:
@@ -1735,9 +1735,9 @@ func (s *FullMultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface
 	}
 }
 
-func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
+func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 	localctx = NewMultiplierContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, ParagraphParserRULE_multiplier)
+	p.EnterRule(localctx, 14, WorkoutlinerParserRULE_multiplier)
 	p.SetState(81)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
@@ -1751,7 +1751,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		{
 			p.SetState(73)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*PartialMultiplierContext).sets = _m
 			if p.HasError() {
@@ -1761,7 +1761,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		}
 		{
 			p.SetState(74)
-			p.Match(ParagraphParserX)
+			p.Match(WorkoutlinerParserX)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1770,7 +1770,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		{
 			p.SetState(75)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*PartialMultiplierContext).reps = _m
 			if p.HasError() {
@@ -1785,7 +1785,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		{
 			p.SetState(76)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*FullMultiplierContext).sets = _m
 			if p.HasError() {
@@ -1795,7 +1795,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		}
 		{
 			p.SetState(77)
-			p.Match(ParagraphParserX)
+			p.Match(WorkoutlinerParserX)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1804,7 +1804,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		{
 			p.SetState(78)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*FullMultiplierContext).reps = _m
 			if p.HasError() {
@@ -1814,7 +1814,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		}
 		{
 			p.SetState(79)
-			p.Match(ParagraphParserX)
+			p.Match(WorkoutlinerParserX)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1823,7 +1823,7 @@ func (p *ParagraphParser) Multiplier() (localctx IMultiplierContext) {
 		{
 			p.SetState(80)
 
-			var _m = p.Match(ParagraphParserNUMBER)
+			var _m = p.Match(WorkoutlinerParserNUMBER)
 
 			localctx.(*FullMultiplierContext).weight = _m
 			if p.HasError() {
@@ -1871,13 +1871,13 @@ type NumberContext struct {
 func NewEmptyNumberContext() *NumberContext {
 	var p = new(NumberContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_number
+	p.RuleIndex = WorkoutlinerParserRULE_number
 	return p
 }
 
 func InitEmptyNumberContext(p *NumberContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_number
+	p.RuleIndex = WorkoutlinerParserRULE_number
 }
 
 func (*NumberContext) IsNumberContext() {}
@@ -1888,7 +1888,7 @@ func NewNumberContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_number
+	p.RuleIndex = WorkoutlinerParserRULE_number
 
 	return p
 }
@@ -1896,7 +1896,7 @@ func NewNumberContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 func (s *NumberContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *NumberContext) NUMBER() antlr.TerminalNode {
-	return s.GetToken(ParagraphParserNUMBER, 0)
+	return s.GetToken(WorkoutlinerParserNUMBER, 0)
 }
 
 func (s *NumberContext) GetRuleContext() antlr.RuleContext {
@@ -1908,20 +1908,20 @@ func (s *NumberContext) ToStringTree(ruleNames []string, recog antlr.Recognizer)
 }
 
 func (s *NumberContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterNumber(s)
 	}
 }
 
 func (s *NumberContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitNumber(s)
 	}
 }
 
 func (s *NumberContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitNumber(s)
 
 	default:
@@ -1929,13 +1929,13 @@ func (s *NumberContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
-func (p *ParagraphParser) Number() (localctx INumberContext) {
+func (p *WorkoutlinerParser) Number() (localctx INumberContext) {
 	localctx = NewNumberContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, ParagraphParserRULE_number)
+	p.EnterRule(localctx, 16, WorkoutlinerParserRULE_number)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(83)
-		p.Match(ParagraphParserNUMBER)
+		p.Match(WorkoutlinerParserNUMBER)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
@@ -1978,13 +1978,13 @@ type NoteContext struct {
 func NewEmptyNoteContext() *NoteContext {
 	var p = new(NoteContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_note
+	p.RuleIndex = WorkoutlinerParserRULE_note
 	return p
 }
 
 func InitEmptyNoteContext(p *NoteContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ParagraphParserRULE_note
+	p.RuleIndex = WorkoutlinerParserRULE_note
 }
 
 func (*NoteContext) IsNoteContext() {}
@@ -1995,7 +1995,7 @@ func NewNoteContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokin
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParagraphParserRULE_note
+	p.RuleIndex = WorkoutlinerParserRULE_note
 
 	return p
 }
@@ -2003,11 +2003,11 @@ func NewNoteContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokin
 func (s *NoteContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *NoteContext) AllWORD() []antlr.TerminalNode {
-	return s.GetTokens(ParagraphParserWORD)
+	return s.GetTokens(WorkoutlinerParserWORD)
 }
 
 func (s *NoteContext) WORD(i int) antlr.TerminalNode {
-	return s.GetToken(ParagraphParserWORD, i)
+	return s.GetToken(WorkoutlinerParserWORD, i)
 }
 
 func (s *NoteContext) GetRuleContext() antlr.RuleContext {
@@ -2019,20 +2019,20 @@ func (s *NoteContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) s
 }
 
 func (s *NoteContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.EnterNote(s)
 	}
 }
 
 func (s *NoteContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ParagraphListener); ok {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
 		listenerT.ExitNote(s)
 	}
 }
 
 func (s *NoteContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case ParagraphVisitor:
+	case WorkoutlinerVisitor:
 		return t.VisitNote(s)
 
 	default:
@@ -2040,9 +2040,9 @@ func (s *NoteContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
-func (p *ParagraphParser) Note() (localctx INoteContext) {
+func (p *WorkoutlinerParser) Note() (localctx INoteContext) {
 	localctx = NewNoteContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, ParagraphParserRULE_note)
+	p.EnterRule(localctx, 18, WorkoutlinerParserRULE_note)
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
@@ -2057,7 +2057,7 @@ func (p *ParagraphParser) Note() (localctx INoteContext) {
 		case 1:
 			{
 				p.SetState(85)
-				p.Match(ParagraphParserWORD)
+				p.Match(WorkoutlinerParserWORD)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit

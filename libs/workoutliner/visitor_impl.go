@@ -1,4 +1,4 @@
-package paragraph
+package workoutliner
 
 import (
 	"strconv"
@@ -22,19 +22,19 @@ func (r *ParseResult) HasExercises() bool {
 	return len(r.Exercises) > 0
 }
 
-type ParagraphASTVisitor struct {
-	BaseParagraphVisitor
+type WorkoutlinerASTVisitor struct {
+	BaseWorkoutlinerVisitor
 }
 
-func NewParagraphASTVisitor() *ParagraphASTVisitor {
-	return &ParagraphASTVisitor{}
+func NewWorkoutlinerASTVisitor() *WorkoutlinerASTVisitor {
+	return &WorkoutlinerASTVisitor{}
 }
 
-func (v *ParagraphASTVisitor) Visit(tree antlr.ParseTree) interface{} {
+func (v *WorkoutlinerASTVisitor) Visit(tree antlr.ParseTree) interface{} {
 	return tree.Accept(v)
 }
 
-func (v *ParagraphASTVisitor) VisitParagraph(ctx *ParagraphContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitParagraph(ctx *ParagraphContext) interface{} {
 	result := &ParseResult{}
 	for _, lineCtx := range ctx.AllLine() {
 		lineResult := v.Visit(lineCtx)
@@ -55,15 +55,15 @@ func (v *ParagraphASTVisitor) VisitParagraph(ctx *ParagraphContext) interface{} 
 	return result
 }
 
-func (v *ParagraphASTVisitor) VisitExerciseLineAlt(ctx *ExerciseLineAltContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitExerciseLineAlt(ctx *ExerciseLineAltContext) interface{} {
 	return v.Visit(ctx.ExerciseLine())
 }
 
-func (v *ParagraphASTVisitor) VisitProseLineAlt(ctx *ProseLineAltContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitProseLineAlt(ctx *ProseLineAltContext) interface{} {
 	return v.Visit(ctx.ProseLine())
 }
 
-func (v *ParagraphASTVisitor) VisitExerciseLine(ctx *ExerciseLineContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitExerciseLine(ctx *ExerciseLineContext) interface{} {
 	words := ctx.AllWORD()
 	numericToken := ctx.NumericToken()
 	tokens := ctx.AllToken()
@@ -74,7 +74,7 @@ func (v *ParagraphASTVisitor) VisitExerciseLine(ctx *ExerciseLineContext) interf
 	return Exercise{Name: name, Sets: sets}
 }
 
-func (v *ParagraphASTVisitor) VisitProseLine(ctx *ProseLineContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitProseLine(ctx *ProseLineContext) interface{} {
 	words := []string{}
 	for _, word := range ctx.AllWORD() {
 		words = append(words, word.GetText())
@@ -82,7 +82,7 @@ func (v *ParagraphASTVisitor) VisitProseLine(ctx *ProseLineContext) interface{} 
 	return strings.Join(words, " ")
 }
 
-func (v *ParagraphASTVisitor) extractName(words []antlr.TerminalNode, numericToken INumericTokenContext) string {
+func (v *WorkoutlinerASTVisitor) extractName(words []antlr.TerminalNode, numericToken INumericTokenContext) string {
 	firstTokenStart := numericToken.GetStart().GetStart()
 	nameWords := []string{}
 	for _, w := range words {
@@ -93,7 +93,7 @@ func (v *ParagraphASTVisitor) extractName(words []antlr.TerminalNode, numericTok
 	return titleCase(strings.Join(nameWords, " "))
 }
 
-func (v *ParagraphASTVisitor) buildSetsFromExercise(numericToken INumericTokenContext, tokens []ITokenContext) []Set {
+func (v *WorkoutlinerASTVisitor) buildSetsFromExercise(numericToken INumericTokenContext, tokens []ITokenContext) []Set {
 	var allTokenResults []tokenResult
 
 	numResult := v.Visit(numericToken)
@@ -119,7 +119,7 @@ type tokenResult struct {
 	pendingReps []int
 }
 
-func (v *ParagraphASTVisitor) VisitNumericToken(ctx *NumericTokenContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitNumericToken(ctx *NumericTokenContext) interface{} {
 	if byExpr := ctx.ByExpr(); byExpr != nil {
 		return v.Visit(byExpr)
 	}
@@ -132,7 +132,7 @@ func (v *ParagraphASTVisitor) VisitNumericToken(ctx *NumericTokenContext) interf
 	return nil
 }
 
-func (v *ParagraphASTVisitor) VisitToken(ctx *TokenContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitToken(ctx *TokenContext) interface{} {
 	if numToken := ctx.NumericToken(); numToken != nil {
 		return v.Visit(numToken)
 	}
@@ -142,7 +142,7 @@ func (v *ParagraphASTVisitor) VisitToken(ctx *TokenContext) interface{} {
 	return nil
 }
 
-func (v *ParagraphASTVisitor) VisitTwoPartBy(ctx *TwoPartByContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitTwoPartBy(ctx *TwoPartByContext) interface{} {
 	reps := toInt(ctx.GetReps().GetText())
 	weight := toInt(ctx.GetWeight().GetText())
 
@@ -153,7 +153,7 @@ func (v *ParagraphASTVisitor) VisitTwoPartBy(ctx *TwoPartByContext) interface{} 
 	return tokenResult{kind: "sets", sets: sets}
 }
 
-func (v *ParagraphASTVisitor) VisitThreePartBy(ctx *ThreePartByContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitThreePartBy(ctx *ThreePartByContext) interface{} {
 	numSets := toInt(ctx.GetSets().GetText())
 	reps := toInt(ctx.GetReps().GetText())
 	weight := toInt(ctx.GetWeight().GetText())
@@ -165,7 +165,7 @@ func (v *ParagraphASTVisitor) VisitThreePartBy(ctx *ThreePartByContext) interfac
 	return tokenResult{kind: "sets", sets: sets}
 }
 
-func (v *ParagraphASTVisitor) VisitFullMultiplier(ctx *FullMultiplierContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitFullMultiplier(ctx *FullMultiplierContext) interface{} {
 	numSets := toInt(ctx.GetSets().GetText())
 	reps := toInt(ctx.GetReps().GetText())
 	weight := toInt(ctx.GetWeight().GetText())
@@ -177,7 +177,7 @@ func (v *ParagraphASTVisitor) VisitFullMultiplier(ctx *FullMultiplierContext) in
 	return tokenResult{kind: "sets", sets: sets}
 }
 
-func (v *ParagraphASTVisitor) VisitPartialMultiplier(ctx *PartialMultiplierContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitPartialMultiplier(ctx *PartialMultiplierContext) interface{} {
 	numSets := toInt(ctx.GetSets().GetText())
 	reps := toInt(ctx.GetReps().GetText())
 
@@ -188,7 +188,7 @@ func (v *ParagraphASTVisitor) VisitPartialMultiplier(ctx *PartialMultiplierConte
 	return tokenResult{kind: "pending_reps", pendingReps: pending}
 }
 
-func (v *ParagraphASTVisitor) VisitNumber(ctx *NumberContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitNumber(ctx *NumberContext) interface{} {
 	n := toInt(ctx.NUMBER().GetText())
 	if n > repThreshold {
 		return tokenResult{kind: "weight", value: n}
@@ -196,7 +196,7 @@ func (v *ParagraphASTVisitor) VisitNumber(ctx *NumberContext) interface{} {
 	return tokenResult{kind: "reps", value: n}
 }
 
-func (v *ParagraphASTVisitor) VisitNote(ctx *NoteContext) interface{} {
+func (v *WorkoutlinerASTVisitor) VisitNote(ctx *NoteContext) interface{} {
 	words := []string{}
 	for _, word := range ctx.AllWORD() {
 		words = append(words, word.GetText())
@@ -204,7 +204,7 @@ func (v *ParagraphASTVisitor) VisitNote(ctx *NoteContext) interface{} {
 	return tokenResult{kind: "note", text: strings.Join(words, " ")}
 }
 
-func (v *ParagraphASTVisitor) buildSetsFromResults(tokenResults []tokenResult) []Set {
+func (v *WorkoutlinerASTVisitor) buildSetsFromResults(tokenResults []tokenResult) []Set {
 	var sets []Set
 	var pendingReps []int
 	var lastWeight int

@@ -1,4 +1,4 @@
-package paragraph
+package workoutliner
 
 import (
 	"testing"

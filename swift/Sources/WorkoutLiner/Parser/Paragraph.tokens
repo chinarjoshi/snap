@@ -1,0 +1,7 @@
+NUMBER=1
+X=2
+BY=3
+WORD=4
+NEWLINE=5
+WS=6
+'\n'=5

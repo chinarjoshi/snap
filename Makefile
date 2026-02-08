@@ -1,8 +1,8 @@
 .PHONY: antlr test build clean
 
 antlr:
-	antlr4 -Dlanguage=Go -visitor -package paragraph -o paragraph Paragraph.g4
-	antlr4 -Dlanguage=Swift -visitor -o swift/Sources/WorkoutLiner/Parser Paragraph.g4
+	antlr -Dlanguage=Go -visitor -package workoutliner -o libs/workoutliner Workoutliner.g4
+	antlr -Dlanguage=Swift -visitor -o swift/Sources/WorkoutLiner/Parser Workoutliner.g4
 
 test:
 	go test ./...
@@ -13,5 +13,5 @@ build:
 
 clean:
 	rm -f workoutliner
-	rm -f paragraph/*.interp paragraph/*.tokens
+	rm -f libs/workoutliner/*.interp libs/workoutliner/*.tokens
 	rm -f swift/Sources/WorkoutLiner/Parser/*.interp swift/Sources/WorkoutLiner/Parser/*.tokens

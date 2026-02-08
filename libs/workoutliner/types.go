@@ -1,4 +1,4 @@
-package paragraph
+package workoutliner
 
 // Set represents a single set within an exercise
 type Set struct {

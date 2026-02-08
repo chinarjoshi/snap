@@ -1,10 +1,10 @@
-// Code generated from ./Paragraph.g4 by ANTLR 4.13.2. DO NOT EDIT.
+// Code generated from Workoutliner.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
-package paragraph // Paragraph
+package workoutliner // Workoutliner
 import "github.com/antlr4-go/antlr/v4"
 
-// ParagraphListener is a complete listener for a parse tree produced by ParagraphParser.
-type ParagraphListener interface {
+// WorkoutlinerListener is a complete listener for a parse tree produced by WorkoutlinerParser.
+type WorkoutlinerListener interface {
 	antlr.ParseTreeListener
 
 	// EnterParagraph is called when entering the paragraph production.

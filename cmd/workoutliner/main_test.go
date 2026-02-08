@@ -1,4 +1,4 @@
-package transform
+package main
 
 import (
 	"strings"
@@ -7,7 +7,7 @@ import (
 
 func TestTransformPureWorkout(t *testing.T) {
 	input := "squat 8 8 8 135\nbench 3x8 95"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "| Squat") {
 		t.Error("Expected Squat in table")
@@ -25,7 +25,7 @@ func TestTransformPureWorkout(t *testing.T) {
 
 func TestTransformProseBeforeWorkout(t *testing.T) {
 	input := "ate a banana beforehand\nsquat 8 8 8 135"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.HasPrefix(result, "ate a banana beforehand") {
 		t.Errorf("Expected prose at start, got: %s", result)
@@ -37,7 +37,7 @@ func TestTransformProseBeforeWorkout(t *testing.T) {
 
 func TestTransformProseAfterWorkout(t *testing.T) {
 	input := "squat 8 8 8 135\n\nRegular notes here."
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "| Squat") {
 		t.Error("Expected Squat in table")
@@ -49,7 +49,7 @@ func TestTransformProseAfterWorkout(t *testing.T) {
 
 func TestTransformMultipleProseLines(t *testing.T) {
 	input := "morning workout\nfelt strong\nsquat 8 8 8 135"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "morning workout") {
 		t.Error("Expected first prose line")
@@ -64,7 +64,7 @@ func TestTransformMultipleProseLines(t *testing.T) {
 
 func TestTransformInlineNotes(t *testing.T) {
 	input := "squat 8 8 8 135 light headed\nbench 3x8 95"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "Notes") {
 		t.Error("Expected Notes column header")
@@ -76,7 +76,7 @@ func TestTransformInlineNotes(t *testing.T) {
 
 func TestTransformPureProse(t *testing.T) {
 	input := "Just some notes today.\nNothing special."
-	result := Transform(input)
+	result := transform(input)
 
 	if result != input {
 		t.Errorf("Expected pure prose unchanged, got: %s", result)
@@ -85,7 +85,7 @@ func TestTransformPureProse(t *testing.T) {
 
 func TestTransformMixedParagraphs(t *testing.T) {
 	input := "squat 8 8 8 135\n\nRegular notes here.\n\nbench 3x8 95"
-	result := Transform(input)
+	result := transform(input)
 
 	parts := strings.Split(result, "\n\n")
 	if len(parts) != 3 {
@@ -116,7 +116,7 @@ func TestTransformMultiplierSyntax(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
-			result := Transform(tt.input)
+			result := transform(tt.input)
 			if !strings.Contains(result, tt.expected) {
 				t.Errorf("Expected %s in result, got: %s", tt.expected, result)
 			}
@@ -125,7 +125,7 @@ func TestTransformMultiplierSyntax(t *testing.T) {
 }
 
 func TestTransformEmptyInput(t *testing.T) {
-	result := Transform("")
+	result := transform("")
 	if result != "" {
 		t.Errorf("Expected empty result, got: %s", result)
 	}
@@ -133,7 +133,7 @@ func TestTransformEmptyInput(t *testing.T) {
 
 func TestTransformNoDigitsParagraphSkipped(t *testing.T) {
 	input := "Just words here\nno numbers at all"
-	result := Transform(input)
+	result := transform(input)
 
 	if result != input {
 		t.Errorf("Expected unchanged input, got: %s", result)
@@ -142,7 +142,7 @@ func TestTransformNoDigitsParagraphSkipped(t *testing.T) {
 
 func TestTransformTitleCase(t *testing.T) {
 	input := "BARBELL SQUAT 8 8 8 135"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "Barbell Squat") {
 		t.Errorf("Expected title-cased exercise name, got: %s", result)
@@ -151,7 +151,7 @@ func TestTransformTitleCase(t *testing.T) {
 
 func TestTransformTrailingReps(t *testing.T) {
 	input := "squat 8 8 8 135 8 8"
-	result := Transform(input)
+	result := transform(input)
 
 	count := strings.Count(result, "8@135")
 	if count != 5 {
@@ -161,7 +161,7 @@ func TestTransformTrailingReps(t *testing.T) {
 
 func TestTransformDefaultSetsForBySyntax(t *testing.T) {
 	input := "squat 8 by 135"
-	result := Transform(input)
+	result := transform(input)
 
 	count := strings.Count(result, "8@135")
 	if count != 3 {
@@ -171,7 +171,7 @@ func TestTransformDefaultSetsForBySyntax(t *testing.T) {
 
 func TestTransformDefaultRepsForWeight(t *testing.T) {
 	input := "squat 135"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "8@135") {
 		t.Errorf("Expected default 8 reps, got: %s", result)
@@ -180,7 +180,7 @@ func TestTransformDefaultRepsForWeight(t *testing.T) {
 
 func TestTransformMultipleExercises(t *testing.T) {
 	input := "squat 8 8 8 135\nbench 3x8 95\npress 8 by 35"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "| Squat") {
 		t.Error("Expected Squat")
@@ -195,9 +195,21 @@ func TestTransformMultipleExercises(t *testing.T) {
 
 func TestTransformPreservesBlankLines(t *testing.T) {
 	input := "paragraph one\n\nparagraph two"
-	result := Transform(input)
+	result := transform(input)
 
 	if !strings.Contains(result, "\n\n") {
 		t.Error("Expected blank line between paragraphs")
+	}
+}
+
+func TestTransformTableColumnNumbers(t *testing.T) {
+	input := "squat 8 8 135"
+	result := transform(input)
+
+	if !strings.Contains(result, "| 1") {
+		t.Error("Expected column 1 in header")
+	}
+	if !strings.Contains(result, "| 2") {
+		t.Error("Expected column 2 in header")
 	}
 }

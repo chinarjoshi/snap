@@ -1,6 +1,6 @@
-// Code generated from ./Paragraph.g4 by ANTLR 4.13.2. DO NOT EDIT.
+// Code generated from Workoutliner.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
-package paragraph
+package workoutliner
 
 import (
 	"fmt"
@@ -14,14 +14,14 @@ var _ = fmt.Printf
 var _ = sync.Once{}
 var _ = unicode.IsLetter
 
-type ParagraphLexer struct {
+type WorkoutlinerLexer struct {
 	*antlr.BaseLexer
 	channelNames []string
 	modeNames    []string
 	// TODO: EOF string
 }
 
-var ParagraphLexerLexerStaticData struct {
+var WorkoutlinerLexerLexerStaticData struct {
 	once                   sync.Once
 	serializedATN          []int32
 	ChannelNames           []string
@@ -34,8 +34,8 @@ var ParagraphLexerLexerStaticData struct {
 	decisionToDFA          []*antlr.DFA
 }
 
-func paragraphlexerLexerInit() {
-	staticData := &ParagraphLexerLexerStaticData
+func workoutlinerlexerLexerInit() {
+	staticData := &WorkoutlinerLexerLexerStaticData
 	staticData.ChannelNames = []string{
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
 	}
@@ -82,39 +82,39 @@ func paragraphlexerLexerInit() {
 	}
 }
 
-// ParagraphLexerInit initializes any static state used to implement ParagraphLexer. By default the
+// WorkoutlinerLexerInit initializes any static state used to implement WorkoutlinerLexer. By default the
 // static state used to implement the lexer is lazily initialized during the first call to
-// NewParagraphLexer(). You can call this function if you wish to initialize the static state ahead
+// NewWorkoutlinerLexer(). You can call this function if you wish to initialize the static state ahead
 // of time.
-func ParagraphLexerInit() {
-	staticData := &ParagraphLexerLexerStaticData
-	staticData.once.Do(paragraphlexerLexerInit)
+func WorkoutlinerLexerInit() {
+	staticData := &WorkoutlinerLexerLexerStaticData
+	staticData.once.Do(workoutlinerlexerLexerInit)
 }
 
-// NewParagraphLexer produces a new lexer instance for the optional input antlr.CharStream.
-func NewParagraphLexer(input antlr.CharStream) *ParagraphLexer {
-	ParagraphLexerInit()
-	l := new(ParagraphLexer)
+// NewWorkoutlinerLexer produces a new lexer instance for the optional input antlr.CharStream.
+func NewWorkoutlinerLexer(input antlr.CharStream) *WorkoutlinerLexer {
+	WorkoutlinerLexerInit()
+	l := new(WorkoutlinerLexer)
 	l.BaseLexer = antlr.NewBaseLexer(input)
-	staticData := &ParagraphLexerLexerStaticData
+	staticData := &WorkoutlinerLexerLexerStaticData
 	l.Interpreter = antlr.NewLexerATNSimulator(l, staticData.atn, staticData.decisionToDFA, staticData.PredictionContextCache)
 	l.channelNames = staticData.ChannelNames
 	l.modeNames = staticData.ModeNames
 	l.RuleNames = staticData.RuleNames
 	l.LiteralNames = staticData.LiteralNames
 	l.SymbolicNames = staticData.SymbolicNames
-	l.GrammarFileName = "Paragraph.g4"
+	l.GrammarFileName = "Workoutliner.g4"
 	// TODO: l.EOF = antlr.TokenEOF
 
 	return l
 }
 
-// ParagraphLexer tokens.
+// WorkoutlinerLexer tokens.
 const (
-	ParagraphLexerNUMBER  = 1
-	ParagraphLexerX       = 2
-	ParagraphLexerBY      = 3
-	ParagraphLexerWORD    = 4
-	ParagraphLexerNEWLINE = 5
-	ParagraphLexerWS      = 6
+	WorkoutlinerLexerNUMBER  = 1
+	WorkoutlinerLexerX       = 2
+	WorkoutlinerLexerBY      = 3
+	WorkoutlinerLexerWORD    = 4
+	WorkoutlinerLexerNEWLINE = 5
+	WorkoutlinerLexerWS      = 6
 )

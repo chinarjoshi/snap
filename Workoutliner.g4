@@ -1,4 +1,4 @@
-grammar Paragraph;
+grammar Workoutliner;
 
 paragraph : line+ EOF ;
 

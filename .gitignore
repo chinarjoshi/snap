@@ -1,4 +1,4 @@
 .worktrees/
-workoutliner
 swift/.build/
 swift/Package.resolved
+/workoutliner
