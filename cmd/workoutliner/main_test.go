@@ -210,3 +210,21 @@ func TestTransformTableColumnNumbers(t *testing.T) {
 		t.Error("Expected column 1 in header")
 	}
 }
+
+func TestTransformTableMerge(t *testing.T) {
+	input := "|      | 0     | 1     | 2     |\n|-------|-------|-------|-------|\n| Squat| 8@225 | 8@225 | 8@225 |\nbench 3x8 155"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Squat") {
+		t.Error("Expected Squat in merged table")
+	}
+	if !strings.Contains(result, "| Bench") {
+		t.Error("Expected Bench in merged table")
+	}
+	if !strings.Contains(result, "8@225") {
+		t.Error("Expected 8@225 in merged table")
+	}
+	if !strings.Contains(result, "8@155") {
+		t.Error("Expected 8@155 in merged table")
+	}
+}

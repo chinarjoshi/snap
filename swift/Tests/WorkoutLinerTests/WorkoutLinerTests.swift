@@ -134,4 +134,14 @@ final class WorkoutLinerTests: XCTestCase {
 
         XCTAssertTrue(result.contains("\n\n"))
     }
+
+    func testTransformTableMerge() {
+        let input = "|      | 0     | 1     | 2     |\n|-------|-------|-------|-------|\n| Squat| 8@225 | 8@225 | 8@225 |\nbench 3x8 155"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Squat"), "Expected Squat in merged table")
+        XCTAssertTrue(result.contains("| Bench"), "Expected Bench in merged table")
+        XCTAssertTrue(result.contains("8@225"), "Expected 8@225 in merged table")
+        XCTAssertTrue(result.contains("8@155"), "Expected 8@155 in merged table")
+    }
 }
