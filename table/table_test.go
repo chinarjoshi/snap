@@ -29,7 +29,7 @@ func TestTableOutput(t *testing.T) {
 	if !strings.Contains(output, "Squat") {
 		t.Error("expected 'Squat' in output")
 	}
-	if !strings.Contains(output, "8 @ 135") {
-		t.Error("expected '8 @ 135' in output")
+	if !strings.Contains(output, "8@135") {
+		t.Error("expected '8@135' in output")
 	}
 }

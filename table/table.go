@@ -7,80 +7,130 @@ import (
 	"github.com/chijoshi/workoutliner/parser"
 )
 
-// Format returns a markdown table representation of the workout log
 func Format(log *parser.WorkoutLog) string {
-	if len(log.Exercises) == 0 {
+	return FormatExercises(log.Exercises)
+}
+
+func FormatExercises(exercises []parser.Exercise) string {
+	if len(exercises) == 0 {
 		return ""
 	}
 
-	maxSets := log.MaxSets()
+	maxSets := maxSetsInExercises(exercises)
 	if maxSets == 0 {
 		maxSets = 1
 	}
 
+	hasNotes := exercisesHaveNotes(exercises)
+	maxNameLen := maxExerciseNameLenFromSlice(exercises)
+	maxNoteLen := maxNoteLenFromSlice(exercises)
+
 	var sb strings.Builder
 
-	// Header row
+	sb.WriteString("| ")
+	sb.WriteString(padRight("Exercise", maxNameLen))
 	sb.WriteString("|")
-	sb.WriteString(pad("", maxExerciseNameLen(log)))
-	sb.WriteString(" |")
 	for i := 1; i <= maxSets; i++ {
 		sb.WriteString(fmt.Sprintf(" Set %d |", i))
 	}
-	sb.WriteString("\n")
-
-	// Separator row
-	sb.WriteString("|")
-	sb.WriteString(strings.Repeat("-", maxExerciseNameLen(log)+1))
-	sb.WriteString("|")
-	for i := 0; i < maxSets; i++ {
-		sb.WriteString("---------|")
+	if hasNotes {
+		sb.WriteString(" ")
+		sb.WriteString(padRight("Notes", maxNoteLen))
+		sb.WriteString("|")
 	}
 	sb.WriteString("\n")
 
-	// Data rows
-	for _, ex := range log.Exercises {
+	sb.WriteString("|")
+	sb.WriteString(strings.Repeat("-", maxNameLen+2))
+	sb.WriteString("|")
+	for i := 0; i < maxSets; i++ {
+		sb.WriteString("-------|")
+	}
+	if hasNotes {
+		sb.WriteString(strings.Repeat("-", maxNoteLen+2))
+		sb.WriteString("|")
+	}
+	sb.WriteString("\n")
+
+	for _, ex := range exercises {
 		sb.WriteString("| ")
-		sb.WriteString(padRight(ex.Name, maxExerciseNameLen(log)))
+		sb.WriteString(padRight(ex.Name, maxNameLen))
 		sb.WriteString("|")
 		for i := 0; i < maxSets; i++ {
 			if i < len(ex.Sets) {
 				sb.WriteString(" ")
-				sb.WriteString(formatSet(ex.Sets[i]))
+				sb.WriteString(padRight(formatSet(ex.Sets[i]), 5))
 				sb.WriteString(" |")
 			} else {
-				sb.WriteString("         |")
+				sb.WriteString("       |")
 			}
+		}
+		if hasNotes {
+			note := collectNotes(ex.Sets)
+			sb.WriteString(" ")
+			sb.WriteString(padRight(note, maxNoteLen))
+			sb.WriteString("|")
 		}
 		sb.WriteString("\n")
 	}
 
-	return sb.String()
+	return strings.TrimSuffix(sb.String(), "\n")
 }
 
 func formatSet(s parser.Set) string {
-	result := fmt.Sprintf("%d @ %d", s.Reps, s.Weight)
-	if s.Note != "" {
-		result += fmt.Sprintf(" (%s)", s.Note)
-	}
-	return result
+	return fmt.Sprintf("%d@%d", s.Reps, s.Weight)
 }
 
-func maxExerciseNameLen(log *parser.WorkoutLog) int {
+func maxSetsInExercises(exercises []parser.Exercise) int {
 	max := 0
-	for _, ex := range log.Exercises {
-		if len(ex.Name) > max {
-			max = len(ex.Name)
+	for _, ex := range exercises {
+		if len(ex.Sets) > max {
+			max = len(ex.Sets)
 		}
-	}
-	if max < 8 {
-		max = 8
 	}
 	return max
 }
 
-func pad(s string, length int) string {
-	return fmt.Sprintf("%*s", length, s)
+func maxExerciseNameLenFromSlice(exercises []parser.Exercise) int {
+	max := len("Exercise")
+	for _, ex := range exercises {
+		if len(ex.Name) > max {
+			max = len(ex.Name)
+		}
+	}
+	return max
+}
+
+func exercisesHaveNotes(exercises []parser.Exercise) bool {
+	for _, ex := range exercises {
+		for _, s := range ex.Sets {
+			if s.Note != "" {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func maxNoteLenFromSlice(exercises []parser.Exercise) int {
+	max := len("Notes")
+	for _, ex := range exercises {
+		noteLen := len(collectNotes(ex.Sets))
+		if noteLen > max {
+			max = noteLen
+		}
+	}
+	return max
+}
+
+func collectNotes(sets []parser.Set) string {
+	var notes []string
+	for _, s := range sets {
+		if s.Note != "" {
+			notes = append(notes, s.Note)
+		}
+	}
+	return strings.Join(notes, ", ")
 }
 
 func padRight(s string, length int) string {

@@ -6,12 +6,8 @@ import (
 	"io"
 	"os"
 
-	antlrparser "github.com/chijoshi/workoutliner/antlr"
-	"github.com/chijoshi/workoutliner/parser"
-	"github.com/chijoshi/workoutliner/table"
+	"github.com/chijoshi/workoutliner/transform"
 )
-
-var usePeg = flag.Bool("peg", false, "use PEG parser instead of ANTLR")
 
 func main() {
 	flag.Parse()
@@ -22,26 +18,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var log *parser.WorkoutLog
-
-	if *usePeg {
-		// Use PEG parser (pigeon)
-		result, err := parser.Parse("input", input)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "parse error: %v\n", err)
-			os.Exit(1)
-		}
-		log = result.(*parser.WorkoutLog)
-	} else {
-		// Use ANTLR parser (default)
-		log, err = antlrparser.Parse(string(input))
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "parse error: %v\n", err)
-			os.Exit(1)
-		}
-	}
-
-	fmt.Print(table.Format(log))
+	fmt.Print(transform.Transform(string(input)))
 }
 
 func readInput() ([]byte, error) {
