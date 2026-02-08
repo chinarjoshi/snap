@@ -220,3 +220,36 @@ func TestParseNotes(t *testing.T) {
 		})
 	}
 }
+
+func TestParseMultipleExercises(t *testing.T) {
+	cases := []struct {
+		input         string
+		expectedCount int
+		expectedNames []string
+	}{
+		{"squat 135. bench 185", 2, []string{"Squat", "Bench"}},
+		{"squat 135\nbench 185", 2, []string{"Squat", "Bench"}},
+		{"squat 135. bench 185. deadlift 225", 3, []string{"Squat", "Bench", "Deadlift"}},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.input, func(t *testing.T) {
+			got, err := Parse("test", []byte(tc.input))
+			if err != nil {
+				t.Fatalf("parse error: %v", err)
+			}
+
+			log := got.(*WorkoutLog)
+
+			if len(log.Exercises) != tc.expectedCount {
+				t.Fatalf("expected %d exercises, got %d", tc.expectedCount, len(log.Exercises))
+			}
+
+			for i, name := range tc.expectedNames {
+				if log.Exercises[i].Name != name {
+					t.Errorf("exercise %d: expected '%s', got '%s'", i, name, log.Exercises[i].Name)
+				}
+			}
+		})
+	}
+}
