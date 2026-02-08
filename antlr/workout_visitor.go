@@ -19,11 +19,17 @@ type WorkoutVisitor interface {
 	// Visit a parse tree produced by WorkoutParser#token.
 	VisitToken(ctx *TokenContext) interface{}
 
-	// Visit a parse tree produced by WorkoutParser#byExpr.
-	VisitByExpr(ctx *ByExprContext) interface{}
+	// Visit a parse tree produced by WorkoutParser#TwoPartBy.
+	VisitTwoPartBy(ctx *TwoPartByContext) interface{}
 
-	// Visit a parse tree produced by WorkoutParser#multiplier.
-	VisitMultiplier(ctx *MultiplierContext) interface{}
+	// Visit a parse tree produced by WorkoutParser#ThreePartBy.
+	VisitThreePartBy(ctx *ThreePartByContext) interface{}
+
+	// Visit a parse tree produced by WorkoutParser#PartialMultiplier.
+	VisitPartialMultiplier(ctx *PartialMultiplierContext) interface{}
+
+	// Visit a parse tree produced by WorkoutParser#FullMultiplier.
+	VisitFullMultiplier(ctx *FullMultiplierContext) interface{}
 
 	// Visit a parse tree produced by WorkoutParser#number.
 	VisitNumber(ctx *NumberContext) interface{}

@@ -23,11 +23,19 @@ func (v *BaseWorkoutVisitor) VisitToken(ctx *TokenContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseWorkoutVisitor) VisitByExpr(ctx *ByExprContext) interface{} {
+func (v *BaseWorkoutVisitor) VisitTwoPartBy(ctx *TwoPartByContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseWorkoutVisitor) VisitMultiplier(ctx *MultiplierContext) interface{} {
+func (v *BaseWorkoutVisitor) VisitThreePartBy(ctx *ThreePartByContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseWorkoutVisitor) VisitPartialMultiplier(ctx *PartialMultiplierContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseWorkoutVisitor) VisitFullMultiplier(ctx *FullMultiplierContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

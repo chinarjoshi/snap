@@ -44,17 +44,29 @@ func (s *BaseWorkoutListener) EnterToken(ctx *TokenContext) {}
 // ExitToken is called when production token is exited.
 func (s *BaseWorkoutListener) ExitToken(ctx *TokenContext) {}
 
-// EnterByExpr is called when production byExpr is entered.
-func (s *BaseWorkoutListener) EnterByExpr(ctx *ByExprContext) {}
+// EnterTwoPartBy is called when production TwoPartBy is entered.
+func (s *BaseWorkoutListener) EnterTwoPartBy(ctx *TwoPartByContext) {}
 
-// ExitByExpr is called when production byExpr is exited.
-func (s *BaseWorkoutListener) ExitByExpr(ctx *ByExprContext) {}
+// ExitTwoPartBy is called when production TwoPartBy is exited.
+func (s *BaseWorkoutListener) ExitTwoPartBy(ctx *TwoPartByContext) {}
 
-// EnterMultiplier is called when production multiplier is entered.
-func (s *BaseWorkoutListener) EnterMultiplier(ctx *MultiplierContext) {}
+// EnterThreePartBy is called when production ThreePartBy is entered.
+func (s *BaseWorkoutListener) EnterThreePartBy(ctx *ThreePartByContext) {}
 
-// ExitMultiplier is called when production multiplier is exited.
-func (s *BaseWorkoutListener) ExitMultiplier(ctx *MultiplierContext) {}
+// ExitThreePartBy is called when production ThreePartBy is exited.
+func (s *BaseWorkoutListener) ExitThreePartBy(ctx *ThreePartByContext) {}
+
+// EnterPartialMultiplier is called when production PartialMultiplier is entered.
+func (s *BaseWorkoutListener) EnterPartialMultiplier(ctx *PartialMultiplierContext) {}
+
+// ExitPartialMultiplier is called when production PartialMultiplier is exited.
+func (s *BaseWorkoutListener) ExitPartialMultiplier(ctx *PartialMultiplierContext) {}
+
+// EnterFullMultiplier is called when production FullMultiplier is entered.
+func (s *BaseWorkoutListener) EnterFullMultiplier(ctx *FullMultiplierContext) {}
+
+// ExitFullMultiplier is called when production FullMultiplier is exited.
+func (s *BaseWorkoutListener) ExitFullMultiplier(ctx *FullMultiplierContext) {}
 
 // EnterNumber is called when production number is entered.
 func (s *BaseWorkoutListener) EnterNumber(ctx *NumberContext) {}

@@ -20,14 +20,18 @@ token
     | note
     ;
 
-// "8 by 35" or "2 by 8 by 35"
+// "8 by 35" (reps by weight, default 3 sets)
+// "2 by 8 by 35" (sets by reps by weight)
 byExpr
-    : NUMBER BY NUMBER (BY NUMBER)?
+    : reps=NUMBER BY weight=NUMBER                      # TwoPartBy
+    | sets=NUMBER BY reps=NUMBER BY weight=NUMBER       # ThreePartBy
     ;
 
-// "3x8" or "3x8x135"
+// "3x8" (sets x reps, weight comes next)
+// "3x8x135" (sets x reps x weight)
 multiplier
-    : NUMBER X NUMBER (X NUMBER)?
+    : sets=NUMBER X reps=NUMBER                         # PartialMultiplier
+    | sets=NUMBER X reps=NUMBER X weight=NUMBER         # FullMultiplier
     ;
 
 number

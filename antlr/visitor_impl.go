@@ -14,7 +14,6 @@ const (
 	repThreshold = 20
 )
 
-// WorkoutASTVisitor builds parser.WorkoutLog from the parse tree
 type WorkoutASTVisitor struct {
 	BaseWorkoutVisitor
 }
@@ -37,13 +36,9 @@ func (v *WorkoutASTVisitor) VisitWorkoutLog(ctx *WorkoutLogContext) interface{} 
 }
 
 func (v *WorkoutASTVisitor) VisitExercise(ctx *ExerciseContext) interface{} {
-	// Get exercise name
 	name := v.Visit(ctx.ExerciseName()).(string)
-
-	// Process tokens to build sets
 	tokens := ctx.AllToken()
 	sets := v.buildSets(tokens)
-
 	return parser.Exercise{Name: name, Sets: sets}
 }
 
@@ -56,7 +51,6 @@ func (v *WorkoutASTVisitor) VisitExerciseName(ctx *ExerciseNameContext) interfac
 }
 
 func (v *WorkoutASTVisitor) VisitToken(ctx *TokenContext) interface{} {
-	// Delegate to specific token type
 	if byExpr := ctx.ByExpr(); byExpr != nil {
 		return v.Visit(byExpr)
 	}
@@ -72,58 +66,55 @@ func (v *WorkoutASTVisitor) VisitToken(ctx *TokenContext) interface{} {
 	return nil
 }
 
-// tokenResult represents an intermediate parsing result
 type tokenResult struct {
-	kind        string // "sets", "reps", "weight", "note", "pending_reps"
+	kind        string
 	sets        []parser.Set
 	value       int
 	text        string
-	pendingReps []int // for partial multiplier
+	pendingReps []int
 }
 
-func (v *WorkoutASTVisitor) VisitByExpr(ctx *ByExprContext) interface{} {
-	numbers := ctx.AllNUMBER()
-	first := toInt(numbers[0].GetText())
-	second := toInt(numbers[1].GetText())
+func (v *WorkoutASTVisitor) VisitTwoPartBy(ctx *TwoPartByContext) interface{} {
+	reps := toInt(ctx.GetReps().GetText())
+	weight := toInt(ctx.GetWeight().GetText())
 
-	var numSets, reps, weight int
-	if len(numbers) == 3 {
-		// S by R by W format
-		numSets = first
-		reps = second
-		weight = toInt(numbers[2].GetText())
-	} else {
-		// R by W format (default 3 sets)
-		numSets = defaultSets
-		reps = first
-		weight = second
-	}
-
-	sets := make([]parser.Set, numSets)
-	for i := 0; i < numSets; i++ {
+	sets := make([]parser.Set, defaultSets)
+	for i := range sets {
 		sets[i] = parser.Set{Reps: reps, Weight: weight}
 	}
 	return tokenResult{kind: "sets", sets: sets}
 }
 
-func (v *WorkoutASTVisitor) VisitMultiplier(ctx *MultiplierContext) interface{} {
-	numbers := ctx.AllNUMBER()
-	numSets := toInt(numbers[0].GetText())
-	reps := toInt(numbers[1].GetText())
+func (v *WorkoutASTVisitor) VisitThreePartBy(ctx *ThreePartByContext) interface{} {
+	numSets := toInt(ctx.GetSets().GetText())
+	reps := toInt(ctx.GetReps().GetText())
+	weight := toInt(ctx.GetWeight().GetText())
 
-	if len(numbers) == 3 {
-		// Full multiplier: 3x8x135
-		weight := toInt(numbers[2].GetText())
-		sets := make([]parser.Set, numSets)
-		for i := 0; i < numSets; i++ {
-			sets[i] = parser.Set{Reps: reps, Weight: weight}
-		}
-		return tokenResult{kind: "sets", sets: sets}
+	sets := make([]parser.Set, numSets)
+	for i := range sets {
+		sets[i] = parser.Set{Reps: reps, Weight: weight}
 	}
+	return tokenResult{kind: "sets", sets: sets}
+}
 
-	// Partial multiplier: 3x8 - returns pending reps
+func (v *WorkoutASTVisitor) VisitFullMultiplier(ctx *FullMultiplierContext) interface{} {
+	numSets := toInt(ctx.GetSets().GetText())
+	reps := toInt(ctx.GetReps().GetText())
+	weight := toInt(ctx.GetWeight().GetText())
+
+	sets := make([]parser.Set, numSets)
+	for i := range sets {
+		sets[i] = parser.Set{Reps: reps, Weight: weight}
+	}
+	return tokenResult{kind: "sets", sets: sets}
+}
+
+func (v *WorkoutASTVisitor) VisitPartialMultiplier(ctx *PartialMultiplierContext) interface{} {
+	numSets := toInt(ctx.GetSets().GetText())
+	reps := toInt(ctx.GetReps().GetText())
+
 	pending := make([]int, numSets)
-	for i := 0; i < numSets; i++ {
+	for i := range pending {
 		pending[i] = reps
 	}
 	return tokenResult{kind: "pending_reps", pendingReps: pending}
@@ -145,7 +136,6 @@ func (v *WorkoutASTVisitor) VisitNote(ctx *NoteContext) interface{} {
 	return tokenResult{kind: "note", text: strings.Join(words, " ")}
 }
 
-// buildSets processes token contexts and builds Set slice
 func (v *WorkoutASTVisitor) buildSets(tokenCtxs []ITokenContext) []parser.Set {
 	var sets []parser.Set
 	var pendingReps []int
@@ -160,13 +150,11 @@ func (v *WorkoutASTVisitor) buildSets(tokenCtxs []ITokenContext) []parser.Set {
 		tok := result.(tokenResult)
 		switch tok.kind {
 		case "sets":
-			// Pre-expanded sets from ByExpr or full Multiplier
 			sets = append(sets, tok.sets...)
 			if len(tok.sets) > 0 {
 				lastWeight = tok.sets[len(tok.sets)-1].Weight
 			}
 		case "pending_reps":
-			// From partial multiplier - add all pending reps
 			pendingReps = append(pendingReps, tok.pendingReps...)
 		case "weight":
 			if len(pendingReps) > 0 {
@@ -187,7 +175,6 @@ func (v *WorkoutASTVisitor) buildSets(tokenCtxs []ITokenContext) []parser.Set {
 		}
 	}
 
-	// Handle trailing reps
 	for _, r := range pendingReps {
 		if lastWeight > 0 {
 			sets = append(sets, parser.Set{Reps: r, Weight: lastWeight})
@@ -197,7 +184,6 @@ func (v *WorkoutASTVisitor) buildSets(tokenCtxs []ITokenContext) []parser.Set {
 	return sets
 }
 
-// Helper functions
 func toInt(s string) int {
 	n, _ := strconv.Atoi(s)
 	return n

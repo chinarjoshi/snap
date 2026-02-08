@@ -19,11 +19,17 @@ type WorkoutListener interface {
 	// EnterToken is called when entering the token production.
 	EnterToken(c *TokenContext)
 
-	// EnterByExpr is called when entering the byExpr production.
-	EnterByExpr(c *ByExprContext)
+	// EnterTwoPartBy is called when entering the TwoPartBy production.
+	EnterTwoPartBy(c *TwoPartByContext)
 
-	// EnterMultiplier is called when entering the multiplier production.
-	EnterMultiplier(c *MultiplierContext)
+	// EnterThreePartBy is called when entering the ThreePartBy production.
+	EnterThreePartBy(c *ThreePartByContext)
+
+	// EnterPartialMultiplier is called when entering the PartialMultiplier production.
+	EnterPartialMultiplier(c *PartialMultiplierContext)
+
+	// EnterFullMultiplier is called when entering the FullMultiplier production.
+	EnterFullMultiplier(c *FullMultiplierContext)
 
 	// EnterNumber is called when entering the number production.
 	EnterNumber(c *NumberContext)
@@ -43,11 +49,17 @@ type WorkoutListener interface {
 	// ExitToken is called when exiting the token production.
 	ExitToken(c *TokenContext)
 
-	// ExitByExpr is called when exiting the byExpr production.
-	ExitByExpr(c *ByExprContext)
+	// ExitTwoPartBy is called when exiting the TwoPartBy production.
+	ExitTwoPartBy(c *TwoPartByContext)
 
-	// ExitMultiplier is called when exiting the multiplier production.
-	ExitMultiplier(c *MultiplierContext)
+	// ExitThreePartBy is called when exiting the ThreePartBy production.
+	ExitThreePartBy(c *ThreePartByContext)
+
+	// ExitPartialMultiplier is called when exiting the PartialMultiplier production.
+	ExitPartialMultiplier(c *PartialMultiplierContext)
+
+	// ExitFullMultiplier is called when exiting the FullMultiplier production.
+	ExitFullMultiplier(c *FullMultiplierContext)
 
 	// ExitNumber is called when exiting the number production.
 	ExitNumber(c *NumberContext)

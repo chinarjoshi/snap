@@ -40,32 +40,34 @@ func workoutParserInit() {
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 6, 66, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7, 4,
+		4, 1, 6, 72, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7, 4,
 		2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 1, 0, 1, 0, 1, 0, 5, 0, 20, 8, 0, 10,
 		0, 12, 0, 23, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 5, 1, 29, 8, 1, 10, 1, 12,
 		1, 32, 9, 1, 1, 2, 4, 2, 35, 8, 2, 11, 2, 12, 2, 36, 1, 3, 1, 3, 1, 3,
-		1, 3, 3, 3, 43, 8, 3, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 3, 4, 50, 8, 4, 1,
-		5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5, 57, 8, 5, 1, 6, 1, 6, 1, 7, 4, 7, 62,
-		8, 7, 11, 7, 12, 7, 63, 1, 7, 0, 0, 8, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0,
-		66, 0, 16, 1, 0, 0, 0, 2, 26, 1, 0, 0, 0, 4, 34, 1, 0, 0, 0, 6, 42, 1,
-		0, 0, 0, 8, 44, 1, 0, 0, 0, 10, 51, 1, 0, 0, 0, 12, 58, 1, 0, 0, 0, 14,
-		61, 1, 0, 0, 0, 16, 21, 3, 2, 1, 0, 17, 18, 5, 5, 0, 0, 18, 20, 3, 2, 1,
-		0, 19, 17, 1, 0, 0, 0, 20, 23, 1, 0, 0, 0, 21, 19, 1, 0, 0, 0, 21, 22,
-		1, 0, 0, 0, 22, 24, 1, 0, 0, 0, 23, 21, 1, 0, 0, 0, 24, 25, 5, 0, 0, 1,
-		25, 1, 1, 0, 0, 0, 26, 30, 3, 4, 2, 0, 27, 29, 3, 6, 3, 0, 28, 27, 1, 0,
-		0, 0, 29, 32, 1, 0, 0, 0, 30, 28, 1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 3,
-		1, 0, 0, 0, 32, 30, 1, 0, 0, 0, 33, 35, 5, 4, 0, 0, 34, 33, 1, 0, 0, 0,
-		35, 36, 1, 0, 0, 0, 36, 34, 1, 0, 0, 0, 36, 37, 1, 0, 0, 0, 37, 5, 1, 0,
-		0, 0, 38, 43, 3, 8, 4, 0, 39, 43, 3, 10, 5, 0, 40, 43, 3, 12, 6, 0, 41,
-		43, 3, 14, 7, 0, 42, 38, 1, 0, 0, 0, 42, 39, 1, 0, 0, 0, 42, 40, 1, 0,
-		0, 0, 42, 41, 1, 0, 0, 0, 43, 7, 1, 0, 0, 0, 44, 45, 5, 1, 0, 0, 45, 46,
-		5, 3, 0, 0, 46, 49, 5, 1, 0, 0, 47, 48, 5, 3, 0, 0, 48, 50, 5, 1, 0, 0,
-		49, 47, 1, 0, 0, 0, 49, 50, 1, 0, 0, 0, 50, 9, 1, 0, 0, 0, 51, 52, 5, 1,
-		0, 0, 52, 53, 5, 2, 0, 0, 53, 56, 5, 1, 0, 0, 54, 55, 5, 2, 0, 0, 55, 57,
-		5, 1, 0, 0, 56, 54, 1, 0, 0, 0, 56, 57, 1, 0, 0, 0, 57, 11, 1, 0, 0, 0,
-		58, 59, 5, 1, 0, 0, 59, 13, 1, 0, 0, 0, 60, 62, 5, 4, 0, 0, 61, 60, 1,
-		0, 0, 0, 62, 63, 1, 0, 0, 0, 63, 61, 1, 0, 0, 0, 63, 64, 1, 0, 0, 0, 64,
-		15, 1, 0, 0, 0, 7, 21, 30, 36, 42, 49, 56, 63,
+		1, 3, 3, 3, 43, 8, 3, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 3,
+		4, 53, 8, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5, 63,
+		8, 5, 1, 6, 1, 6, 1, 7, 4, 7, 68, 8, 7, 11, 7, 12, 7, 69, 1, 7, 0, 0, 8,
+		0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 72, 0, 16, 1, 0, 0, 0, 2, 26, 1, 0, 0,
+		0, 4, 34, 1, 0, 0, 0, 6, 42, 1, 0, 0, 0, 8, 52, 1, 0, 0, 0, 10, 62, 1,
+		0, 0, 0, 12, 64, 1, 0, 0, 0, 14, 67, 1, 0, 0, 0, 16, 21, 3, 2, 1, 0, 17,
+		18, 5, 5, 0, 0, 18, 20, 3, 2, 1, 0, 19, 17, 1, 0, 0, 0, 20, 23, 1, 0, 0,
+		0, 21, 19, 1, 0, 0, 0, 21, 22, 1, 0, 0, 0, 22, 24, 1, 0, 0, 0, 23, 21,
+		1, 0, 0, 0, 24, 25, 5, 0, 0, 1, 25, 1, 1, 0, 0, 0, 26, 30, 3, 4, 2, 0,
+		27, 29, 3, 6, 3, 0, 28, 27, 1, 0, 0, 0, 29, 32, 1, 0, 0, 0, 30, 28, 1,
+		0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 3, 1, 0, 0, 0, 32, 30, 1, 0, 0, 0, 33,
+		35, 5, 4, 0, 0, 34, 33, 1, 0, 0, 0, 35, 36, 1, 0, 0, 0, 36, 34, 1, 0, 0,
+		0, 36, 37, 1, 0, 0, 0, 37, 5, 1, 0, 0, 0, 38, 43, 3, 8, 4, 0, 39, 43, 3,
+		10, 5, 0, 40, 43, 3, 12, 6, 0, 41, 43, 3, 14, 7, 0, 42, 38, 1, 0, 0, 0,
+		42, 39, 1, 0, 0, 0, 42, 40, 1, 0, 0, 0, 42, 41, 1, 0, 0, 0, 43, 7, 1, 0,
+		0, 0, 44, 45, 5, 1, 0, 0, 45, 46, 5, 3, 0, 0, 46, 53, 5, 1, 0, 0, 47, 48,
+		5, 1, 0, 0, 48, 49, 5, 3, 0, 0, 49, 50, 5, 1, 0, 0, 50, 51, 5, 3, 0, 0,
+		51, 53, 5, 1, 0, 0, 52, 44, 1, 0, 0, 0, 52, 47, 1, 0, 0, 0, 53, 9, 1, 0,
+		0, 0, 54, 55, 5, 1, 0, 0, 55, 56, 5, 2, 0, 0, 56, 63, 5, 1, 0, 0, 57, 58,
+		5, 1, 0, 0, 58, 59, 5, 2, 0, 0, 59, 60, 5, 1, 0, 0, 60, 61, 5, 2, 0, 0,
+		61, 63, 5, 1, 0, 0, 62, 54, 1, 0, 0, 0, 62, 57, 1, 0, 0, 0, 63, 11, 1,
+		0, 0, 0, 64, 65, 5, 1, 0, 0, 65, 13, 1, 0, 0, 0, 66, 68, 5, 4, 0, 0, 67,
+		66, 1, 0, 0, 0, 68, 69, 1, 0, 0, 0, 69, 67, 1, 0, 0, 0, 69, 70, 1, 0, 0,
+		0, 70, 15, 1, 0, 0, 0, 7, 21, 30, 36, 42, 52, 62, 69,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -835,13 +837,6 @@ type IByExprContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
-
-	// Getter signatures
-	AllNUMBER() []antlr.TerminalNode
-	NUMBER(i int) antlr.TerminalNode
-	AllBY() []antlr.TerminalNode
-	BY(i int) antlr.TerminalNode
-
 	// IsByExprContext differentiates from other interfaces.
 	IsByExprContext()
 }
@@ -878,20 +873,8 @@ func NewByExprContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 
 func (s *ByExprContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ByExprContext) AllNUMBER() []antlr.TerminalNode {
-	return s.GetTokens(WorkoutParserNUMBER)
-}
-
-func (s *ByExprContext) NUMBER(i int) antlr.TerminalNode {
-	return s.GetToken(WorkoutParserNUMBER, i)
-}
-
-func (s *ByExprContext) AllBY() []antlr.TerminalNode {
-	return s.GetTokens(WorkoutParserBY)
-}
-
-func (s *ByExprContext) BY(i int) antlr.TerminalNode {
-	return s.GetToken(WorkoutParserBY, i)
+func (s *ByExprContext) CopyAll(ctx *ByExprContext) {
+	s.CopyFrom(&ctx.BaseParserRuleContext)
 }
 
 func (s *ByExprContext) GetRuleContext() antlr.RuleContext {
@@ -902,22 +885,133 @@ func (s *ByExprContext) ToStringTree(ruleNames []string, recog antlr.Recognizer)
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *ByExprContext) EnterRule(listener antlr.ParseTreeListener) {
+type TwoPartByContext struct {
+	ByExprContext
+	reps   antlr.Token
+	weight antlr.Token
+}
+
+func NewTwoPartByContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TwoPartByContext {
+	var p = new(TwoPartByContext)
+
+	InitEmptyByExprContext(&p.ByExprContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ByExprContext))
+
+	return p
+}
+
+func (s *TwoPartByContext) GetReps() antlr.Token { return s.reps }
+
+func (s *TwoPartByContext) GetWeight() antlr.Token { return s.weight }
+
+func (s *TwoPartByContext) SetReps(v antlr.Token) { s.reps = v }
+
+func (s *TwoPartByContext) SetWeight(v antlr.Token) { s.weight = v }
+
+func (s *TwoPartByContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *TwoPartByContext) BY() antlr.TerminalNode {
+	return s.GetToken(WorkoutParserBY, 0)
+}
+
+func (s *TwoPartByContext) AllNUMBER() []antlr.TerminalNode {
+	return s.GetTokens(WorkoutParserNUMBER)
+}
+
+func (s *TwoPartByContext) NUMBER(i int) antlr.TerminalNode {
+	return s.GetToken(WorkoutParserNUMBER, i)
+}
+
+func (s *TwoPartByContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(WorkoutListener); ok {
-		listenerT.EnterByExpr(s)
+		listenerT.EnterTwoPartBy(s)
 	}
 }
 
-func (s *ByExprContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *TwoPartByContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(WorkoutListener); ok {
-		listenerT.ExitByExpr(s)
+		listenerT.ExitTwoPartBy(s)
 	}
 }
 
-func (s *ByExprContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+func (s *TwoPartByContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case WorkoutVisitor:
-		return t.VisitByExpr(s)
+		return t.VisitTwoPartBy(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type ThreePartByContext struct {
+	ByExprContext
+	sets   antlr.Token
+	reps   antlr.Token
+	weight antlr.Token
+}
+
+func NewThreePartByContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ThreePartByContext {
+	var p = new(ThreePartByContext)
+
+	InitEmptyByExprContext(&p.ByExprContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ByExprContext))
+
+	return p
+}
+
+func (s *ThreePartByContext) GetSets() antlr.Token { return s.sets }
+
+func (s *ThreePartByContext) GetReps() antlr.Token { return s.reps }
+
+func (s *ThreePartByContext) GetWeight() antlr.Token { return s.weight }
+
+func (s *ThreePartByContext) SetSets(v antlr.Token) { s.sets = v }
+
+func (s *ThreePartByContext) SetReps(v antlr.Token) { s.reps = v }
+
+func (s *ThreePartByContext) SetWeight(v antlr.Token) { s.weight = v }
+
+func (s *ThreePartByContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ThreePartByContext) AllBY() []antlr.TerminalNode {
+	return s.GetTokens(WorkoutParserBY)
+}
+
+func (s *ThreePartByContext) BY(i int) antlr.TerminalNode {
+	return s.GetToken(WorkoutParserBY, i)
+}
+
+func (s *ThreePartByContext) AllNUMBER() []antlr.TerminalNode {
+	return s.GetTokens(WorkoutParserNUMBER)
+}
+
+func (s *ThreePartByContext) NUMBER(i int) antlr.TerminalNode {
+	return s.GetToken(WorkoutParserNUMBER, i)
+}
+
+func (s *ThreePartByContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutListener); ok {
+		listenerT.EnterThreePartBy(s)
+	}
+}
+
+func (s *ThreePartByContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutListener); ok {
+		listenerT.ExitThreePartBy(s)
+	}
+}
+
+func (s *ThreePartByContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case WorkoutVisitor:
+		return t.VisitThreePartBy(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -927,43 +1021,29 @@ func (s *ByExprContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 func (p *WorkoutParser) ByExpr() (localctx IByExprContext) {
 	localctx = NewByExprContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 8, WorkoutParserRULE_byExpr)
-	var _la int
-
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(44)
-		p.Match(WorkoutParserNUMBER)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(45)
-		p.Match(WorkoutParserBY)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(46)
-		p.Match(WorkoutParserNUMBER)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	p.SetState(49)
+	p.SetState(52)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
-	_la = p.GetTokenStream().LA(1)
 
-	if _la == WorkoutParserBY {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 4, p.GetParserRuleContext()) {
+	case 1:
+		localctx = NewTwoPartByContext(p, localctx)
+		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(47)
+			p.SetState(44)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*TwoPartByContext).reps = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(45)
 			p.Match(WorkoutParserBY)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -971,14 +1051,72 @@ func (p *WorkoutParser) ByExpr() (localctx IByExprContext) {
 			}
 		}
 		{
-			p.SetState(48)
-			p.Match(WorkoutParserNUMBER)
+			p.SetState(46)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*TwoPartByContext).weight = _m
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 
+	case 2:
+		localctx = NewThreePartByContext(p, localctx)
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(47)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*ThreePartByContext).sets = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(48)
+			p.Match(WorkoutParserBY)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(49)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*ThreePartByContext).reps = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(50)
+			p.Match(WorkoutParserBY)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(51)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*ThreePartByContext).weight = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case antlr.ATNInvalidAltNumber:
+		goto errorExit
 	}
 
 errorExit:
@@ -1000,13 +1138,6 @@ type IMultiplierContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
-
-	// Getter signatures
-	AllNUMBER() []antlr.TerminalNode
-	NUMBER(i int) antlr.TerminalNode
-	AllX() []antlr.TerminalNode
-	X(i int) antlr.TerminalNode
-
 	// IsMultiplierContext differentiates from other interfaces.
 	IsMultiplierContext()
 }
@@ -1043,20 +1174,8 @@ func NewMultiplierContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 
 func (s *MultiplierContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *MultiplierContext) AllNUMBER() []antlr.TerminalNode {
-	return s.GetTokens(WorkoutParserNUMBER)
-}
-
-func (s *MultiplierContext) NUMBER(i int) antlr.TerminalNode {
-	return s.GetToken(WorkoutParserNUMBER, i)
-}
-
-func (s *MultiplierContext) AllX() []antlr.TerminalNode {
-	return s.GetTokens(WorkoutParserX)
-}
-
-func (s *MultiplierContext) X(i int) antlr.TerminalNode {
-	return s.GetToken(WorkoutParserX, i)
+func (s *MultiplierContext) CopyAll(ctx *MultiplierContext) {
+	s.CopyFrom(&ctx.BaseParserRuleContext)
 }
 
 func (s *MultiplierContext) GetRuleContext() antlr.RuleContext {
@@ -1067,22 +1186,133 @@ func (s *MultiplierContext) ToStringTree(ruleNames []string, recog antlr.Recogni
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *MultiplierContext) EnterRule(listener antlr.ParseTreeListener) {
+type PartialMultiplierContext struct {
+	MultiplierContext
+	sets antlr.Token
+	reps antlr.Token
+}
+
+func NewPartialMultiplierContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *PartialMultiplierContext {
+	var p = new(PartialMultiplierContext)
+
+	InitEmptyMultiplierContext(&p.MultiplierContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*MultiplierContext))
+
+	return p
+}
+
+func (s *PartialMultiplierContext) GetSets() antlr.Token { return s.sets }
+
+func (s *PartialMultiplierContext) GetReps() antlr.Token { return s.reps }
+
+func (s *PartialMultiplierContext) SetSets(v antlr.Token) { s.sets = v }
+
+func (s *PartialMultiplierContext) SetReps(v antlr.Token) { s.reps = v }
+
+func (s *PartialMultiplierContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *PartialMultiplierContext) X() antlr.TerminalNode {
+	return s.GetToken(WorkoutParserX, 0)
+}
+
+func (s *PartialMultiplierContext) AllNUMBER() []antlr.TerminalNode {
+	return s.GetTokens(WorkoutParserNUMBER)
+}
+
+func (s *PartialMultiplierContext) NUMBER(i int) antlr.TerminalNode {
+	return s.GetToken(WorkoutParserNUMBER, i)
+}
+
+func (s *PartialMultiplierContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(WorkoutListener); ok {
-		listenerT.EnterMultiplier(s)
+		listenerT.EnterPartialMultiplier(s)
 	}
 }
 
-func (s *MultiplierContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *PartialMultiplierContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(WorkoutListener); ok {
-		listenerT.ExitMultiplier(s)
+		listenerT.ExitPartialMultiplier(s)
 	}
 }
 
-func (s *MultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+func (s *PartialMultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case WorkoutVisitor:
-		return t.VisitMultiplier(s)
+		return t.VisitPartialMultiplier(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type FullMultiplierContext struct {
+	MultiplierContext
+	sets   antlr.Token
+	reps   antlr.Token
+	weight antlr.Token
+}
+
+func NewFullMultiplierContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *FullMultiplierContext {
+	var p = new(FullMultiplierContext)
+
+	InitEmptyMultiplierContext(&p.MultiplierContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*MultiplierContext))
+
+	return p
+}
+
+func (s *FullMultiplierContext) GetSets() antlr.Token { return s.sets }
+
+func (s *FullMultiplierContext) GetReps() antlr.Token { return s.reps }
+
+func (s *FullMultiplierContext) GetWeight() antlr.Token { return s.weight }
+
+func (s *FullMultiplierContext) SetSets(v antlr.Token) { s.sets = v }
+
+func (s *FullMultiplierContext) SetReps(v antlr.Token) { s.reps = v }
+
+func (s *FullMultiplierContext) SetWeight(v antlr.Token) { s.weight = v }
+
+func (s *FullMultiplierContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *FullMultiplierContext) AllX() []antlr.TerminalNode {
+	return s.GetTokens(WorkoutParserX)
+}
+
+func (s *FullMultiplierContext) X(i int) antlr.TerminalNode {
+	return s.GetToken(WorkoutParserX, i)
+}
+
+func (s *FullMultiplierContext) AllNUMBER() []antlr.TerminalNode {
+	return s.GetTokens(WorkoutParserNUMBER)
+}
+
+func (s *FullMultiplierContext) NUMBER(i int) antlr.TerminalNode {
+	return s.GetToken(WorkoutParserNUMBER, i)
+}
+
+func (s *FullMultiplierContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutListener); ok {
+		listenerT.EnterFullMultiplier(s)
+	}
+}
+
+func (s *FullMultiplierContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutListener); ok {
+		listenerT.ExitFullMultiplier(s)
+	}
+}
+
+func (s *FullMultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case WorkoutVisitor:
+		return t.VisitFullMultiplier(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -1092,44 +1322,22 @@ func (s *MultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 func (p *WorkoutParser) Multiplier() (localctx IMultiplierContext) {
 	localctx = NewMultiplierContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 10, WorkoutParserRULE_multiplier)
-	var _la int
-
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(51)
-		p.Match(WorkoutParserNUMBER)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(52)
-		p.Match(WorkoutParserX)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(53)
-		p.Match(WorkoutParserNUMBER)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	p.SetState(56)
+	p.SetState(62)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
-	_la = p.GetTokenStream().LA(1)
 
-	if _la == WorkoutParserX {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 5, p.GetParserRuleContext()) {
+	case 1:
+		localctx = NewPartialMultiplierContext(p, localctx)
+		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(54)
-			p.Match(WorkoutParserX)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*PartialMultiplierContext).sets = _m
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1137,13 +1345,79 @@ func (p *WorkoutParser) Multiplier() (localctx IMultiplierContext) {
 		}
 		{
 			p.SetState(55)
-			p.Match(WorkoutParserNUMBER)
+			p.Match(WorkoutParserX)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(56)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*PartialMultiplierContext).reps = _m
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 
+	case 2:
+		localctx = NewFullMultiplierContext(p, localctx)
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(57)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*FullMultiplierContext).sets = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(58)
+			p.Match(WorkoutParserX)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(59)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*FullMultiplierContext).reps = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(60)
+			p.Match(WorkoutParserX)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(61)
+
+			var _m = p.Match(WorkoutParserNUMBER)
+
+			localctx.(*FullMultiplierContext).weight = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case antlr.ATNInvalidAltNumber:
+		goto errorExit
 	}
 
 errorExit:
@@ -1244,7 +1518,7 @@ func (p *WorkoutParser) Number() (localctx INumberContext) {
 	p.EnterRule(localctx, 12, WorkoutParserRULE_number)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(58)
+		p.SetState(64)
 		p.Match(WorkoutParserNUMBER)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1356,7 +1630,7 @@ func (p *WorkoutParser) Note() (localctx INoteContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(61)
+	p.SetState(67)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1366,7 +1640,7 @@ func (p *WorkoutParser) Note() (localctx INoteContext) {
 		switch _alt {
 		case 1:
 			{
-				p.SetState(60)
+				p.SetState(66)
 				p.Match(WorkoutParserWORD)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1379,7 +1653,7 @@ func (p *WorkoutParser) Note() (localctx INoteContext) {
 			goto errorExit
 		}
 
-		p.SetState(63)
+		p.SetState(69)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 6, p.GetParserRuleContext())
 		if p.HasError() {
