@@ -1,12 +1,12 @@
-When did the world unanimously admit buttons as an acceptable a way to operate software? When I'm sweaty and achy the last thing I want is to navigate some shitty overengineered AI-generated slop. Whatever. Here's an ANTLR grammar to parse natural workout descriptions into org-mode tables.
+When did the world unanimously accept buttons as an acceptable a way to operate software? When I'm sweaty and achy the last thing I want is to navigate some shitty overengineered AI-generated slop. Whatever. Here's a shitty overengineered AI-generated ANTLR grammar to parse natural workout descriptions into org-mode tables.
 
 ** Example
 
 Input:
 #+begin_example
 ate a banana beforehand
-squat 8 8 8 135
-bench 3x8 95
+squat 8 8 8 225
+bench 3x8 155
 #+end_example
 
 Output:
@@ -15,20 +15,20 @@ ate a banana beforehand
 
 | Exercise| 1     | 2     | 3     |
 |----------|-------|-------|-------|
-| Squat   | 8@135 | 8@135 | 8@135 |
-| Bench   | 8@95  | 8@95  | 8@95  |
+| Squat   | 8@225 | 8@225 | 8@225 |
+| Bench   | 8@155 | 8@155 | 8@155 |
 #+end_example
 
 ** Syntax
 
 | Notation         | Meaning                        |
 |------------------+--------------------------------|
-| =squat 135=      | 1 set of 8 reps @ 135          |
-| =squat 8 8 135=  | 2 sets of 8 reps @ 135         |
-| =squat 3x8 135=  | 3 sets of 8 reps @ 135         |
-| =squat 3x8x135=  | 3 sets of 8 reps @ 135         |
-| =squat 8 by 135= | 3 sets of 8 reps @ 135         |
-| =squat 3 by 8 by 135= | 3 sets of 8 reps @ 135    |
+| =squat 225=      | 1 set of 8 reps @ 225          |
+| =squat 8 8 225=  | 2 sets of 8 reps @ 225         |
+| =squat 3x8 225=  | 3 sets of 8 reps @ 225         |
+| =squat 3x8x225=  | 3 sets of 8 reps @ 225         |
+| =squat 8 by 225= | 3 sets of 8 reps @ 225         |
+| =squat 3 by 8 by 225= | 3 sets of 8 reps @ 225    |
 
 Prose lines (no numbers) appear above the table. Inline notes (words after numbers) go in a Notes column.
 
@@ -39,7 +39,7 @@ Prose lines (no numbers) appear above the table. Inline notes (words after numbe
 make build
 
 # Usage
-echo "squat 3x8 135" | ./workoutliner
+echo "squat 3x8 225" | ./workoutliner
 ./workoutliner < workout.txt
 ./workoutliner workout.txt
 #+end_src
@@ -59,7 +59,7 @@ Usage:
 #+begin_src swift
 import WorkoutLiner
 
-let output = transform("squat 3x8 135")
+let output = transform("squat 3x8 225")
 #+end_src
 
 ** Structure

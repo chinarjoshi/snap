@@ -1,0 +1,5 @@
+# ANTLR-generated files
+libs/workoutliner/workoutliner_*.go linguist-generated
+swift/Sources/WorkoutLiner/Parser/*.swift linguist-generated
+swift/Sources/WorkoutLiner/Parser/*.interp linguist-generated
+swift/Sources/WorkoutLiner/Parser/*.tokens linguist-generated
