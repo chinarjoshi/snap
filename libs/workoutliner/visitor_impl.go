@@ -178,12 +178,18 @@ func (v *WorkoutlinerASTVisitor) VisitFullMultiplier(ctx *FullMultiplierContext)
 }
 
 func (v *WorkoutlinerASTVisitor) VisitPartialMultiplier(ctx *PartialMultiplierContext) interface{} {
-	numSets := toInt(ctx.GetSets().GetText())
-	reps := toInt(ctx.GetReps().GetText())
+	first := toInt(ctx.GetSets().GetText())
+	second := toInt(ctx.GetReps().GetText())
 
-	pending := make([]int, numSets)
+	// If second number looks like a weight, treat as reps@weight
+	if second > repThreshold {
+		return tokenResult{kind: "sets", sets: []Set{{Reps: first, Weight: second}}}
+	}
+
+	// Otherwise, it's sets x reps waiting for weight
+	pending := make([]int, first)
 	for i := range pending {
-		pending[i] = reps
+		pending[i] = second
 	}
 	return tokenResult{kind: "pending_reps", pendingReps: pending}
 }

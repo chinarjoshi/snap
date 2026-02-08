@@ -66,11 +66,8 @@ func TestTransformInlineNotes(t *testing.T) {
 	input := "squat 8 8 8 135 light headed\nbench 3x8 95"
 	result := transform(input)
 
-	if !strings.Contains(result, "Notes") {
-		t.Error("Expected Notes column header")
-	}
-	if !strings.Contains(result, "light headed") {
-		t.Error("Expected inline note in table")
+	if !strings.Contains(result, "- Squat :: light headed") {
+		t.Errorf("Expected note as description list, got: %s", result)
 	}
 }
 
@@ -206,10 +203,10 @@ func TestTransformTableColumnNumbers(t *testing.T) {
 	input := "squat 8 8 135"
 	result := transform(input)
 
+	if !strings.Contains(result, "| 0") {
+		t.Error("Expected column 0 in header")
+	}
 	if !strings.Contains(result, "| 1") {
 		t.Error("Expected column 1 in header")
-	}
-	if !strings.Contains(result, "| 2") {
-		t.Error("Expected column 2 in header")
 	}
 }

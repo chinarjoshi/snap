@@ -91,37 +91,29 @@ func formatExercises(exercises []workoutliner.Exercise) string {
 		maxSets = 1
 	}
 
-	hasNotes := exercisesHaveNotes(exercises)
 	maxNameLen := maxExerciseNameLen(exercises)
-	maxNoteLen := maxNoteLen(exercises)
 
 	var sb strings.Builder
 
+	// Header
 	sb.WriteString("| ")
-	sb.WriteString(padRight("Exercise", maxNameLen))
+	sb.WriteString(padRight("", maxNameLen))
 	sb.WriteString("|")
-	for i := 1; i <= maxSets; i++ {
+	for i := 0; i < maxSets; i++ {
 		sb.WriteString(fmt.Sprintf(" %-5d |", i))
-	}
-	if hasNotes {
-		sb.WriteString(" ")
-		sb.WriteString(padRight("Notes", maxNoteLen))
-		sb.WriteString("|")
 	}
 	sb.WriteString("\n")
 
+	// Separator
 	sb.WriteString("|")
 	sb.WriteString(strings.Repeat("-", maxNameLen+2))
 	sb.WriteString("|")
 	for i := 0; i < maxSets; i++ {
 		sb.WriteString("-------|")
 	}
-	if hasNotes {
-		sb.WriteString(strings.Repeat("-", maxNoteLen+2))
-		sb.WriteString("|")
-	}
 	sb.WriteString("\n")
 
+	// Data rows
 	for _, ex := range exercises {
 		sb.WriteString("| ")
 		sb.WriteString(padRight(ex.Name, maxNameLen))
@@ -135,13 +127,20 @@ func formatExercises(exercises []workoutliner.Exercise) string {
 				sb.WriteString("       |")
 			}
 		}
-		if hasNotes {
-			note := collectNotes(ex.Sets)
-			sb.WriteString(" ")
-			sb.WriteString(padRight(note, maxNoteLen))
-			sb.WriteString("|")
-		}
 		sb.WriteString("\n")
+	}
+
+	// Notes as description list
+	var notes []string
+	for _, ex := range exercises {
+		note := collectNotes(ex.Sets)
+		if note != "" {
+			notes = append(notes, fmt.Sprintf("- %s :: %s", ex.Name, note))
+		}
+	}
+	if len(notes) > 0 {
+		sb.WriteString("\n")
+		sb.WriteString(strings.Join(notes, "\n"))
 	}
 
 	return strings.TrimSuffix(sb.String(), "\n")
@@ -162,7 +161,7 @@ func maxSetsInExercises(exercises []workoutliner.Exercise) int {
 }
 
 func maxExerciseNameLen(exercises []workoutliner.Exercise) int {
-	max := len("Exercise")
+	max := 0
 	for _, ex := range exercises {
 		if len(ex.Name) > max {
 			max = len(ex.Name)
@@ -171,27 +170,6 @@ func maxExerciseNameLen(exercises []workoutliner.Exercise) int {
 	return max
 }
 
-func exercisesHaveNotes(exercises []workoutliner.Exercise) bool {
-	for _, ex := range exercises {
-		for _, s := range ex.Sets {
-			if s.Note != "" {
-				return true
-			}
-		}
-	}
-	return false
-}
-
-func maxNoteLen(exercises []workoutliner.Exercise) int {
-	max := len("Notes")
-	for _, ex := range exercises {
-		noteLen := len(collectNotes(ex.Sets))
-		if noteLen > max {
-			max = noteLen
-		}
-	}
-	return max
-}
 
 func collectNotes(sets []workoutliner.Set) string {
 	var notes []string

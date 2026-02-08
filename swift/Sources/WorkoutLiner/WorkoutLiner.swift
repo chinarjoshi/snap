@@ -64,22 +64,14 @@ private func formatExercises(_ exercises: [Exercise]) -> String {
     guard !exercises.isEmpty else { return "" }
 
     let maxSets = exercises.map { $0.sets.count }.max() ?? 1
-    let hasNotes = exercises.flatMap { $0.sets }.contains { !$0.note.isEmpty }
-    let maxNameLen = max(exercises.map { $0.name.count }.max() ?? 0, "Exercise".count)
-    let maxNoteLen = hasNotes ? max(
-        exercises.flatMap { $0.sets }.map { $0.note.count }.max() ?? 0,
-        "Notes".count
-    ) : 0
+    let maxNameLen = exercises.map { $0.name.count }.max() ?? 0
 
     var lines: [String] = []
 
     // Header
-    var header = "| " + "Exercise".padding(toLength: maxNameLen, withPad: " ", startingAt: 0) + "|"
-    for i in 1...maxSets {
+    var header = "| " + "".padding(toLength: maxNameLen, withPad: " ", startingAt: 0) + "|"
+    for i in 0..<maxSets {
         header += " " + String(i).padding(toLength: 5, withPad: " ", startingAt: 0) + " |"
-    }
-    if hasNotes {
-        header += " " + "Notes".padding(toLength: maxNoteLen, withPad: " ", startingAt: 0) + "|"
     }
     lines.append(header)
 
@@ -87,9 +79,6 @@ private func formatExercises(_ exercises: [Exercise]) -> String {
     var separator = "|" + String(repeating: "-", count: maxNameLen + 2) + "|"
     for _ in 0..<maxSets {
         separator += "-------|"
-    }
-    if hasNotes {
-        separator += String(repeating: "-", count: maxNoteLen + 2) + "|"
     }
     lines.append(separator)
 
@@ -105,11 +94,20 @@ private func formatExercises(_ exercises: [Exercise]) -> String {
                 row += "       |"
             }
         }
-        if hasNotes {
-            let notes = exercise.sets.compactMap { $0.note.isEmpty ? nil : $0.note }.joined(separator: ", ")
-            row += " " + notes.padding(toLength: maxNoteLen, withPad: " ", startingAt: 0) + "|"
-        }
         lines.append(row)
+    }
+
+    // Notes as description list
+    var notes: [String] = []
+    for exercise in exercises {
+        let noteText = exercise.sets.compactMap { $0.note.isEmpty ? nil : $0.note }.joined(separator: ", ")
+        if !noteText.isEmpty {
+            notes.append("- \(exercise.name) :: \(noteText)")
+        }
+    }
+    if !notes.isEmpty {
+        lines.append("")
+        lines.append(contentsOf: notes)
     }
 
     return lines.joined(separator: "\n")

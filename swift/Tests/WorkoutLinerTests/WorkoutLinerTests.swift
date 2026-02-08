@@ -42,8 +42,7 @@ final class WorkoutLinerTests: XCTestCase {
         let input = "squat 8 8 8 135 light headed\nbench 3x8 95"
         let result = transform(input)
 
-        XCTAssertTrue(result.contains("Notes"))
-        XCTAssertTrue(result.contains("light headed"))
+        XCTAssertTrue(result.contains("- Squat :: light headed"), "Expected note as description list, got: \(result)")
     }
 
     func testTransformPureProse() {

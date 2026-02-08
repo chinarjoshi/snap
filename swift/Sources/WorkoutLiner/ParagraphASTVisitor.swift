@@ -141,10 +141,16 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
     }
 
     override func visitPartialMultiplier(_ ctx: ParagraphParser.PartialMultiplierContext) -> Any? {
-        let numSets = Int(ctx.sets?.getText() ?? "0") ?? 0
-        let reps = Int(ctx.reps?.getText() ?? "0") ?? 0
+        let first = Int(ctx.sets?.getText() ?? "0") ?? 0
+        let second = Int(ctx.reps?.getText() ?? "0") ?? 0
 
-        let pending = (0..<numSets).map { _ in reps }
+        // If second number looks like a weight, treat as reps@weight
+        if second > repThreshold {
+            return TokenResult.sets([WorkoutSet(reps: first, weight: second)])
+        }
+
+        // Otherwise, it's sets x reps waiting for weight
+        let pending = (0..<first).map { _ in second }
         return TokenResult.pendingReps(pending)
     }
 
