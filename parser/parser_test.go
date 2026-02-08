@@ -119,3 +119,36 @@ func TestParseTrailingReps(t *testing.T) {
 		}
 	}
 }
+
+func TestParseMultiplier(t *testing.T) {
+	cases := []struct {
+		input    string
+		expected []Set
+	}{
+		{"squat 3x8 135", []Set{{8, 135, ""}, {8, 135, ""}, {8, 135, ""}}},
+		{"squat 3x8x135", []Set{{8, 135, ""}, {8, 135, ""}, {8, 135, ""}}},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.input, func(t *testing.T) {
+			got, err := Parse("test", []byte(tc.input))
+			if err != nil {
+				t.Fatalf("parse error: %v", err)
+			}
+
+			log := got.(*WorkoutLog)
+			ex := log.Exercises[0]
+
+			if len(ex.Sets) != len(tc.expected) {
+				t.Fatalf("expected %d sets, got %d", len(tc.expected), len(ex.Sets))
+			}
+
+			for i, want := range tc.expected {
+				got := ex.Sets[i]
+				if got.Reps != want.Reps || got.Weight != want.Weight {
+					t.Errorf("set %d: expected %d@%d, got %d@%d", i, want.Reps, want.Weight, got.Reps, got.Weight)
+				}
+			}
+		})
+	}
+}

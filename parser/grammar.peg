@@ -47,35 +47,54 @@ type token struct {
 	text  string
 }
 
-func buildSets(tokens []token) []Set {
+type multiplierToken struct {
+	sets   int
+	reps   int
+	weight int // 0 if not specified
+}
+
+func buildSets(tokens []any) []Set {
 	var sets []Set
 	var pendingReps []int
 	var lastWeight int
 
-	for _, tok := range tokens {
-		switch tok.kind {
-		case "weight":
-			if len(pendingReps) > 0 {
-				// Apply all pending reps to this weight
-				for _, r := range pendingReps {
-					sets = append(sets, Set{Reps: r, Weight: tok.value})
+	for _, t := range tokens {
+		switch tok := t.(type) {
+		case multiplierToken:
+			if tok.weight > 0 {
+				// Full multiplier: 3x8x135
+				for i := 0; i < tok.sets; i++ {
+					sets = append(sets, Set{Reps: tok.reps, Weight: tok.weight})
 				}
-				pendingReps = nil
+				lastWeight = tok.weight
 			} else {
-				// No pending reps, use default
-				sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
+				// Partial multiplier: 3x8 (needs weight from next token)
+				for i := 0; i < tok.sets; i++ {
+					pendingReps = append(pendingReps, tok.reps)
+				}
 			}
-			lastWeight = tok.value
-		case "reps":
-			pendingReps = append(pendingReps, tok.value)
-		case "note":
-			if len(sets) > 0 {
-				sets[len(sets)-1].Note = strings.TrimSpace(tok.text)
+		case token:
+			switch tok.kind {
+			case "weight":
+				if len(pendingReps) > 0 {
+					for _, r := range pendingReps {
+						sets = append(sets, Set{Reps: r, Weight: tok.value})
+					}
+					pendingReps = nil
+				} else {
+					sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
+				}
+				lastWeight = tok.value
+			case "reps":
+				pendingReps = append(pendingReps, tok.value)
+			case "note":
+				if len(sets) > 0 {
+					sets[len(sets)-1].Note = strings.TrimSpace(tok.text)
+				}
 			}
 		}
 	}
 
-	// Handle trailing reps (inherit last weight)
 	for _, r := range pendingReps {
 		if lastWeight > 0 {
 			sets = append(sets, Set{Reps: r, Weight: lastWeight})
@@ -102,10 +121,10 @@ ExerciseList <- first:Exercise rest:(Delimiter Exercise)* {
 Delimiter <- [.\n]+
 
 Exercise <- _ name:ExerciseName tokens:Token* _ {
-	toks := []token{}
+	toks := []any{}
 	for _, t := range toIfaceSlice(tokens) {
 		if t != nil {
-			toks = append(toks, t.(token))
+			toks = append(toks, t)
 		}
 	}
 	sets := buildSets(toks)
@@ -120,7 +139,7 @@ ExerciseName <- chars:(!Digit !Delimiter .)+ {
 	return sb.String(), nil
 }
 
-Token <- _ t:(Number / NoteText) {
+Token <- _ t:(Multiplier / Number / NoteText) {
 	return t, nil
 }
 
@@ -131,6 +150,21 @@ NoteText <- chars:(!Digit !Delimiter .)+ {
 	}
 	text := sb.String()
 	return token{kind: "note", text: text}, nil
+}
+
+Multiplier <- sets:Digits [xX] reps:Digits weight:([xX] Digits)? {
+	s := toInt(sets.(string))
+	r := toInt(reps.(string))
+	w := 0
+	if weight != nil {
+		wParts := toIfaceSlice(weight)
+		w = toInt(wParts[1].(string))
+	}
+	return multiplierToken{sets: s, reps: r, weight: w}, nil
+}
+
+Digits <- [0-9]+ {
+	return string(c.text), nil
 }
 
 Number <- digits:Digit+ {
