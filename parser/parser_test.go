@@ -185,3 +185,38 @@ func TestParseBySyntax(t *testing.T) {
 		})
 	}
 }
+
+func TestParseNotes(t *testing.T) {
+	cases := []struct {
+		input    string
+		expected []Set
+	}{
+		{"squat 8 135 hard", []Set{{8, 135, "hard"}}},
+		{"bench 135 tough 125", []Set{{8, 135, "tough"}, {8, 125, ""}}},
+		{"squat 8 8 8 135 light headed", []Set{{8, 135, ""}, {8, 135, ""}, {8, 135, "light headed"}}},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.input, func(t *testing.T) {
+			got, err := Parse("test", []byte(tc.input))
+			if err != nil {
+				t.Fatalf("parse error: %v", err)
+			}
+
+			log := got.(*WorkoutLog)
+			ex := log.Exercises[0]
+
+			if len(ex.Sets) != len(tc.expected) {
+				t.Fatalf("expected %d sets, got %d", len(tc.expected), len(ex.Sets))
+			}
+
+			for i, want := range tc.expected {
+				got := ex.Sets[i]
+				if got.Reps != want.Reps || got.Weight != want.Weight || got.Note != want.Note {
+					t.Errorf("set %d: expected %d@%d(%s), got %d@%d(%s)",
+						i, want.Reps, want.Weight, want.Note, got.Reps, got.Weight, got.Note)
+				}
+			}
+		})
+	}
+}
