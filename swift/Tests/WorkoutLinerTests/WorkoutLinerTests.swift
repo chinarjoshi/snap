@@ -144,4 +144,80 @@ final class WorkoutLinerTests: XCTestCase {
         XCTAssertTrue(result.contains("8@225"), "Expected 8@225 in merged table")
         XCTAssertTrue(result.contains("8@155"), "Expected 8@155 in merged table")
     }
+
+    func testTransformBodyweight() {
+        let input = "dips 8 8 8"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Dips"), "Expected Dips in table")
+        XCTAssertFalse(result.contains("@"), "Bodyweight should not have @ symbol, got: \(result)")
+    }
+
+    func testTransformSupersetBasic() {
+        let input = "dips* press* 8 135 8 135 8 135"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Dips*"), "Expected Dips* in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Press*"), "Expected Press* in table, got: \(result)")
+    }
+
+    func testTransformSupersetMixedBodyweightWeighted() {
+        let input = "dips* shoulder press* 8 8x135 8 8x125 8 8x100"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Dips*"), "Expected Dips* in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Shoulder Press*"), "Expected Shoulder Press* in table, got: \(result)")
+        XCTAssertTrue(result.contains("8@135"), "Expected 8@135 for press, got: \(result)")
+        XCTAssertTrue(result.contains("8@125"), "Expected 8@125 for press, got: \(result)")
+        XCTAssertTrue(result.contains("8@100"), "Expected 8@100 for press, got: \(result)")
+    }
+
+    func testTransformSupersetOddSets() {
+        let input = "dips* press* 8 135 8 135 8"
+        let result = transform(input)
+
+        // With 5 sets: indices 0,2,4 go to dips (3 sets), indices 1,3 go to press (2 sets)
+        XCTAssertTrue(result.contains("| Dips*"), "Expected Dips* in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Press*"), "Expected Press* in table, got: \(result)")
+    }
+
+    func testTransformMultiLineBasic() {
+        let input = "Bench\n8x135\n8\n8\n8"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Bench"), "Expected Bench in table, got: \(result)")
+        // Should have 4 sets of 8@135 (first set explicit, next 3 inherit weight)
+        let count = result.components(separatedBy: "8@135").count - 1
+        XCTAssertEqual(count, 4, "Expected 4 sets of 8@135, got \(count) in: \(result)")
+    }
+
+    func testTransformMultiLineInlinePlusContinuation() {
+        let input = "shoulder press 7x100\n6\n5"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Shoulder Press"), "Expected Shoulder Press in table, got: \(result)")
+        XCTAssertTrue(result.contains("7@100"), "Expected 7@100, got: \(result)")
+        XCTAssertTrue(result.contains("6@100"), "Expected 6@100, got: \(result)")
+        XCTAssertTrue(result.contains("5@100"), "Expected 5@100, got: \(result)")
+    }
+
+    func testTransformMultiLineBodyweight() {
+        let input = "Dips\n8\n8\n8"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Dips"), "Expected Dips in table, got: \(result)")
+        // Bodyweight - no @ symbol
+        XCTAssertFalse(result.contains("@"), "Expected bodyweight (no @), got: \(result)")
+    }
+
+    func testTransformMultiLineMixedExercises() {
+        let input = "Bench\n8x135\nshoulder press 7x100\n6"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Bench"), "Expected Bench in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Shoulder Press"), "Expected Shoulder Press in table, got: \(result)")
+        XCTAssertTrue(result.contains("8@135"), "Expected 8@135, got: \(result)")
+        XCTAssertTrue(result.contains("7@100"), "Expected 7@100, got: \(result)")
+        XCTAssertTrue(result.contains("6@100"), "Expected 6@100, got: \(result)")
+    }
 }

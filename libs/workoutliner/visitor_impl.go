@@ -36,22 +36,70 @@ func (v *WorkoutlinerASTVisitor) Visit(tree antlr.ParseTree) interface{} {
 
 func (v *WorkoutlinerASTVisitor) VisitParagraph(ctx *ParagraphContext) interface{} {
 	result := &ParseResult{}
+
+	// State for handling continuation lines
+	var lastExercise *Exercise  // Currently being built
+	var pendingProse string     // Prose that might become exercise name
+
+	flush := func() {
+		if lastExercise != nil && len(lastExercise.Sets) > 0 {
+			result.Exercises = append(result.Exercises, *lastExercise)
+		} else if pendingProse != "" {
+			result.ProseLines = append(result.ProseLines, pendingProse)
+		}
+		lastExercise = nil
+		pendingProse = ""
+	}
+
 	for _, lineCtx := range ctx.AllLine() {
 		lineResult := v.Visit(lineCtx)
 		if lineResult == nil {
 			continue
 		}
 		switch lr := lineResult.(type) {
-		case string:
-			result.ProseLines = append(result.ProseLines, lr)
-		case Exercise:
+		case string: // proseLine
+			flush()
+			pendingProse = lr
+
+		case Exercise: // exerciseLine
+			flush()
 			if len(lr.Sets) > 0 {
-				result.Exercises = append(result.Exercises, lr)
+				lastExercise = &lr
 			} else {
-				result.ProseLines = append(result.ProseLines, lr.Name)
+				pendingProse = lr.Name
 			}
+
+		case []Exercise: // supersetLine
+			flush()
+			for _, ex := range lr {
+				if len(ex.Sets) > 0 {
+					result.Exercises = append(result.Exercises, ex)
+				}
+			}
+
+		case []tokenResult: // continuationLine
+			if lastExercise != nil {
+				// Extend existing exercise
+				lastWeight := 0
+				if len(lastExercise.Sets) > 0 {
+					lastWeight = lastExercise.Sets[len(lastExercise.Sets)-1].Weight
+				}
+				newSets := v.buildSetsFromResultsWithInitialWeight(lr, lastWeight)
+				lastExercise.Sets = append(lastExercise.Sets, newSets...)
+			} else if pendingProse != "" {
+				// Start new exercise from pending prose
+				lastExercise = &Exercise{
+					Name: titleCase(pendingProse),
+				}
+				sets := v.buildSetsFromResults(lr)
+				lastExercise.Sets = sets
+				pendingProse = ""
+			}
+			// If no pending prose or exercise, ignore the continuation line
 		}
 	}
+
+	flush()
 	return result
 }
 
@@ -61,6 +109,100 @@ func (v *WorkoutlinerASTVisitor) VisitExerciseLineAlt(ctx *ExerciseLineAltContex
 
 func (v *WorkoutlinerASTVisitor) VisitProseLineAlt(ctx *ProseLineAltContext) interface{} {
 	return v.Visit(ctx.ProseLine())
+}
+
+func (v *WorkoutlinerASTVisitor) VisitContinuationLineAlt(ctx *ContinuationLineAltContext) interface{} {
+	return v.Visit(ctx.ContinuationLine())
+}
+
+func (v *WorkoutlinerASTVisitor) VisitContinuationLine(ctx *ContinuationLineContext) interface{} {
+	var results []tokenResult
+
+	numericToken := ctx.NumericToken()
+	if numResult := v.Visit(numericToken); numResult != nil {
+		results = append(results, numResult.(tokenResult))
+	}
+
+	for _, tokenCtx := range ctx.AllToken() {
+		if result := v.Visit(tokenCtx); result != nil {
+			results = append(results, result.(tokenResult))
+		}
+	}
+
+	return results
+}
+
+func (v *WorkoutlinerASTVisitor) VisitSupersetLineAlt(ctx *SupersetLineAltContext) interface{} {
+	return v.Visit(ctx.SupersetLine())
+}
+
+func (v *WorkoutlinerASTVisitor) VisitSupersetLine(ctx *SupersetLineContext) interface{} {
+	supersetNames := ctx.AllSupersetName()
+	if len(supersetNames) != 2 {
+		return nil
+	}
+
+	// Extract exercise names (keep * suffix)
+	name1 := v.extractSupersetName(supersetNames[0])
+	name2 := v.extractSupersetName(supersetNames[1])
+
+	// Build all sets from tokens
+	tokens := ctx.AllToken()
+	allSets := v.buildSetsFromTokens(tokens)
+
+	// Alternate sets between two exercises
+	var sets1, sets2 []Set
+	for i, set := range allSets {
+		if i%2 == 0 {
+			sets1 = append(sets1, set)
+		} else {
+			sets2 = append(sets2, set)
+		}
+	}
+
+	return []Exercise{
+		{Name: name1, Sets: sets1},
+		{Name: name2, Sets: sets2},
+	}
+}
+
+func (v *WorkoutlinerASTVisitor) extractSupersetName(ctx ISupersetNameContext) string {
+	words := []string{}
+	for _, w := range ctx.AllWORD() {
+		words = append(words, w.GetText())
+	}
+	name := titleCase(strings.Join(words, " "))
+	return name + "*"
+}
+
+func (v *WorkoutlinerASTVisitor) buildSetsFromTokens(tokens []ITokenContext) []Set {
+	var sets []Set
+
+	for _, tokenCtx := range tokens {
+		result := v.Visit(tokenCtx)
+		if result == nil {
+			continue
+		}
+		tok := result.(tokenResult)
+		switch tok.kind {
+		case "sets":
+			// Fully specified sets (e.g., 3x8x135) - add each as individual set
+			sets = append(sets, tok.sets...)
+		case "pending_reps":
+			// Partial multiplier (e.g., 3x8) - add each as bodyweight
+			for _, r := range tok.pendingReps {
+				sets = append(sets, Set{Reps: r, Weight: 0})
+			}
+		case "weight":
+			// Single weight - assume default reps
+			sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
+		case "reps":
+			// Single rep count - bodyweight
+			sets = append(sets, Set{Reps: tok.value, Weight: 0})
+		}
+	}
+
+	return sets
 }
 
 func (v *WorkoutlinerASTVisitor) VisitExerciseLine(ctx *ExerciseLineContext) interface{} {
@@ -210,6 +352,46 @@ func (v *WorkoutlinerASTVisitor) VisitNote(ctx *NoteContext) interface{} {
 	return tokenResult{kind: "note", text: strings.Join(words, " ")}
 }
 
+func (v *WorkoutlinerASTVisitor) buildSetsFromResultsWithInitialWeight(tokenResults []tokenResult, initialWeight int) []Set {
+	var sets []Set
+	var pendingReps []int
+	lastWeight := initialWeight
+
+	for _, tok := range tokenResults {
+		switch tok.kind {
+		case "sets":
+			sets = append(sets, tok.sets...)
+			if len(tok.sets) > 0 {
+				lastWeight = tok.sets[len(tok.sets)-1].Weight
+			}
+		case "pending_reps":
+			pendingReps = append(pendingReps, tok.pendingReps...)
+		case "weight":
+			if len(pendingReps) > 0 {
+				for _, r := range pendingReps {
+					sets = append(sets, Set{Reps: r, Weight: tok.value})
+				}
+				pendingReps = nil
+			} else {
+				sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
+			}
+			lastWeight = tok.value
+		case "reps":
+			pendingReps = append(pendingReps, tok.value)
+		case "note":
+			if len(sets) > 0 {
+				sets[len(sets)-1].Note = joinNotes(sets[len(sets)-1].Note, tok.text)
+			}
+		}
+	}
+
+	for _, r := range pendingReps {
+		sets = append(sets, Set{Reps: r, Weight: lastWeight})
+	}
+
+	return sets
+}
+
 func (v *WorkoutlinerASTVisitor) buildSetsFromResults(tokenResults []tokenResult) []Set {
 	var sets []Set
 	var pendingReps []int
@@ -244,9 +426,7 @@ func (v *WorkoutlinerASTVisitor) buildSetsFromResults(tokenResults []tokenResult
 	}
 
 	for _, r := range pendingReps {
-		if lastWeight > 0 {
-			sets = append(sets, Set{Reps: r, Weight: lastWeight})
-		}
+		sets = append(sets, Set{Reps: r, Weight: lastWeight})
 	}
 
 	return sets

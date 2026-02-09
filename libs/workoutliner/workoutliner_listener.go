@@ -10,11 +10,26 @@ type WorkoutlinerListener interface {
 	// EnterParagraph is called when entering the paragraph production.
 	EnterParagraph(c *ParagraphContext)
 
+	// EnterSupersetLineAlt is called when entering the SupersetLineAlt production.
+	EnterSupersetLineAlt(c *SupersetLineAltContext)
+
 	// EnterExerciseLineAlt is called when entering the ExerciseLineAlt production.
 	EnterExerciseLineAlt(c *ExerciseLineAltContext)
 
+	// EnterContinuationLineAlt is called when entering the ContinuationLineAlt production.
+	EnterContinuationLineAlt(c *ContinuationLineAltContext)
+
 	// EnterProseLineAlt is called when entering the ProseLineAlt production.
 	EnterProseLineAlt(c *ProseLineAltContext)
+
+	// EnterContinuationLine is called when entering the continuationLine production.
+	EnterContinuationLine(c *ContinuationLineContext)
+
+	// EnterSupersetLine is called when entering the supersetLine production.
+	EnterSupersetLine(c *SupersetLineContext)
+
+	// EnterSupersetName is called when entering the supersetName production.
+	EnterSupersetName(c *SupersetNameContext)
 
 	// EnterExerciseLine is called when entering the exerciseLine production.
 	EnterExerciseLine(c *ExerciseLineContext)
@@ -49,11 +64,26 @@ type WorkoutlinerListener interface {
 	// ExitParagraph is called when exiting the paragraph production.
 	ExitParagraph(c *ParagraphContext)
 
+	// ExitSupersetLineAlt is called when exiting the SupersetLineAlt production.
+	ExitSupersetLineAlt(c *SupersetLineAltContext)
+
 	// ExitExerciseLineAlt is called when exiting the ExerciseLineAlt production.
 	ExitExerciseLineAlt(c *ExerciseLineAltContext)
 
+	// ExitContinuationLineAlt is called when exiting the ContinuationLineAlt production.
+	ExitContinuationLineAlt(c *ContinuationLineAltContext)
+
 	// ExitProseLineAlt is called when exiting the ProseLineAlt production.
 	ExitProseLineAlt(c *ProseLineAltContext)
+
+	// ExitContinuationLine is called when exiting the continuationLine production.
+	ExitContinuationLine(c *ContinuationLineContext)
+
+	// ExitSupersetLine is called when exiting the supersetLine production.
+	ExitSupersetLine(c *SupersetLineContext)
+
+	// ExitSupersetName is called when exiting the supersetName production.
+	ExitSupersetName(c *SupersetNameContext)
 
 	// ExitExerciseLine is called when exiting the exerciseLine production.
 	ExitExerciseLine(c *ExerciseLineContext)

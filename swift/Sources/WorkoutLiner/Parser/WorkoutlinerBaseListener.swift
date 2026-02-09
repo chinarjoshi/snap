@@ -28,6 +28,19 @@ open class WorkoutlinerBaseListener: WorkoutlinerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	open func enterSupersetLineAlt(_ ctx: WorkoutlinerParser.SupersetLineAltContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func exitSupersetLineAlt(_ ctx: WorkoutlinerParser.SupersetLineAltContext) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	open func enterExerciseLineAlt(_ ctx: WorkoutlinerParser.ExerciseLineAltContext) { }
 	/**
 	 * {@inheritDoc}
@@ -41,6 +54,19 @@ open class WorkoutlinerBaseListener: WorkoutlinerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	open func enterContinuationLineAlt(_ ctx: WorkoutlinerParser.ContinuationLineAltContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func exitContinuationLineAlt(_ ctx: WorkoutlinerParser.ContinuationLineAltContext) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	open func enterProseLineAlt(_ ctx: WorkoutlinerParser.ProseLineAltContext) { }
 	/**
 	 * {@inheritDoc}
@@ -48,6 +74,45 @@ open class WorkoutlinerBaseListener: WorkoutlinerListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	open func exitProseLineAlt(_ ctx: WorkoutlinerParser.ProseLineAltContext) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func enterContinuationLine(_ ctx: WorkoutlinerParser.ContinuationLineContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func exitContinuationLine(_ ctx: WorkoutlinerParser.ContinuationLineContext) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func enterSupersetLine(_ ctx: WorkoutlinerParser.SupersetLineContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func exitSupersetLine(_ ctx: WorkoutlinerParser.SupersetLineContext) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func enterSupersetName(_ ctx: WorkoutlinerParser.SupersetNameContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	open func exitSupersetName(_ ctx: WorkoutlinerParser.SupersetNameContext) { }
 
 	/**
 	 * {@inheritDoc}

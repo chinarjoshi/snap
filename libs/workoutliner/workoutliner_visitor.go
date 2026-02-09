@@ -10,11 +10,26 @@ type WorkoutlinerVisitor interface {
 	// Visit a parse tree produced by WorkoutlinerParser#paragraph.
 	VisitParagraph(ctx *ParagraphContext) interface{}
 
+	// Visit a parse tree produced by WorkoutlinerParser#SupersetLineAlt.
+	VisitSupersetLineAlt(ctx *SupersetLineAltContext) interface{}
+
 	// Visit a parse tree produced by WorkoutlinerParser#ExerciseLineAlt.
 	VisitExerciseLineAlt(ctx *ExerciseLineAltContext) interface{}
 
+	// Visit a parse tree produced by WorkoutlinerParser#ContinuationLineAlt.
+	VisitContinuationLineAlt(ctx *ContinuationLineAltContext) interface{}
+
 	// Visit a parse tree produced by WorkoutlinerParser#ProseLineAlt.
 	VisitProseLineAlt(ctx *ProseLineAltContext) interface{}
+
+	// Visit a parse tree produced by WorkoutlinerParser#continuationLine.
+	VisitContinuationLine(ctx *ContinuationLineContext) interface{}
+
+	// Visit a parse tree produced by WorkoutlinerParser#supersetLine.
+	VisitSupersetLine(ctx *SupersetLineContext) interface{}
+
+	// Visit a parse tree produced by WorkoutlinerParser#supersetName.
+	VisitSupersetName(ctx *SupersetNameContext) interface{}
 
 	// Visit a parse tree produced by WorkoutlinerParser#exerciseLine.
 	VisitExerciseLine(ctx *ExerciseLineContext) interface{}

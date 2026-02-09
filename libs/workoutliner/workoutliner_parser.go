@@ -32,53 +32,70 @@ var WorkoutlinerParserStaticData struct {
 func workoutlinerParserInit() {
 	staticData := &WorkoutlinerParserStaticData
 	staticData.LiteralNames = []string{
-		"", "", "", "", "", "'\\n'",
+		"", "", "", "", "'*'", "", "'\\n'",
 	}
 	staticData.SymbolicNames = []string{
-		"", "NUMBER", "X", "BY", "WORD", "NEWLINE", "WS",
+		"", "NUMBER", "X", "BY", "STAR", "WORD", "NEWLINE", "WS",
 	}
 	staticData.RuleNames = []string{
-		"paragraph", "line", "exerciseLine", "proseLine", "numericToken", "token",
-		"byExpr", "multiplier", "number", "note",
+		"paragraph", "line", "continuationLine", "supersetLine", "supersetName",
+		"exerciseLine", "proseLine", "numericToken", "token", "byExpr", "multiplier",
+		"number", "note",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 6, 91, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7, 4,
-		2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 1, 0, 4, 0,
-		22, 8, 0, 11, 0, 12, 0, 23, 1, 0, 1, 0, 1, 1, 1, 1, 3, 1, 30, 8, 1, 1,
-		1, 1, 1, 3, 1, 34, 8, 1, 3, 1, 36, 8, 1, 1, 2, 4, 2, 39, 8, 2, 11, 2, 12,
-		2, 40, 1, 2, 1, 2, 5, 2, 45, 8, 2, 10, 2, 12, 2, 48, 9, 2, 1, 3, 4, 3,
-		51, 8, 3, 11, 3, 12, 3, 52, 1, 4, 1, 4, 1, 4, 3, 4, 58, 8, 4, 1, 5, 1,
-		5, 3, 5, 62, 8, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 3, 6,
-		72, 8, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 3, 7, 82, 8,
-		7, 1, 8, 1, 8, 1, 9, 4, 9, 87, 8, 9, 11, 9, 12, 9, 88, 1, 9, 0, 0, 10,
-		0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 0, 0, 93, 0, 21, 1, 0, 0, 0, 2, 35,
-		1, 0, 0, 0, 4, 38, 1, 0, 0, 0, 6, 50, 1, 0, 0, 0, 8, 57, 1, 0, 0, 0, 10,
-		61, 1, 0, 0, 0, 12, 71, 1, 0, 0, 0, 14, 81, 1, 0, 0, 0, 16, 83, 1, 0, 0,
-		0, 18, 86, 1, 0, 0, 0, 20, 22, 3, 2, 1, 0, 21, 20, 1, 0, 0, 0, 22, 23,
-		1, 0, 0, 0, 23, 21, 1, 0, 0, 0, 23, 24, 1, 0, 0, 0, 24, 25, 1, 0, 0, 0,
-		25, 26, 5, 0, 0, 1, 26, 1, 1, 0, 0, 0, 27, 29, 3, 4, 2, 0, 28, 30, 5, 5,
-		0, 0, 29, 28, 1, 0, 0, 0, 29, 30, 1, 0, 0, 0, 30, 36, 1, 0, 0, 0, 31, 33,
-		3, 6, 3, 0, 32, 34, 5, 5, 0, 0, 33, 32, 1, 0, 0, 0, 33, 34, 1, 0, 0, 0,
-		34, 36, 1, 0, 0, 0, 35, 27, 1, 0, 0, 0, 35, 31, 1, 0, 0, 0, 36, 3, 1, 0,
-		0, 0, 37, 39, 5, 4, 0, 0, 38, 37, 1, 0, 0, 0, 39, 40, 1, 0, 0, 0, 40, 38,
-		1, 0, 0, 0, 40, 41, 1, 0, 0, 0, 41, 42, 1, 0, 0, 0, 42, 46, 3, 8, 4, 0,
-		43, 45, 3, 10, 5, 0, 44, 43, 1, 0, 0, 0, 45, 48, 1, 0, 0, 0, 46, 44, 1,
-		0, 0, 0, 46, 47, 1, 0, 0, 0, 47, 5, 1, 0, 0, 0, 48, 46, 1, 0, 0, 0, 49,
-		51, 5, 4, 0, 0, 50, 49, 1, 0, 0, 0, 51, 52, 1, 0, 0, 0, 52, 50, 1, 0, 0,
-		0, 52, 53, 1, 0, 0, 0, 53, 7, 1, 0, 0, 0, 54, 58, 3, 12, 6, 0, 55, 58,
-		3, 14, 7, 0, 56, 58, 3, 16, 8, 0, 57, 54, 1, 0, 0, 0, 57, 55, 1, 0, 0,
-		0, 57, 56, 1, 0, 0, 0, 58, 9, 1, 0, 0, 0, 59, 62, 3, 8, 4, 0, 60, 62, 3,
-		18, 9, 0, 61, 59, 1, 0, 0, 0, 61, 60, 1, 0, 0, 0, 62, 11, 1, 0, 0, 0, 63,
-		64, 5, 1, 0, 0, 64, 65, 5, 3, 0, 0, 65, 72, 5, 1, 0, 0, 66, 67, 5, 1, 0,
-		0, 67, 68, 5, 3, 0, 0, 68, 69, 5, 1, 0, 0, 69, 70, 5, 3, 0, 0, 70, 72,
-		5, 1, 0, 0, 71, 63, 1, 0, 0, 0, 71, 66, 1, 0, 0, 0, 72, 13, 1, 0, 0, 0,
-		73, 74, 5, 1, 0, 0, 74, 75, 5, 2, 0, 0, 75, 82, 5, 1, 0, 0, 76, 77, 5,
-		1, 0, 0, 77, 78, 5, 2, 0, 0, 78, 79, 5, 1, 0, 0, 79, 80, 5, 2, 0, 0, 80,
-		82, 5, 1, 0, 0, 81, 73, 1, 0, 0, 0, 81, 76, 1, 0, 0, 0, 82, 15, 1, 0, 0,
-		0, 83, 84, 5, 1, 0, 0, 84, 17, 1, 0, 0, 0, 85, 87, 5, 4, 0, 0, 86, 85,
-		1, 0, 0, 0, 87, 88, 1, 0, 0, 0, 88, 86, 1, 0, 0, 0, 88, 89, 1, 0, 0, 0,
-		89, 19, 1, 0, 0, 0, 12, 23, 29, 33, 35, 40, 46, 52, 57, 61, 71, 81, 88,
+		4, 1, 7, 126, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
+		10, 2, 11, 7, 11, 2, 12, 7, 12, 1, 0, 4, 0, 28, 8, 0, 11, 0, 12, 0, 29,
+		1, 0, 1, 0, 1, 1, 1, 1, 3, 1, 36, 8, 1, 1, 1, 1, 1, 3, 1, 40, 8, 1, 1,
+		1, 1, 1, 3, 1, 44, 8, 1, 1, 1, 1, 1, 3, 1, 48, 8, 1, 3, 1, 50, 8, 1, 1,
+		2, 1, 2, 5, 2, 54, 8, 2, 10, 2, 12, 2, 57, 9, 2, 1, 3, 1, 3, 1, 3, 4, 3,
+		62, 8, 3, 11, 3, 12, 3, 63, 1, 4, 4, 4, 67, 8, 4, 11, 4, 12, 4, 68, 1,
+		4, 1, 4, 1, 5, 4, 5, 74, 8, 5, 11, 5, 12, 5, 75, 1, 5, 1, 5, 5, 5, 80,
+		8, 5, 10, 5, 12, 5, 83, 9, 5, 1, 6, 4, 6, 86, 8, 6, 11, 6, 12, 6, 87, 1,
+		7, 1, 7, 1, 7, 3, 7, 93, 8, 7, 1, 8, 1, 8, 3, 8, 97, 8, 8, 1, 9, 1, 9,
+		1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 3, 9, 107, 8, 9, 1, 10, 1, 10, 1, 10,
+		1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 3, 10, 117, 8, 10, 1, 11, 1, 11, 1,
+		12, 4, 12, 122, 8, 12, 11, 12, 12, 12, 123, 1, 12, 0, 0, 13, 0, 2, 4, 6,
+		8, 10, 12, 14, 16, 18, 20, 22, 24, 0, 0, 132, 0, 27, 1, 0, 0, 0, 2, 49,
+		1, 0, 0, 0, 4, 51, 1, 0, 0, 0, 6, 58, 1, 0, 0, 0, 8, 66, 1, 0, 0, 0, 10,
+		73, 1, 0, 0, 0, 12, 85, 1, 0, 0, 0, 14, 92, 1, 0, 0, 0, 16, 96, 1, 0, 0,
+		0, 18, 106, 1, 0, 0, 0, 20, 116, 1, 0, 0, 0, 22, 118, 1, 0, 0, 0, 24, 121,
+		1, 0, 0, 0, 26, 28, 3, 2, 1, 0, 27, 26, 1, 0, 0, 0, 28, 29, 1, 0, 0, 0,
+		29, 27, 1, 0, 0, 0, 29, 30, 1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 32, 5,
+		0, 0, 1, 32, 1, 1, 0, 0, 0, 33, 35, 3, 6, 3, 0, 34, 36, 5, 6, 0, 0, 35,
+		34, 1, 0, 0, 0, 35, 36, 1, 0, 0, 0, 36, 50, 1, 0, 0, 0, 37, 39, 3, 10,
+		5, 0, 38, 40, 5, 6, 0, 0, 39, 38, 1, 0, 0, 0, 39, 40, 1, 0, 0, 0, 40, 50,
+		1, 0, 0, 0, 41, 43, 3, 4, 2, 0, 42, 44, 5, 6, 0, 0, 43, 42, 1, 0, 0, 0,
+		43, 44, 1, 0, 0, 0, 44, 50, 1, 0, 0, 0, 45, 47, 3, 12, 6, 0, 46, 48, 5,
+		6, 0, 0, 47, 46, 1, 0, 0, 0, 47, 48, 1, 0, 0, 0, 48, 50, 1, 0, 0, 0, 49,
+		33, 1, 0, 0, 0, 49, 37, 1, 0, 0, 0, 49, 41, 1, 0, 0, 0, 49, 45, 1, 0, 0,
+		0, 50, 3, 1, 0, 0, 0, 51, 55, 3, 14, 7, 0, 52, 54, 3, 16, 8, 0, 53, 52,
+		1, 0, 0, 0, 54, 57, 1, 0, 0, 0, 55, 53, 1, 0, 0, 0, 55, 56, 1, 0, 0, 0,
+		56, 5, 1, 0, 0, 0, 57, 55, 1, 0, 0, 0, 58, 59, 3, 8, 4, 0, 59, 61, 3, 8,
+		4, 0, 60, 62, 3, 16, 8, 0, 61, 60, 1, 0, 0, 0, 62, 63, 1, 0, 0, 0, 63,
+		61, 1, 0, 0, 0, 63, 64, 1, 0, 0, 0, 64, 7, 1, 0, 0, 0, 65, 67, 5, 5, 0,
+		0, 66, 65, 1, 0, 0, 0, 67, 68, 1, 0, 0, 0, 68, 66, 1, 0, 0, 0, 68, 69,
+		1, 0, 0, 0, 69, 70, 1, 0, 0, 0, 70, 71, 5, 4, 0, 0, 71, 9, 1, 0, 0, 0,
+		72, 74, 5, 5, 0, 0, 73, 72, 1, 0, 0, 0, 74, 75, 1, 0, 0, 0, 75, 73, 1,
+		0, 0, 0, 75, 76, 1, 0, 0, 0, 76, 77, 1, 0, 0, 0, 77, 81, 3, 14, 7, 0, 78,
+		80, 3, 16, 8, 0, 79, 78, 1, 0, 0, 0, 80, 83, 1, 0, 0, 0, 81, 79, 1, 0,
+		0, 0, 81, 82, 1, 0, 0, 0, 82, 11, 1, 0, 0, 0, 83, 81, 1, 0, 0, 0, 84, 86,
+		5, 5, 0, 0, 85, 84, 1, 0, 0, 0, 86, 87, 1, 0, 0, 0, 87, 85, 1, 0, 0, 0,
+		87, 88, 1, 0, 0, 0, 88, 13, 1, 0, 0, 0, 89, 93, 3, 18, 9, 0, 90, 93, 3,
+		20, 10, 0, 91, 93, 3, 22, 11, 0, 92, 89, 1, 0, 0, 0, 92, 90, 1, 0, 0, 0,
+		92, 91, 1, 0, 0, 0, 93, 15, 1, 0, 0, 0, 94, 97, 3, 14, 7, 0, 95, 97, 3,
+		24, 12, 0, 96, 94, 1, 0, 0, 0, 96, 95, 1, 0, 0, 0, 97, 17, 1, 0, 0, 0,
+		98, 99, 5, 1, 0, 0, 99, 100, 5, 3, 0, 0, 100, 107, 5, 1, 0, 0, 101, 102,
+		5, 1, 0, 0, 102, 103, 5, 3, 0, 0, 103, 104, 5, 1, 0, 0, 104, 105, 5, 3,
+		0, 0, 105, 107, 5, 1, 0, 0, 106, 98, 1, 0, 0, 0, 106, 101, 1, 0, 0, 0,
+		107, 19, 1, 0, 0, 0, 108, 109, 5, 1, 0, 0, 109, 110, 5, 2, 0, 0, 110, 117,
+		5, 1, 0, 0, 111, 112, 5, 1, 0, 0, 112, 113, 5, 2, 0, 0, 113, 114, 5, 1,
+		0, 0, 114, 115, 5, 2, 0, 0, 115, 117, 5, 1, 0, 0, 116, 108, 1, 0, 0, 0,
+		116, 111, 1, 0, 0, 0, 117, 21, 1, 0, 0, 0, 118, 119, 5, 1, 0, 0, 119, 23,
+		1, 0, 0, 0, 120, 122, 5, 5, 0, 0, 121, 120, 1, 0, 0, 0, 122, 123, 1, 0,
+		0, 0, 123, 121, 1, 0, 0, 0, 123, 124, 1, 0, 0, 0, 124, 25, 1, 0, 0, 0,
+		17, 29, 35, 39, 43, 47, 49, 55, 63, 68, 75, 81, 87, 92, 96, 106, 116, 123,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -120,23 +137,27 @@ const (
 	WorkoutlinerParserNUMBER  = 1
 	WorkoutlinerParserX       = 2
 	WorkoutlinerParserBY      = 3
-	WorkoutlinerParserWORD    = 4
-	WorkoutlinerParserNEWLINE = 5
-	WorkoutlinerParserWS      = 6
+	WorkoutlinerParserSTAR    = 4
+	WorkoutlinerParserWORD    = 5
+	WorkoutlinerParserNEWLINE = 6
+	WorkoutlinerParserWS      = 7
 )
 
 // WorkoutlinerParser rules.
 const (
-	WorkoutlinerParserRULE_paragraph    = 0
-	WorkoutlinerParserRULE_line         = 1
-	WorkoutlinerParserRULE_exerciseLine = 2
-	WorkoutlinerParserRULE_proseLine    = 3
-	WorkoutlinerParserRULE_numericToken = 4
-	WorkoutlinerParserRULE_token        = 5
-	WorkoutlinerParserRULE_byExpr       = 6
-	WorkoutlinerParserRULE_multiplier   = 7
-	WorkoutlinerParserRULE_number       = 8
-	WorkoutlinerParserRULE_note         = 9
+	WorkoutlinerParserRULE_paragraph        = 0
+	WorkoutlinerParserRULE_line             = 1
+	WorkoutlinerParserRULE_continuationLine = 2
+	WorkoutlinerParserRULE_supersetLine     = 3
+	WorkoutlinerParserRULE_supersetName     = 4
+	WorkoutlinerParserRULE_exerciseLine     = 5
+	WorkoutlinerParserRULE_proseLine        = 6
+	WorkoutlinerParserRULE_numericToken     = 7
+	WorkoutlinerParserRULE_token            = 8
+	WorkoutlinerParserRULE_byExpr           = 9
+	WorkoutlinerParserRULE_multiplier       = 10
+	WorkoutlinerParserRULE_number           = 11
+	WorkoutlinerParserRULE_note             = 12
 )
 
 // IParagraphContext is an interface to support dynamic dispatch.
@@ -268,20 +289,20 @@ func (p *WorkoutlinerParser) Paragraph() (localctx IParagraphContext) {
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(21)
+	p.SetState(27)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == WorkoutlinerParserWORD {
+	for ok := true; ok; ok = _la == WorkoutlinerParserNUMBER || _la == WorkoutlinerParserWORD {
 		{
-			p.SetState(20)
+			p.SetState(26)
 			p.Line()
 		}
 
-		p.SetState(23)
+		p.SetState(29)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -289,7 +310,7 @@ func (p *WorkoutlinerParser) Paragraph() (localctx IParagraphContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(25)
+		p.SetState(31)
 		p.Match(WorkoutlinerParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -424,6 +445,126 @@ func (s *ExerciseLineAltContext) Accept(visitor antlr.ParseTreeVisitor) interfac
 	}
 }
 
+type ContinuationLineAltContext struct {
+	LineContext
+}
+
+func NewContinuationLineAltContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ContinuationLineAltContext {
+	var p = new(ContinuationLineAltContext)
+
+	InitEmptyLineContext(&p.LineContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*LineContext))
+
+	return p
+}
+
+func (s *ContinuationLineAltContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ContinuationLineAltContext) ContinuationLine() IContinuationLineContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IContinuationLineContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IContinuationLineContext)
+}
+
+func (s *ContinuationLineAltContext) NEWLINE() antlr.TerminalNode {
+	return s.GetToken(WorkoutlinerParserNEWLINE, 0)
+}
+
+func (s *ContinuationLineAltContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.EnterContinuationLineAlt(s)
+	}
+}
+
+func (s *ContinuationLineAltContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.ExitContinuationLineAlt(s)
+	}
+}
+
+func (s *ContinuationLineAltContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case WorkoutlinerVisitor:
+		return t.VisitContinuationLineAlt(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type SupersetLineAltContext struct {
+	LineContext
+}
+
+func NewSupersetLineAltContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SupersetLineAltContext {
+	var p = new(SupersetLineAltContext)
+
+	InitEmptyLineContext(&p.LineContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*LineContext))
+
+	return p
+}
+
+func (s *SupersetLineAltContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SupersetLineAltContext) SupersetLine() ISupersetLineContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISupersetLineContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISupersetLineContext)
+}
+
+func (s *SupersetLineAltContext) NEWLINE() antlr.TerminalNode {
+	return s.GetToken(WorkoutlinerParserNEWLINE, 0)
+}
+
+func (s *SupersetLineAltContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.EnterSupersetLineAlt(s)
+	}
+}
+
+func (s *SupersetLineAltContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.ExitSupersetLineAlt(s)
+	}
+}
+
+func (s *SupersetLineAltContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case WorkoutlinerVisitor:
+		return t.VisitSupersetLineAlt(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type ProseLineAltContext struct {
 	LineContext
 }
@@ -489,21 +630,21 @@ func (p *WorkoutlinerParser) Line() (localctx ILineContext) {
 	p.EnterRule(localctx, 2, WorkoutlinerParserRULE_line)
 	var _la int
 
-	p.SetState(35)
+	p.SetState(49)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 5, p.GetParserRuleContext()) {
 	case 1:
-		localctx = NewExerciseLineAltContext(p, localctx)
+		localctx = NewSupersetLineAltContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(27)
-			p.ExerciseLine()
+			p.SetState(33)
+			p.SupersetLine()
 		}
-		p.SetState(29)
+		p.SetState(35)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -512,7 +653,7 @@ func (p *WorkoutlinerParser) Line() (localctx ILineContext) {
 
 		if _la == WorkoutlinerParserNEWLINE {
 			{
-				p.SetState(28)
+				p.SetState(34)
 				p.Match(WorkoutlinerParserNEWLINE)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -523,13 +664,13 @@ func (p *WorkoutlinerParser) Line() (localctx ILineContext) {
 		}
 
 	case 2:
-		localctx = NewProseLineAltContext(p, localctx)
+		localctx = NewExerciseLineAltContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(31)
-			p.ProseLine()
+			p.SetState(37)
+			p.ExerciseLine()
 		}
-		p.SetState(33)
+		p.SetState(39)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -538,7 +679,59 @@ func (p *WorkoutlinerParser) Line() (localctx ILineContext) {
 
 		if _la == WorkoutlinerParserNEWLINE {
 			{
-				p.SetState(32)
+				p.SetState(38)
+				p.Match(WorkoutlinerParserNEWLINE)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		}
+
+	case 3:
+		localctx = NewContinuationLineAltContext(p, localctx)
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(41)
+			p.ContinuationLine()
+		}
+		p.SetState(43)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == WorkoutlinerParserNEWLINE {
+			{
+				p.SetState(42)
+				p.Match(WorkoutlinerParserNEWLINE)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		}
+
+	case 4:
+		localctx = NewProseLineAltContext(p, localctx)
+		p.EnterOuterAlt(localctx, 4)
+		{
+			p.SetState(45)
+			p.ProseLine()
+		}
+		p.SetState(47)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == WorkoutlinerParserNEWLINE {
+			{
+				p.SetState(46)
 				p.Match(WorkoutlinerParserNEWLINE)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -550,6 +743,549 @@ func (p *WorkoutlinerParser) Line() (localctx ILineContext) {
 
 	case antlr.ATNInvalidAltNumber:
 		goto errorExit
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IContinuationLineContext is an interface to support dynamic dispatch.
+type IContinuationLineContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	NumericToken() INumericTokenContext
+	AllToken() []ITokenContext
+	Token(i int) ITokenContext
+
+	// IsContinuationLineContext differentiates from other interfaces.
+	IsContinuationLineContext()
+}
+
+type ContinuationLineContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyContinuationLineContext() *ContinuationLineContext {
+	var p = new(ContinuationLineContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = WorkoutlinerParserRULE_continuationLine
+	return p
+}
+
+func InitEmptyContinuationLineContext(p *ContinuationLineContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = WorkoutlinerParserRULE_continuationLine
+}
+
+func (*ContinuationLineContext) IsContinuationLineContext() {}
+
+func NewContinuationLineContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ContinuationLineContext {
+	var p = new(ContinuationLineContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = WorkoutlinerParserRULE_continuationLine
+
+	return p
+}
+
+func (s *ContinuationLineContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ContinuationLineContext) NumericToken() INumericTokenContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(INumericTokenContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(INumericTokenContext)
+}
+
+func (s *ContinuationLineContext) AllToken() []ITokenContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ITokenContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]ITokenContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ITokenContext); ok {
+			tst[i] = t.(ITokenContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *ContinuationLineContext) Token(i int) ITokenContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ITokenContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITokenContext)
+}
+
+func (s *ContinuationLineContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ContinuationLineContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *ContinuationLineContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.EnterContinuationLine(s)
+	}
+}
+
+func (s *ContinuationLineContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.ExitContinuationLine(s)
+	}
+}
+
+func (s *ContinuationLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case WorkoutlinerVisitor:
+		return t.VisitContinuationLine(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *WorkoutlinerParser) ContinuationLine() (localctx IContinuationLineContext) {
+	localctx = NewContinuationLineContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 4, WorkoutlinerParserRULE_continuationLine)
+	var _alt int
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(51)
+		p.NumericToken()
+	}
+	p.SetState(55)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 6, p.GetParserRuleContext())
+	if p.HasError() {
+		goto errorExit
+	}
+	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+		if _alt == 1 {
+			{
+				p.SetState(52)
+				p.Token()
+			}
+
+		}
+		p.SetState(57)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 6, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// ISupersetLineContext is an interface to support dynamic dispatch.
+type ISupersetLineContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	AllSupersetName() []ISupersetNameContext
+	SupersetName(i int) ISupersetNameContext
+	AllToken() []ITokenContext
+	Token(i int) ITokenContext
+
+	// IsSupersetLineContext differentiates from other interfaces.
+	IsSupersetLineContext()
+}
+
+type SupersetLineContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptySupersetLineContext() *SupersetLineContext {
+	var p = new(SupersetLineContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = WorkoutlinerParserRULE_supersetLine
+	return p
+}
+
+func InitEmptySupersetLineContext(p *SupersetLineContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = WorkoutlinerParserRULE_supersetLine
+}
+
+func (*SupersetLineContext) IsSupersetLineContext() {}
+
+func NewSupersetLineContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *SupersetLineContext {
+	var p = new(SupersetLineContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = WorkoutlinerParserRULE_supersetLine
+
+	return p
+}
+
+func (s *SupersetLineContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *SupersetLineContext) AllSupersetName() []ISupersetNameContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ISupersetNameContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]ISupersetNameContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ISupersetNameContext); ok {
+			tst[i] = t.(ISupersetNameContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *SupersetLineContext) SupersetName(i int) ISupersetNameContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISupersetNameContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISupersetNameContext)
+}
+
+func (s *SupersetLineContext) AllToken() []ITokenContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ITokenContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]ITokenContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ITokenContext); ok {
+			tst[i] = t.(ITokenContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *SupersetLineContext) Token(i int) ITokenContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ITokenContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITokenContext)
+}
+
+func (s *SupersetLineContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SupersetLineContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *SupersetLineContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.EnterSupersetLine(s)
+	}
+}
+
+func (s *SupersetLineContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.ExitSupersetLine(s)
+	}
+}
+
+func (s *SupersetLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case WorkoutlinerVisitor:
+		return t.VisitSupersetLine(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *WorkoutlinerParser) SupersetLine() (localctx ISupersetLineContext) {
+	localctx = NewSupersetLineContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 6, WorkoutlinerParserRULE_supersetLine)
+	var _alt int
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(58)
+		p.SupersetName()
+	}
+	{
+		p.SetState(59)
+		p.SupersetName()
+	}
+	p.SetState(61)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_alt = 1
+	for ok := true; ok; ok = _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+		switch _alt {
+		case 1:
+			{
+				p.SetState(60)
+				p.Token()
+			}
+
+		default:
+			p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+			goto errorExit
+		}
+
+		p.SetState(63)
+		p.GetErrorHandler().Sync(p)
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 7, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// ISupersetNameContext is an interface to support dynamic dispatch.
+type ISupersetNameContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	STAR() antlr.TerminalNode
+	AllWORD() []antlr.TerminalNode
+	WORD(i int) antlr.TerminalNode
+
+	// IsSupersetNameContext differentiates from other interfaces.
+	IsSupersetNameContext()
+}
+
+type SupersetNameContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptySupersetNameContext() *SupersetNameContext {
+	var p = new(SupersetNameContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = WorkoutlinerParserRULE_supersetName
+	return p
+}
+
+func InitEmptySupersetNameContext(p *SupersetNameContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = WorkoutlinerParserRULE_supersetName
+}
+
+func (*SupersetNameContext) IsSupersetNameContext() {}
+
+func NewSupersetNameContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *SupersetNameContext {
+	var p = new(SupersetNameContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = WorkoutlinerParserRULE_supersetName
+
+	return p
+}
+
+func (s *SupersetNameContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *SupersetNameContext) STAR() antlr.TerminalNode {
+	return s.GetToken(WorkoutlinerParserSTAR, 0)
+}
+
+func (s *SupersetNameContext) AllWORD() []antlr.TerminalNode {
+	return s.GetTokens(WorkoutlinerParserWORD)
+}
+
+func (s *SupersetNameContext) WORD(i int) antlr.TerminalNode {
+	return s.GetToken(WorkoutlinerParserWORD, i)
+}
+
+func (s *SupersetNameContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SupersetNameContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *SupersetNameContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.EnterSupersetName(s)
+	}
+}
+
+func (s *SupersetNameContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(WorkoutlinerListener); ok {
+		listenerT.ExitSupersetName(s)
+	}
+}
+
+func (s *SupersetNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case WorkoutlinerVisitor:
+		return t.VisitSupersetName(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *WorkoutlinerParser) SupersetName() (localctx ISupersetNameContext) {
+	localctx = NewSupersetNameContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 8, WorkoutlinerParserRULE_supersetName)
+	var _la int
+
+	p.EnterOuterAlt(localctx, 1)
+	p.SetState(66)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	for ok := true; ok; ok = _la == WorkoutlinerParserWORD {
+		{
+			p.SetState(65)
+			p.Match(WorkoutlinerParserWORD)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+		p.SetState(68)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+	}
+	{
+		p.SetState(70)
+		p.Match(WorkoutlinerParserSTAR)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
 errorExit:
@@ -712,13 +1448,13 @@ func (s *ExerciseLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *WorkoutlinerParser) ExerciseLine() (localctx IExerciseLineContext) {
 	localctx = NewExerciseLineContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, WorkoutlinerParserRULE_exerciseLine)
+	p.EnterRule(localctx, 10, WorkoutlinerParserRULE_exerciseLine)
 	var _la int
 
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(38)
+	p.SetState(73)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -727,7 +1463,7 @@ func (p *WorkoutlinerParser) ExerciseLine() (localctx IExerciseLineContext) {
 
 	for ok := true; ok; ok = _la == WorkoutlinerParserWORD {
 		{
-			p.SetState(37)
+			p.SetState(72)
 			p.Match(WorkoutlinerParserWORD)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -735,7 +1471,7 @@ func (p *WorkoutlinerParser) ExerciseLine() (localctx IExerciseLineContext) {
 			}
 		}
 
-		p.SetState(40)
+		p.SetState(75)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -743,32 +1479,32 @@ func (p *WorkoutlinerParser) ExerciseLine() (localctx IExerciseLineContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(42)
+		p.SetState(77)
 		p.NumericToken()
 	}
-	p.SetState(46)
+	p.SetState(81)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
-	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 5, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 10, p.GetParserRuleContext())
 	if p.HasError() {
 		goto errorExit
 	}
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
 			{
-				p.SetState(43)
+				p.SetState(78)
 				p.Token()
 			}
 
 		}
-		p.SetState(48)
+		p.SetState(83)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
-		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 5, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 10, p.GetParserRuleContext())
 		if p.HasError() {
 			goto errorExit
 		}
@@ -874,11 +1610,11 @@ func (s *ProseLineContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *WorkoutlinerParser) ProseLine() (localctx IProseLineContext) {
 	localctx = NewProseLineContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, WorkoutlinerParserRULE_proseLine)
+	p.EnterRule(localctx, 12, WorkoutlinerParserRULE_proseLine)
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(50)
+	p.SetState(85)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -888,7 +1624,7 @@ func (p *WorkoutlinerParser) ProseLine() (localctx IProseLineContext) {
 		switch _alt {
 		case 1:
 			{
-				p.SetState(49)
+				p.SetState(84)
 				p.Match(WorkoutlinerParserWORD)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -901,9 +1637,9 @@ func (p *WorkoutlinerParser) ProseLine() (localctx IProseLineContext) {
 			goto errorExit
 		}
 
-		p.SetState(52)
+		p.SetState(87)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 6, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 11, p.GetParserRuleContext())
 		if p.HasError() {
 			goto errorExit
 		}
@@ -1050,32 +1786,32 @@ func (s *NumericTokenContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *WorkoutlinerParser) NumericToken() (localctx INumericTokenContext) {
 	localctx = NewNumericTokenContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, WorkoutlinerParserRULE_numericToken)
-	p.SetState(57)
+	p.EnterRule(localctx, 14, WorkoutlinerParserRULE_numericToken)
+	p.SetState(92)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 7, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 12, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(54)
+			p.SetState(89)
 			p.ByExpr()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(55)
+			p.SetState(90)
 			p.Multiplier()
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(56)
+			p.SetState(91)
 			p.Number()
 		}
 
@@ -1207,8 +1943,8 @@ func (s *TokenContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *WorkoutlinerParser) Token() (localctx ITokenContext) {
 	localctx = NewTokenContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, WorkoutlinerParserRULE_token)
-	p.SetState(61)
+	p.EnterRule(localctx, 16, WorkoutlinerParserRULE_token)
+	p.SetState(96)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1218,14 +1954,14 @@ func (p *WorkoutlinerParser) Token() (localctx ITokenContext) {
 	case WorkoutlinerParserNUMBER:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(59)
+			p.SetState(94)
 			p.NumericToken()
 		}
 
 	case WorkoutlinerParserWORD:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(60)
+			p.SetState(95)
 			p.Note()
 		}
 
@@ -1436,19 +2172,19 @@ func (s *ThreePartByContext) Accept(visitor antlr.ParseTreeVisitor) interface{} 
 
 func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 	localctx = NewByExprContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, WorkoutlinerParserRULE_byExpr)
-	p.SetState(71)
+	p.EnterRule(localctx, 18, WorkoutlinerParserRULE_byExpr)
+	p.SetState(106)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 9, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 14, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewTwoPartByContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(63)
+			p.SetState(98)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1459,7 +2195,7 @@ func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 			}
 		}
 		{
-			p.SetState(64)
+			p.SetState(99)
 			p.Match(WorkoutlinerParserBY)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1467,7 +2203,7 @@ func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 			}
 		}
 		{
-			p.SetState(65)
+			p.SetState(100)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1482,7 +2218,7 @@ func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 		localctx = NewThreePartByContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(66)
+			p.SetState(101)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1493,7 +2229,7 @@ func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 			}
 		}
 		{
-			p.SetState(67)
+			p.SetState(102)
 			p.Match(WorkoutlinerParserBY)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1501,7 +2237,7 @@ func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 			}
 		}
 		{
-			p.SetState(68)
+			p.SetState(103)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1512,7 +2248,7 @@ func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 			}
 		}
 		{
-			p.SetState(69)
+			p.SetState(104)
 			p.Match(WorkoutlinerParserBY)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1520,7 +2256,7 @@ func (p *WorkoutlinerParser) ByExpr() (localctx IByExprContext) {
 			}
 		}
 		{
-			p.SetState(70)
+			p.SetState(105)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1737,19 +2473,19 @@ func (s *FullMultiplierContext) Accept(visitor antlr.ParseTreeVisitor) interface
 
 func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 	localctx = NewMultiplierContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, WorkoutlinerParserRULE_multiplier)
-	p.SetState(81)
+	p.EnterRule(localctx, 20, WorkoutlinerParserRULE_multiplier)
+	p.SetState(116)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 10, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 15, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewPartialMultiplierContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(73)
+			p.SetState(108)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1760,7 +2496,7 @@ func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 			}
 		}
 		{
-			p.SetState(74)
+			p.SetState(109)
 			p.Match(WorkoutlinerParserX)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1768,7 +2504,7 @@ func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 			}
 		}
 		{
-			p.SetState(75)
+			p.SetState(110)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1783,7 +2519,7 @@ func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 		localctx = NewFullMultiplierContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(76)
+			p.SetState(111)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1794,7 +2530,7 @@ func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 			}
 		}
 		{
-			p.SetState(77)
+			p.SetState(112)
 			p.Match(WorkoutlinerParserX)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1802,7 +2538,7 @@ func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 			}
 		}
 		{
-			p.SetState(78)
+			p.SetState(113)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1813,7 +2549,7 @@ func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 			}
 		}
 		{
-			p.SetState(79)
+			p.SetState(114)
 			p.Match(WorkoutlinerParserX)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1821,7 +2557,7 @@ func (p *WorkoutlinerParser) Multiplier() (localctx IMultiplierContext) {
 			}
 		}
 		{
-			p.SetState(80)
+			p.SetState(115)
 
 			var _m = p.Match(WorkoutlinerParserNUMBER)
 
@@ -1931,10 +2667,10 @@ func (s *NumberContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *WorkoutlinerParser) Number() (localctx INumberContext) {
 	localctx = NewNumberContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, WorkoutlinerParserRULE_number)
+	p.EnterRule(localctx, 22, WorkoutlinerParserRULE_number)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(83)
+		p.SetState(118)
 		p.Match(WorkoutlinerParserNUMBER)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2042,11 +2778,11 @@ func (s *NoteContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *WorkoutlinerParser) Note() (localctx INoteContext) {
 	localctx = NewNoteContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, WorkoutlinerParserRULE_note)
+	p.EnterRule(localctx, 24, WorkoutlinerParserRULE_note)
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(86)
+	p.SetState(121)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2056,7 +2792,7 @@ func (p *WorkoutlinerParser) Note() (localctx INoteContext) {
 		switch _alt {
 		case 1:
 			{
-				p.SetState(85)
+				p.SetState(120)
 				p.Match(WorkoutlinerParserWORD)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -2069,9 +2805,9 @@ func (p *WorkoutlinerParser) Note() (localctx INoteContext) {
 			goto errorExit
 		}
 
-		p.SetState(88)
+		p.SetState(123)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 11, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 16, p.GetParserRuleContext())
 		if p.HasError() {
 			goto errorExit
 		}

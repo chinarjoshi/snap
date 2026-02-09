@@ -20,6 +20,17 @@ open class WorkoutlinerVisitor<T>: ParseTreeVisitor<T> {
 	}
 
 	/**
+	 * Visit a parse tree produced by the {@code SupersetLineAlt}
+	 * labeled alternative in {@link WorkoutlinerParser#line}.
+	- Parameters:
+	  - ctx: the parse tree
+	- returns: the visitor result
+	 */
+	open func visitSupersetLineAlt(_ ctx: WorkoutlinerParser.SupersetLineAltContext) -> T {
+	 	fatalError(#function + " must be overridden")
+	}
+
+	/**
 	 * Visit a parse tree produced by the {@code ExerciseLineAlt}
 	 * labeled alternative in {@link WorkoutlinerParser#line}.
 	- Parameters:
@@ -31,6 +42,17 @@ open class WorkoutlinerVisitor<T>: ParseTreeVisitor<T> {
 	}
 
 	/**
+	 * Visit a parse tree produced by the {@code ContinuationLineAlt}
+	 * labeled alternative in {@link WorkoutlinerParser#line}.
+	- Parameters:
+	  - ctx: the parse tree
+	- returns: the visitor result
+	 */
+	open func visitContinuationLineAlt(_ ctx: WorkoutlinerParser.ContinuationLineAltContext) -> T {
+	 	fatalError(#function + " must be overridden")
+	}
+
+	/**
 	 * Visit a parse tree produced by the {@code ProseLineAlt}
 	 * labeled alternative in {@link WorkoutlinerParser#line}.
 	- Parameters:
@@ -38,6 +60,36 @@ open class WorkoutlinerVisitor<T>: ParseTreeVisitor<T> {
 	- returns: the visitor result
 	 */
 	open func visitProseLineAlt(_ ctx: WorkoutlinerParser.ProseLineAltContext) -> T {
+	 	fatalError(#function + " must be overridden")
+	}
+
+	/**
+	 * Visit a parse tree produced by {@link WorkoutlinerParser#continuationLine}.
+	- Parameters:
+	  - ctx: the parse tree
+	- returns: the visitor result
+	 */
+	open func visitContinuationLine(_ ctx: WorkoutlinerParser.ContinuationLineContext) -> T {
+	 	fatalError(#function + " must be overridden")
+	}
+
+	/**
+	 * Visit a parse tree produced by {@link WorkoutlinerParser#supersetLine}.
+	- Parameters:
+	  - ctx: the parse tree
+	- returns: the visitor result
+	 */
+	open func visitSupersetLine(_ ctx: WorkoutlinerParser.SupersetLineContext) -> T {
+	 	fatalError(#function + " must be overridden")
+	}
+
+	/**
+	 * Visit a parse tree produced by {@link WorkoutlinerParser#supersetName}.
+	- Parameters:
+	  - ctx: the parse tree
+	- returns: the visitor result
+	 */
+	open func visitSupersetName(_ ctx: WorkoutlinerParser.SupersetNameContext) -> T {
 	 	fatalError(#function + " must be overridden")
 	}
 

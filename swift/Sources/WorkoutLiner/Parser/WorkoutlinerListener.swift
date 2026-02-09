@@ -19,6 +19,20 @@ public protocol WorkoutlinerListener: ParseTreeListener {
 	 */
 	func exitParagraph(_ ctx: WorkoutlinerParser.ParagraphContext)
 	/**
+	 * Enter a parse tree produced by the {@code SupersetLineAlt}
+	 * labeled alternative in {@link WorkoutlinerParser#line}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func enterSupersetLineAlt(_ ctx: WorkoutlinerParser.SupersetLineAltContext)
+	/**
+	 * Exit a parse tree produced by the {@code SupersetLineAlt}
+	 * labeled alternative in {@link WorkoutlinerParser#line}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func exitSupersetLineAlt(_ ctx: WorkoutlinerParser.SupersetLineAltContext)
+	/**
 	 * Enter a parse tree produced by the {@code ExerciseLineAlt}
 	 * labeled alternative in {@link WorkoutlinerParser#line}.
 	 - Parameters:
@@ -33,6 +47,20 @@ public protocol WorkoutlinerListener: ParseTreeListener {
 	 */
 	func exitExerciseLineAlt(_ ctx: WorkoutlinerParser.ExerciseLineAltContext)
 	/**
+	 * Enter a parse tree produced by the {@code ContinuationLineAlt}
+	 * labeled alternative in {@link WorkoutlinerParser#line}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func enterContinuationLineAlt(_ ctx: WorkoutlinerParser.ContinuationLineAltContext)
+	/**
+	 * Exit a parse tree produced by the {@code ContinuationLineAlt}
+	 * labeled alternative in {@link WorkoutlinerParser#line}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func exitContinuationLineAlt(_ ctx: WorkoutlinerParser.ContinuationLineAltContext)
+	/**
 	 * Enter a parse tree produced by the {@code ProseLineAlt}
 	 * labeled alternative in {@link WorkoutlinerParser#line}.
 	 - Parameters:
@@ -46,6 +74,42 @@ public protocol WorkoutlinerListener: ParseTreeListener {
 	   - ctx: the parse tree
 	 */
 	func exitProseLineAlt(_ ctx: WorkoutlinerParser.ProseLineAltContext)
+	/**
+	 * Enter a parse tree produced by {@link WorkoutlinerParser#continuationLine}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func enterContinuationLine(_ ctx: WorkoutlinerParser.ContinuationLineContext)
+	/**
+	 * Exit a parse tree produced by {@link WorkoutlinerParser#continuationLine}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func exitContinuationLine(_ ctx: WorkoutlinerParser.ContinuationLineContext)
+	/**
+	 * Enter a parse tree produced by {@link WorkoutlinerParser#supersetLine}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func enterSupersetLine(_ ctx: WorkoutlinerParser.SupersetLineContext)
+	/**
+	 * Exit a parse tree produced by {@link WorkoutlinerParser#supersetLine}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func exitSupersetLine(_ ctx: WorkoutlinerParser.SupersetLineContext)
+	/**
+	 * Enter a parse tree produced by {@link WorkoutlinerParser#supersetName}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func enterSupersetName(_ ctx: WorkoutlinerParser.SupersetNameContext)
+	/**
+	 * Exit a parse tree produced by {@link WorkoutlinerParser#supersetName}.
+	 - Parameters:
+	   - ctx: the parse tree
+	 */
+	func exitSupersetName(_ ctx: WorkoutlinerParser.SupersetNameContext)
 	/**
 	 * Enter a parse tree produced by {@link WorkoutlinerParser#exerciseLine}.
 	 - Parameters:

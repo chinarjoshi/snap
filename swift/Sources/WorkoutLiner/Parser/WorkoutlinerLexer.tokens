@@ -1,7 +1,9 @@
 NUMBER=1
 X=2
 BY=3
-WORD=4
-NEWLINE=5
-WS=6
-'\n'=5
+STAR=4
+WORD=5
+NEWLINE=6
+WS=7
+'*'=4
+'\n'=6

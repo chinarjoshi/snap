@@ -13,39 +13,173 @@ enum TokenResult {
     case note(String)
 }
 
-class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
+class WorkoutlinerASTVisitor: WorkoutlinerBaseVisitor<Any> {
 
-    override func visitParagraph(_ ctx: ParagraphParser.ParagraphContext) -> Any? {
+    override func visitParagraph(_ ctx: WorkoutlinerParser.ParagraphContext) -> Any? {
         var result = ParseResult()
+
+        // State for handling continuation lines
+        var lastExercise: Exercise? = nil
+        var pendingProse: String = ""
+
+        func flush() {
+            if let ex = lastExercise, !ex.sets.isEmpty {
+                result.exercises.append(ex)
+            } else if !pendingProse.isEmpty {
+                result.proseLines.append(pendingProse)
+            }
+            lastExercise = nil
+            pendingProse = ""
+        }
 
         for lineCtx in ctx.line() {
             guard let lineResult = visit(lineCtx) else { continue }
 
             if let prose = lineResult as? String {
-                result.proseLines.append(prose)
+                // proseLine
+                flush()
+                pendingProse = prose
             } else if let exercise = lineResult as? Exercise {
-                if exercise.sets.isEmpty {
-                    result.proseLines.append(exercise.name)
+                // exerciseLine
+                flush()
+                if !exercise.sets.isEmpty {
+                    lastExercise = exercise
                 } else {
-                    result.exercises.append(exercise)
+                    pendingProse = exercise.name
                 }
+            } else if let exercises = lineResult as? [Exercise] {
+                // supersetLine
+                flush()
+                for ex in exercises {
+                    if !ex.sets.isEmpty {
+                        result.exercises.append(ex)
+                    }
+                }
+            } else if let tokenResults = lineResult as? [TokenResult] {
+                // continuationLine
+                if var ex = lastExercise {
+                    // Extend existing exercise
+                    let lastWeight = ex.sets.last?.weight ?? 0
+                    let newSets = buildSetsFromResultsWithInitialWeight(tokenResults, initialWeight: lastWeight)
+                    ex.sets.append(contentsOf: newSets)
+                    lastExercise = ex
+                } else if !pendingProse.isEmpty {
+                    // Start new exercise from pending prose
+                    let sets = buildSetsFromResults(tokenResults)
+                    lastExercise = Exercise(name: titleCase(pendingProse), sets: sets)
+                    pendingProse = ""
+                }
+                // If no pending prose or exercise, ignore the continuation line
             }
         }
 
+        flush()
         return result
     }
 
-    override func visitExerciseLineAlt(_ ctx: ParagraphParser.ExerciseLineAltContext) -> Any? {
+    override func visitExerciseLineAlt(_ ctx: WorkoutlinerParser.ExerciseLineAltContext) -> Any? {
         guard let exerciseLine = ctx.exerciseLine() else { return nil }
         return visit(exerciseLine)
     }
 
-    override func visitProseLineAlt(_ ctx: ParagraphParser.ProseLineAltContext) -> Any? {
+    override func visitProseLineAlt(_ ctx: WorkoutlinerParser.ProseLineAltContext) -> Any? {
         guard let proseLine = ctx.proseLine() else { return nil }
         return visit(proseLine)
     }
 
-    override func visitExerciseLine(_ ctx: ParagraphParser.ExerciseLineContext) -> Any? {
+    override func visitContinuationLineAlt(_ ctx: WorkoutlinerParser.ContinuationLineAltContext) -> Any? {
+        guard let continuationLine = ctx.continuationLine() else { return nil }
+        return visit(continuationLine)
+    }
+
+    override func visitContinuationLine(_ ctx: WorkoutlinerParser.ContinuationLineContext) -> Any? {
+        var results: [TokenResult] = []
+
+        if let numericToken = ctx.numericToken(),
+           let numResult = visit(numericToken) as? TokenResult {
+            results.append(numResult)
+        }
+
+        for tokenCtx in ctx.token() {
+            if let result = visit(tokenCtx) as? TokenResult {
+                results.append(result)
+            }
+        }
+
+        return results
+    }
+
+    override func visitSupersetLineAlt(_ ctx: WorkoutlinerParser.SupersetLineAltContext) -> Any? {
+        guard let supersetLine = ctx.supersetLine() else { return nil }
+        return visit(supersetLine)
+    }
+
+    override func visitSupersetLine(_ ctx: WorkoutlinerParser.SupersetLineContext) -> Any? {
+        let supersetNames = ctx.supersetName()
+        guard supersetNames.count == 2 else { return nil }
+
+        // Extract exercise names (keep * suffix)
+        let name1 = extractSupersetName(supersetNames[0])
+        let name2 = extractSupersetName(supersetNames[1])
+
+        // Build all sets from tokens
+        let tokens = ctx.token()
+        let allSets = buildSetsFromTokens(tokens)
+
+        // Alternate sets between two exercises
+        var sets1: [WorkoutSet] = []
+        var sets2: [WorkoutSet] = []
+        for (i, set) in allSets.enumerated() {
+            if i % 2 == 0 {
+                sets1.append(set)
+            } else {
+                sets2.append(set)
+            }
+        }
+
+        return [
+            Exercise(name: name1, sets: sets1),
+            Exercise(name: name2, sets: sets2)
+        ]
+    }
+
+    private func extractSupersetName(_ ctx: WorkoutlinerParser.SupersetNameContext) -> String {
+        let words = ctx.WORD().map { $0.getText() }
+        let name = titleCase(words.joined(separator: " "))
+        return name + "*"
+    }
+
+    private func buildSetsFromTokens(_ tokens: [WorkoutlinerParser.TokenContext]) -> [WorkoutSet] {
+        var sets: [WorkoutSet] = []
+
+        for tokenCtx in tokens {
+            guard let result = visit(tokenCtx) as? TokenResult else { continue }
+
+            switch result {
+            case .sets(let newSets):
+                // Fully specified sets (e.g., 3x8x135) - add each as individual set
+                sets.append(contentsOf: newSets)
+            case .pendingReps(let pending):
+                // Partial multiplier (e.g., 3x8) - add each as bodyweight
+                for r in pending {
+                    sets.append(WorkoutSet(reps: r, weight: 0))
+                }
+            case .weight(let w):
+                // Single weight - assume default reps
+                sets.append(WorkoutSet(reps: defaultReps, weight: w))
+            case .reps(let r):
+                // Single rep count - bodyweight
+                sets.append(WorkoutSet(reps: r, weight: 0))
+            case .note:
+                // Notes don't create sets in superset context
+                break
+            }
+        }
+
+        return sets
+    }
+
+    override func visitExerciseLine(_ ctx: WorkoutlinerParser.ExerciseLineContext) -> Any? {
         guard let numericToken = ctx.numericToken() else { return nil }
 
         let words = ctx.WORD()
@@ -57,12 +191,12 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return Exercise(name: name, sets: sets)
     }
 
-    override func visitProseLine(_ ctx: ParagraphParser.ProseLineContext) -> Any? {
+    override func visitProseLine(_ ctx: WorkoutlinerParser.ProseLineContext) -> Any? {
         let words = ctx.WORD().map { $0.getText() }
         return words.joined(separator: " ")
     }
 
-    private func extractName(words: [TerminalNode], numericToken: ParagraphParser.NumericTokenContext) -> String {
+    private func extractName(words: [TerminalNode], numericToken: WorkoutlinerParser.NumericTokenContext) -> String {
         let firstTokenStart = numericToken.getStart()?.getStartIndex() ?? 0
         var nameWords: [String] = []
 
@@ -75,7 +209,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return titleCase(nameWords.joined(separator: " "))
     }
 
-    private func buildSetsFromExercise(numericToken: ParagraphParser.NumericTokenContext, tokens: [ParagraphParser.TokenContext]) -> [WorkoutSet] {
+    private func buildSetsFromExercise(numericToken: WorkoutlinerParser.NumericTokenContext, tokens: [WorkoutlinerParser.TokenContext]) -> [WorkoutSet] {
         var allResults: [TokenResult] = []
 
         if let numResult = visit(numericToken) as? TokenResult {
@@ -91,7 +225,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return buildSetsFromResults(allResults)
     }
 
-    override func visitNumericToken(_ ctx: ParagraphParser.NumericTokenContext) -> Any? {
+    override func visitNumericToken(_ ctx: WorkoutlinerParser.NumericTokenContext) -> Any? {
         if let byExpr = ctx.byExpr() {
             return visit(byExpr)
         }
@@ -104,7 +238,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return nil
     }
 
-    override func visitToken(_ ctx: ParagraphParser.TokenContext) -> Any? {
+    override func visitToken(_ ctx: WorkoutlinerParser.TokenContext) -> Any? {
         if let numToken = ctx.numericToken() {
             return visit(numToken)
         }
@@ -114,7 +248,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return nil
     }
 
-    override func visitTwoPartBy(_ ctx: ParagraphParser.TwoPartByContext) -> Any? {
+    override func visitTwoPartBy(_ ctx: WorkoutlinerParser.TwoPartByContext) -> Any? {
         let reps = Int(ctx.reps?.getText() ?? "0") ?? 0
         let weight = Int(ctx.weight?.getText() ?? "0") ?? 0
 
@@ -122,7 +256,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return TokenResult.sets(sets)
     }
 
-    override func visitThreePartBy(_ ctx: ParagraphParser.ThreePartByContext) -> Any? {
+    override func visitThreePartBy(_ ctx: WorkoutlinerParser.ThreePartByContext) -> Any? {
         let numSets = Int(ctx.sets?.getText() ?? "0") ?? 0
         let reps = Int(ctx.reps?.getText() ?? "0") ?? 0
         let weight = Int(ctx.weight?.getText() ?? "0") ?? 0
@@ -131,7 +265,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return TokenResult.sets(sets)
     }
 
-    override func visitFullMultiplier(_ ctx: ParagraphParser.FullMultiplierContext) -> Any? {
+    override func visitFullMultiplier(_ ctx: WorkoutlinerParser.FullMultiplierContext) -> Any? {
         let numSets = Int(ctx.sets?.getText() ?? "0") ?? 0
         let reps = Int(ctx.reps?.getText() ?? "0") ?? 0
         let weight = Int(ctx.weight?.getText() ?? "0") ?? 0
@@ -140,7 +274,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return TokenResult.sets(sets)
     }
 
-    override func visitPartialMultiplier(_ ctx: ParagraphParser.PartialMultiplierContext) -> Any? {
+    override func visitPartialMultiplier(_ ctx: WorkoutlinerParser.PartialMultiplierContext) -> Any? {
         let first = Int(ctx.sets?.getText() ?? "0") ?? 0
         let second = Int(ctx.reps?.getText() ?? "0") ?? 0
 
@@ -154,7 +288,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return TokenResult.pendingReps(pending)
     }
 
-    override func visitNumber(_ ctx: ParagraphParser.NumberContext) -> Any? {
+    override func visitNumber(_ ctx: WorkoutlinerParser.NumberContext) -> Any? {
         let n = Int(ctx.NUMBER()?.getText() ?? "0") ?? 0
         if n > repThreshold {
             return TokenResult.weight(n)
@@ -162,9 +296,51 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         return TokenResult.reps(n)
     }
 
-    override func visitNote(_ ctx: ParagraphParser.NoteContext) -> Any? {
+    override func visitNote(_ ctx: WorkoutlinerParser.NoteContext) -> Any? {
         let words = ctx.WORD().map { $0.getText() }
         return TokenResult.note(words.joined(separator: " "))
+    }
+
+    private func buildSetsFromResultsWithInitialWeight(_ results: [TokenResult], initialWeight: Int) -> [WorkoutSet] {
+        var sets: [WorkoutSet] = []
+        var pendingReps: [Int] = []
+        var lastWeight = initialWeight
+
+        for result in results {
+            switch result {
+            case .sets(let newSets):
+                sets.append(contentsOf: newSets)
+                if let last = newSets.last {
+                    lastWeight = last.weight
+                }
+            case .pendingReps(let pending):
+                pendingReps.append(contentsOf: pending)
+            case .weight(let w):
+                if !pendingReps.isEmpty {
+                    for r in pendingReps {
+                        sets.append(WorkoutSet(reps: r, weight: w))
+                    }
+                    pendingReps.removeAll()
+                } else {
+                    sets.append(WorkoutSet(reps: defaultReps, weight: w))
+                }
+                lastWeight = w
+            case .reps(let r):
+                pendingReps.append(r)
+            case .note(let text):
+                if !sets.isEmpty {
+                    var lastSet = sets.removeLast()
+                    lastSet.note = joinNotes(lastSet.note, text)
+                    sets.append(lastSet)
+                }
+            }
+        }
+
+        for r in pendingReps {
+            sets.append(WorkoutSet(reps: r, weight: lastWeight))
+        }
+
+        return sets
     }
 
     private func buildSetsFromResults(_ results: [TokenResult]) -> [WorkoutSet] {
@@ -203,9 +379,7 @@ class ParagraphASTVisitor: ParagraphBaseVisitor<Any> {
         }
 
         for r in pendingReps {
-            if lastWeight > 0 {
-                sets.append(WorkoutSet(reps: r, weight: lastWeight))
-            }
+            sets.append(WorkoutSet(reps: r, weight: lastWeight))
         }
 
         return sets

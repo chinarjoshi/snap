@@ -159,13 +159,13 @@ private func parseDescList(_ lines: [String]) -> [String: String] {
 func parse(_ input: String) -> ParseResult? {
     do {
         let inputStream = ANTLRInputStream(input)
-        let lexer = ParagraphLexer(inputStream)
+        let lexer = WorkoutlinerLexer(inputStream)
         let tokenStream = CommonTokenStream(lexer)
-        let parser = try ParagraphParser(tokenStream)
+        let parser = try WorkoutlinerParser(tokenStream)
 
         let tree = try parser.paragraph()
 
-        let visitor = ParagraphASTVisitor()
+        let visitor = WorkoutlinerASTVisitor()
         guard let result = visitor.visit(tree) as? ParseResult else { return nil }
 
         return result
@@ -215,7 +215,7 @@ private func formatExercises(_ exercises: [Exercise]) -> String {
         for i in 0..<maxSets {
             if i < exercise.sets.count {
                 let set = exercise.sets[i]
-                let setStr = "\(set.reps)@\(set.weight)"
+                let setStr = set.weight == 0 ? "\(set.reps)" : "\(set.reps)@\(set.weight)"
                 row += " " + setStr.padding(toLength: 5, withPad: " ", startingAt: 0) + " |"
             } else {
                 row += "       |"

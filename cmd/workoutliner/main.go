@@ -294,6 +294,9 @@ func formatExercises(exercises []workoutliner.Exercise) string {
 }
 
 func formatSet(s workoutliner.Set) string {
+	if s.Weight == 0 {
+		return fmt.Sprintf("%d", s.Reps)
+	}
 	return fmt.Sprintf("%d@%d", s.Reps, s.Weight)
 }
 

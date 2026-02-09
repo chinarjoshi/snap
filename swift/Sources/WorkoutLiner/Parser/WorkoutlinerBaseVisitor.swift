@@ -23,6 +23,13 @@ open class WorkoutlinerBaseVisitor<T>: AbstractParseTreeVisitor<T> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	open func visitSupersetLineAlt(_ ctx: WorkoutlinerParser.SupersetLineAltContext) -> T? { return visitChildren(ctx) }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	open func visitExerciseLineAlt(_ ctx: WorkoutlinerParser.ExerciseLineAltContext) -> T? { return visitChildren(ctx) }
 	/**
 	 * {@inheritDoc}
@@ -30,7 +37,35 @@ open class WorkoutlinerBaseVisitor<T>: AbstractParseTreeVisitor<T> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	open func visitContinuationLineAlt(_ ctx: WorkoutlinerParser.ContinuationLineAltContext) -> T? { return visitChildren(ctx) }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	open func visitProseLineAlt(_ ctx: WorkoutlinerParser.ProseLineAltContext) -> T? { return visitChildren(ctx) }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	open func visitContinuationLine(_ ctx: WorkoutlinerParser.ContinuationLineContext) -> T? { return visitChildren(ctx) }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	open func visitSupersetLine(_ ctx: WorkoutlinerParser.SupersetLineContext) -> T? { return visitChildren(ctx) }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	open func visitSupersetName(_ ctx: WorkoutlinerParser.SupersetNameContext) -> T? { return visitChildren(ctx) }
 	/**
 	 * {@inheritDoc}
 	 *

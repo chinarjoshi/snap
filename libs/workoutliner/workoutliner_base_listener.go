@@ -26,17 +26,47 @@ func (s *BaseWorkoutlinerListener) EnterParagraph(ctx *ParagraphContext) {}
 // ExitParagraph is called when production paragraph is exited.
 func (s *BaseWorkoutlinerListener) ExitParagraph(ctx *ParagraphContext) {}
 
+// EnterSupersetLineAlt is called when production SupersetLineAlt is entered.
+func (s *BaseWorkoutlinerListener) EnterSupersetLineAlt(ctx *SupersetLineAltContext) {}
+
+// ExitSupersetLineAlt is called when production SupersetLineAlt is exited.
+func (s *BaseWorkoutlinerListener) ExitSupersetLineAlt(ctx *SupersetLineAltContext) {}
+
 // EnterExerciseLineAlt is called when production ExerciseLineAlt is entered.
 func (s *BaseWorkoutlinerListener) EnterExerciseLineAlt(ctx *ExerciseLineAltContext) {}
 
 // ExitExerciseLineAlt is called when production ExerciseLineAlt is exited.
 func (s *BaseWorkoutlinerListener) ExitExerciseLineAlt(ctx *ExerciseLineAltContext) {}
 
+// EnterContinuationLineAlt is called when production ContinuationLineAlt is entered.
+func (s *BaseWorkoutlinerListener) EnterContinuationLineAlt(ctx *ContinuationLineAltContext) {}
+
+// ExitContinuationLineAlt is called when production ContinuationLineAlt is exited.
+func (s *BaseWorkoutlinerListener) ExitContinuationLineAlt(ctx *ContinuationLineAltContext) {}
+
 // EnterProseLineAlt is called when production ProseLineAlt is entered.
 func (s *BaseWorkoutlinerListener) EnterProseLineAlt(ctx *ProseLineAltContext) {}
 
 // ExitProseLineAlt is called when production ProseLineAlt is exited.
 func (s *BaseWorkoutlinerListener) ExitProseLineAlt(ctx *ProseLineAltContext) {}
+
+// EnterContinuationLine is called when production continuationLine is entered.
+func (s *BaseWorkoutlinerListener) EnterContinuationLine(ctx *ContinuationLineContext) {}
+
+// ExitContinuationLine is called when production continuationLine is exited.
+func (s *BaseWorkoutlinerListener) ExitContinuationLine(ctx *ContinuationLineContext) {}
+
+// EnterSupersetLine is called when production supersetLine is entered.
+func (s *BaseWorkoutlinerListener) EnterSupersetLine(ctx *SupersetLineContext) {}
+
+// ExitSupersetLine is called when production supersetLine is exited.
+func (s *BaseWorkoutlinerListener) ExitSupersetLine(ctx *SupersetLineContext) {}
+
+// EnterSupersetName is called when production supersetName is entered.
+func (s *BaseWorkoutlinerListener) EnterSupersetName(ctx *SupersetNameContext) {}
+
+// ExitSupersetName is called when production supersetName is exited.
+func (s *BaseWorkoutlinerListener) ExitSupersetName(ctx *SupersetNameContext) {}
 
 // EnterExerciseLine is called when production exerciseLine is entered.
 func (s *BaseWorkoutlinerListener) EnterExerciseLine(ctx *ExerciseLineContext) {}

@@ -11,11 +11,31 @@ func (v *BaseWorkoutlinerVisitor) VisitParagraph(ctx *ParagraphContext) interfac
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseWorkoutlinerVisitor) VisitSupersetLineAlt(ctx *SupersetLineAltContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseWorkoutlinerVisitor) VisitExerciseLineAlt(ctx *ExerciseLineAltContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseWorkoutlinerVisitor) VisitContinuationLineAlt(ctx *ContinuationLineAltContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseWorkoutlinerVisitor) VisitProseLineAlt(ctx *ProseLineAltContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseWorkoutlinerVisitor) VisitContinuationLine(ctx *ContinuationLineContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseWorkoutlinerVisitor) VisitSupersetLine(ctx *SupersetLineContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseWorkoutlinerVisitor) VisitSupersetName(ctx *SupersetNameContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

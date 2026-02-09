@@ -3,9 +3,17 @@ grammar Workoutliner;
 paragraph : line+ EOF ;
 
 line
-    : exerciseLine NEWLINE?   # ExerciseLineAlt
-    | proseLine NEWLINE?      # ProseLineAlt
+    : supersetLine NEWLINE?     # SupersetLineAlt
+    | exerciseLine NEWLINE?     # ExerciseLineAlt
+    | continuationLine NEWLINE? # ContinuationLineAlt
+    | proseLine NEWLINE?        # ProseLineAlt
     ;
+
+continuationLine : numericToken token* ;
+
+supersetLine : supersetName supersetName token+ ;
+
+supersetName : WORD+ STAR ;
 
 exerciseLine : WORD+ numericToken token* ;
 
@@ -39,6 +47,7 @@ note : WORD+ ;
 NUMBER  : [0-9]+ ;
 X       : [xX] ;
 BY      : [bB][yY] ;
+STAR    : '*' ;
 WORD    : [a-zA-Z]+ ;
 NEWLINE : '\n' ;
 WS      : [ \t]+ -> skip ;

@@ -228,3 +228,136 @@ func TestTransformTableMerge(t *testing.T) {
 		t.Error("Expected 8@155 in merged table")
 	}
 }
+
+func TestTransformBodyweight(t *testing.T) {
+	input := "dips 8 8 8"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Dips") {
+		t.Error("Expected Dips in table")
+	}
+	// Should show just "8" not "8@0"
+	if strings.Contains(result, "@") {
+		t.Errorf("Bodyweight should not have @ symbol, got: %s", result)
+	}
+	count := strings.Count(result, "| 8")
+	if count < 3 {
+		t.Errorf("Expected at least 3 sets of 8, got: %s", result)
+	}
+}
+
+func TestTransformSupersetBasic(t *testing.T) {
+	input := "dips* press* 8 135 8 135 8 135"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Dips*") {
+		t.Errorf("Expected Dips* in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Press*") {
+		t.Errorf("Expected Press* in table, got: %s", result)
+	}
+	// Dips gets odd-indexed values (8, 8, 8 - bodyweight)
+	// Press gets even-indexed values (135, 135, 135 - weights)
+}
+
+func TestTransformSupersetMixedBodyweightWeighted(t *testing.T) {
+	input := "dips* shoulder press* 8 8x135 8 8x125 8 8x100"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Dips*") {
+		t.Errorf("Expected Dips* in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Shoulder Press*") {
+		t.Errorf("Expected Shoulder Press* in table, got: %s", result)
+	}
+	// Dips should have bodyweight (no @)
+	// Shoulder Press should have weights
+	if !strings.Contains(result, "8@135") {
+		t.Errorf("Expected 8@135 for press, got: %s", result)
+	}
+	if !strings.Contains(result, "8@125") {
+		t.Errorf("Expected 8@125 for press, got: %s", result)
+	}
+	if !strings.Contains(result, "8@100") {
+		t.Errorf("Expected 8@100 for press, got: %s", result)
+	}
+}
+
+func TestTransformSupersetOddSets(t *testing.T) {
+	input := "dips* press* 8 135 8 135 8"
+	result := transform(input)
+
+	// With 5 sets: indices 0,2,4 go to dips (3 sets), indices 1,3 go to press (2 sets)
+	if !strings.Contains(result, "| Dips*") {
+		t.Errorf("Expected Dips* in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Press*") {
+		t.Errorf("Expected Press* in table, got: %s", result)
+	}
+}
+
+func TestTransformMultiLineBasic(t *testing.T) {
+	input := "Bench\n8x135\n8\n8\n8"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Bench") {
+		t.Errorf("Expected Bench in table, got: %s", result)
+	}
+	// Should have 4 sets of 8@135 (first set explicit, next 3 inherit weight)
+	count := strings.Count(result, "8@135")
+	if count != 4 {
+		t.Errorf("Expected 4 sets of 8@135, got %d in: %s", count, result)
+	}
+}
+
+func TestTransformMultiLineInlinePlusContinuation(t *testing.T) {
+	input := "shoulder press 7x100\n6\n5"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Shoulder Press") {
+		t.Errorf("Expected Shoulder Press in table, got: %s", result)
+	}
+	if !strings.Contains(result, "7@100") {
+		t.Errorf("Expected 7@100, got: %s", result)
+	}
+	if !strings.Contains(result, "6@100") {
+		t.Errorf("Expected 6@100, got: %s", result)
+	}
+	if !strings.Contains(result, "5@100") {
+		t.Errorf("Expected 5@100, got: %s", result)
+	}
+}
+
+func TestTransformMultiLineBodyweight(t *testing.T) {
+	input := "Dips\n8\n8\n8"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Dips") {
+		t.Errorf("Expected Dips in table, got: %s", result)
+	}
+	// Bodyweight - no @ symbol
+	if strings.Contains(result, "@") {
+		t.Errorf("Expected bodyweight (no @), got: %s", result)
+	}
+}
+
+func TestTransformMultiLineMixedExercises(t *testing.T) {
+	input := "Bench\n8x135\nshoulder press 7x100\n6"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Bench") {
+		t.Errorf("Expected Bench in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Shoulder Press") {
+		t.Errorf("Expected Shoulder Press in table, got: %s", result)
+	}
+	if !strings.Contains(result, "8@135") {
+		t.Errorf("Expected 8@135, got: %s", result)
+	}
+	if !strings.Contains(result, "7@100") {
+		t.Errorf("Expected 7@100, got: %s", result)
+	}
+	if !strings.Contains(result, "6@100") {
+		t.Errorf("Expected 6@100, got: %s", result)
+	}
+}
