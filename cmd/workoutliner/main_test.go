@@ -361,3 +361,53 @@ func TestTransformMultiLineMixedExercises(t *testing.T) {
 		t.Errorf("Expected 6@100, got: %s", result)
 	}
 }
+
+func TestTransformSingleLineMultipleExercises(t *testing.T) {
+	input := "squat 8x135 bench 8x95 press 8x45"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Squat") {
+		t.Errorf("Expected Squat in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Bench") {
+		t.Errorf("Expected Bench in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Press") {
+		t.Errorf("Expected Press in table, got: %s", result)
+	}
+	if !strings.Contains(result, "8@135") {
+		t.Errorf("Expected 8@135, got: %s", result)
+	}
+	if !strings.Contains(result, "8@95") {
+		t.Errorf("Expected 8@95, got: %s", result)
+	}
+	if !strings.Contains(result, "8@45") {
+		t.Errorf("Expected 8@45, got: %s", result)
+	}
+}
+
+func TestTransformSingleLineMultiWordWithModifier(t *testing.T) {
+	input := "squat 8x135 heavy bench 8x95"
+	result := transform(input)
+
+	// All words before a numericToken form the exercise name
+	// So "heavy bench" becomes "Heavy Bench" exercise
+	if !strings.Contains(result, "| Squat") {
+		t.Errorf("Expected Squat in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Heavy Bench") {
+		t.Errorf("Expected Heavy Bench in table, got: %s", result)
+	}
+}
+
+func TestTransformSingleLineMultiWordExercise(t *testing.T) {
+	input := "squat 8x135 bench press 8x95"
+	result := transform(input)
+
+	if !strings.Contains(result, "| Squat") {
+		t.Errorf("Expected Squat in table, got: %s", result)
+	}
+	if !strings.Contains(result, "| Bench Press") {
+		t.Errorf("Expected Bench Press in table, got: %s", result)
+	}
+}

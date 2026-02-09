@@ -220,4 +220,34 @@ final class WorkoutLinerTests: XCTestCase {
         XCTAssertTrue(result.contains("7@100"), "Expected 7@100, got: \(result)")
         XCTAssertTrue(result.contains("6@100"), "Expected 6@100, got: \(result)")
     }
+
+    func testTransformSingleLineMultipleExercises() {
+        let input = "squat 8x135 bench 8x95 press 8x45"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Squat"), "Expected Squat in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Bench"), "Expected Bench in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Press"), "Expected Press in table, got: \(result)")
+        XCTAssertTrue(result.contains("8@135"), "Expected 8@135, got: \(result)")
+        XCTAssertTrue(result.contains("8@95"), "Expected 8@95, got: \(result)")
+        XCTAssertTrue(result.contains("8@45"), "Expected 8@45, got: \(result)")
+    }
+
+    func testTransformSingleLineMultiWordWithModifier() {
+        let input = "squat 8x135 heavy bench 8x95"
+        let result = transform(input)
+
+        // All words before a numericToken form the exercise name
+        // So "heavy bench" becomes "Heavy Bench" exercise
+        XCTAssertTrue(result.contains("| Squat"), "Expected Squat in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Heavy Bench"), "Expected Heavy Bench in table, got: \(result)")
+    }
+
+    func testTransformSingleLineMultiWordExercise() {
+        let input = "squat 8x135 bench press 8x95"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("| Squat"), "Expected Squat in table, got: \(result)")
+        XCTAssertTrue(result.contains("| Bench Press"), "Expected Bench Press in table, got: \(result)")
+    }
 }

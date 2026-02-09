@@ -185,10 +185,69 @@ class WorkoutlinerASTVisitor: WorkoutlinerBaseVisitor<Any> {
         let words = ctx.WORD()
         let tokens = ctx.token()
 
-        let name = extractName(words: words, numericToken: numericToken)
-        let sets = buildSetsFromExercise(numericToken: numericToken, tokens: tokens)
+        // Collect first exercise name
+        let firstName = extractName(words: words, numericToken: numericToken)
 
-        return Exercise(name: name, sets: sets)
+        // Collect all token results including notes
+        var allTokenResults: [TokenResult] = []
+        if let numResult = visit(numericToken) as? TokenResult {
+            allTokenResults.append(numResult)
+        }
+        for tokenCtx in tokens {
+            if let result = visit(tokenCtx) as? TokenResult {
+                allTokenResults.append(result)
+            }
+        }
+
+        // Split into exercises by detecting note+numericToken pattern
+        let exercises = splitIntoExercises(firstName: firstName, tokens: allTokenResults)
+        if exercises.count == 1 {
+            return exercises[0]
+        }
+        return exercises
+    }
+
+    private func splitIntoExercises(firstName: String, tokens: [TokenResult]) -> [Exercise] {
+        var exercises: [Exercise] = []
+        var currentName = firstName
+        var currentTokens: [TokenResult] = []
+
+        for i in 0..<tokens.count {
+            let tok = tokens[i]
+
+            // Check if this note starts a new exercise (note followed by numeric token)
+            if case .note(let text) = tok,
+               i + 1 < tokens.count,
+               isNumericToken(tokens[i + 1]) {
+                // Flush the current exercise
+                if !currentName.isEmpty {
+                    let sets = buildSetsFromResults(currentTokens)
+                    exercises.append(Exercise(name: currentName, sets: sets))
+                }
+                // Start new exercise with this note as name
+                currentName = titleCase(text)
+                currentTokens = []
+            } else {
+                currentTokens.append(tok)
+            }
+        }
+
+        // Flush last exercise
+        if !currentName.isEmpty {
+            let sets = buildSetsFromResults(currentTokens)
+            exercises.append(Exercise(name: currentName, sets: sets))
+        }
+
+        return exercises
+    }
+
+    private func isNumericToken(_ tok: TokenResult) -> Bool {
+        switch tok {
+        case .sets, .pendingReps, .weight, .reps:
+            return true
+        case .note:
+            return false
+        }
     }
 
     override func visitProseLine(_ ctx: WorkoutlinerParser.ProseLineContext) -> Any? {

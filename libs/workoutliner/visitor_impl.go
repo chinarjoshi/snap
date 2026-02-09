@@ -210,10 +210,64 @@ func (v *WorkoutlinerASTVisitor) VisitExerciseLine(ctx *ExerciseLineContext) int
 	numericToken := ctx.NumericToken()
 	tokens := ctx.AllToken()
 
-	name := v.extractName(words, numericToken)
-	sets := v.buildSetsFromExercise(numericToken, tokens)
+	// Collect first exercise name
+	firstName := v.extractName(words, numericToken)
 
-	return Exercise{Name: name, Sets: sets}
+	// Collect all token results including notes
+	var allTokenResults []tokenResult
+	numResult := v.Visit(numericToken)
+	if numResult != nil {
+		allTokenResults = append(allTokenResults, numResult.(tokenResult))
+	}
+	for _, tokenCtx := range tokens {
+		result := v.Visit(tokenCtx)
+		if result != nil {
+			allTokenResults = append(allTokenResults, result.(tokenResult))
+		}
+	}
+
+	// Split into exercises by detecting note+numericToken pattern
+	exercises := v.splitIntoExercises(firstName, allTokenResults)
+	if len(exercises) == 1 {
+		return exercises[0]
+	}
+	return exercises
+}
+
+func (v *WorkoutlinerASTVisitor) splitIntoExercises(firstName string, tokens []tokenResult) []Exercise {
+	var exercises []Exercise
+	currentName := firstName
+	var currentTokens []tokenResult
+
+	for i := 0; i < len(tokens); i++ {
+		tok := tokens[i]
+
+		// Check if this note starts a new exercise (note followed by numeric token)
+		if tok.kind == "note" && i+1 < len(tokens) && isNumericToken(tokens[i+1]) {
+			// Flush the current exercise
+			if currentName != "" {
+				sets := v.buildSetsFromResults(currentTokens)
+				exercises = append(exercises, Exercise{Name: currentName, Sets: sets})
+			}
+			// Start new exercise with this note as name
+			currentName = titleCase(tok.text)
+			currentTokens = nil
+		} else {
+			currentTokens = append(currentTokens, tok)
+		}
+	}
+
+	// Flush last exercise
+	if currentName != "" {
+		sets := v.buildSetsFromResults(currentTokens)
+		exercises = append(exercises, Exercise{Name: currentName, Sets: sets})
+	}
+
+	return exercises
+}
+
+func isNumericToken(tok tokenResult) bool {
+	return tok.kind == "sets" || tok.kind == "pending_reps" || tok.kind == "weight" || tok.kind == "reps"
 }
 
 func (v *WorkoutlinerASTVisitor) VisitProseLine(ctx *ProseLineContext) interface{} {
