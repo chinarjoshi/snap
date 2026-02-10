@@ -289,24 +289,6 @@ func (v *WorkoutlinerASTVisitor) extractName(words []antlr.TerminalNode, numeric
 	return titleCase(strings.Join(nameWords, " "))
 }
 
-func (v *WorkoutlinerASTVisitor) buildSetsFromExercise(numericToken INumericTokenContext, tokens []ITokenContext) []Set {
-	var allTokenResults []tokenResult
-
-	numResult := v.Visit(numericToken)
-	if numResult != nil {
-		allTokenResults = append(allTokenResults, numResult.(tokenResult))
-	}
-
-	for _, tokenCtx := range tokens {
-		result := v.Visit(tokenCtx)
-		if result != nil {
-			allTokenResults = append(allTokenResults, result.(tokenResult))
-		}
-	}
-
-	return v.buildSetsFromResults(allTokenResults)
-}
-
 type tokenResult struct {
 	kind        string
 	sets        []Set

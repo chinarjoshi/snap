@@ -268,22 +268,6 @@ class WorkoutlinerASTVisitor: WorkoutlinerBaseVisitor<Any> {
         return titleCase(nameWords.joined(separator: " "))
     }
 
-    private func buildSetsFromExercise(numericToken: WorkoutlinerParser.NumericTokenContext, tokens: [WorkoutlinerParser.TokenContext]) -> [WorkoutSet] {
-        var allResults: [TokenResult] = []
-
-        if let numResult = visit(numericToken) as? TokenResult {
-            allResults.append(numResult)
-        }
-
-        for tokenCtx in tokens {
-            if let result = visit(tokenCtx) as? TokenResult {
-                allResults.append(result)
-            }
-        }
-
-        return buildSetsFromResults(allResults)
-    }
-
     override func visitNumericToken(_ ctx: WorkoutlinerParser.NumericTokenContext) -> Any? {
         if let byExpr = ctx.byExpr() {
             return visit(byExpr)
