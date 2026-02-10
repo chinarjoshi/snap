@@ -113,7 +113,7 @@ final class WorkoutLinerTests: XCTestCase {
     }
 
     func testTransformDefaultRepsForWeight() {
-        let input = "squat 135"
+        let input = "squat 135 135"
         let result = transform(input)
 
         XCTAssertTrue(result.contains("8@135"))
@@ -146,11 +146,17 @@ final class WorkoutLinerTests: XCTestCase {
     }
 
     func testTransformBodyweight() {
-        let input = "dips 8 8 8"
+        // Bodyweight exercise in a paragraph that also has weighted exercise
+        let input = "dips 8 8 8\nbench 8x135 8x130"
         let result = transform(input)
 
         XCTAssertTrue(result.contains("| Dips"), "Expected Dips in table")
-        XCTAssertFalse(result.contains("@"), "Bodyweight should not have @ symbol, got: \(result)")
+        // Dips row should show just "8" not "8@0"
+        for line in result.components(separatedBy: "\n") {
+            if line.contains("Dips") && line.contains("@") {
+                XCTFail("Bodyweight should not have @ symbol, got: \(line)")
+            }
+        }
     }
 
     func testTransformSupersetBasic() {
@@ -202,12 +208,17 @@ final class WorkoutLinerTests: XCTestCase {
     }
 
     func testTransformMultiLineBodyweight() {
-        let input = "Dips\n8\n8\n8"
+        // Bodyweight multi-line in a paragraph with weighted exercise
+        let input = "Dips\n8\n8\n8\nbench 8x135 8x130"
         let result = transform(input)
 
         XCTAssertTrue(result.contains("| Dips"), "Expected Dips in table, got: \(result)")
-        // Bodyweight - no @ symbol
-        XCTAssertFalse(result.contains("@"), "Expected bodyweight (no @), got: \(result)")
+        // Dips row should have no @ symbol
+        for line in result.components(separatedBy: "\n") {
+            if line.contains("Dips") && line.contains("@") {
+                XCTFail("Bodyweight should not have @ symbol, got: \(line)")
+            }
+        }
     }
 
     func testTransformMultiLineMixedExercises() {
@@ -249,5 +260,35 @@ final class WorkoutLinerTests: XCTestCase {
 
         XCTAssertTrue(result.contains("| Squat"), "Expected Squat in table, got: \(result)")
         XCTAssertTrue(result.contains("| Bench Press"), "Expected Bench Press in table, got: \(result)")
+    }
+
+    func testHeuristicRejectsProseWithNumber() {
+        let cases = [
+            "I ran 5 miles today",
+            "ate 3 eggs",
+            "rested 10 minutes between sets",
+            "dips 8",
+            "squat 135",
+            "bench 8x135",
+            "dips 8 8 8",
+            "rested 30 minutes",
+        ]
+        for input in cases {
+            let result = transform(input)
+            XCTAssertFalse(result.contains("|"), "'\(input)' should NOT be treated as workout, got: \(result)")
+        }
+    }
+
+    func testHeuristicAcceptsWorkout() {
+        let cases = [
+            "squat 135 135 135",
+            "bench 8x135 8x130 8x125",
+            "squat 135 bench 95",
+            "squat 3x8x135",
+        ]
+        for input in cases {
+            let result = transform(input)
+            XCTAssertTrue(result.contains("|"), "'\(input)' should be treated as workout, got: \(result)")
+        }
     }
 }

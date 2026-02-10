@@ -37,11 +37,26 @@ private func transformParagraph(_ para: String) -> String {
         return transformTableWithTrailing(lines)
     }
 
-    guard let parseResult = parse(para), parseResult.hasExercises else {
+    guard let parseResult = parse(para), isWorkout(parseResult) else {
         return para
     }
 
     return formatResult(parseResult)
+}
+
+private func isWorkout(_ result: ParseResult) -> Bool {
+    guard result.hasExercises else { return false }
+    var totalSets = 0
+    var hasWeight = false
+    for exercise in result.exercises {
+        totalSets += exercise.sets.count
+        for set in exercise.sets {
+            if set.weight > 0 {
+                hasWeight = true
+            }
+        }
+    }
+    return totalSets >= 2 && hasWeight
 }
 
 private func transformTableWithTrailing(_ lines: [String]) -> String {

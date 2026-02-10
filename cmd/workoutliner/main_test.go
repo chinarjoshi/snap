@@ -167,7 +167,7 @@ func TestTransformDefaultSetsForBySyntax(t *testing.T) {
 }
 
 func TestTransformDefaultRepsForWeight(t *testing.T) {
-	input := "squat 135"
+	input := "squat 135 135"
 	result := transform(input)
 
 	if !strings.Contains(result, "8@135") {
@@ -230,19 +230,19 @@ func TestTransformTableMerge(t *testing.T) {
 }
 
 func TestTransformBodyweight(t *testing.T) {
-	input := "dips 8 8 8"
+	// Bodyweight exercise in a paragraph that also has weighted exercise
+	input := "dips 8 8 8\nbench 8x135 8x130"
 	result := transform(input)
 
 	if !strings.Contains(result, "| Dips") {
 		t.Error("Expected Dips in table")
 	}
-	// Should show just "8" not "8@0"
-	if strings.Contains(result, "@") {
-		t.Errorf("Bodyweight should not have @ symbol, got: %s", result)
-	}
-	count := strings.Count(result, "| 8")
-	if count < 3 {
-		t.Errorf("Expected at least 3 sets of 8, got: %s", result)
+	// Dips should show just "8" not "8@0"
+	lines := strings.Split(result, "\n")
+	for _, line := range lines {
+		if strings.Contains(line, "Dips") && strings.Contains(line, "@") {
+			t.Errorf("Bodyweight should not have @ symbol, got: %s", line)
+		}
 	}
 }
 
@@ -329,15 +329,18 @@ func TestTransformMultiLineInlinePlusContinuation(t *testing.T) {
 }
 
 func TestTransformMultiLineBodyweight(t *testing.T) {
-	input := "Dips\n8\n8\n8"
+	// Bodyweight multi-line in a paragraph with weighted exercise
+	input := "Dips\n8\n8\n8\nbench 8x135 8x130"
 	result := transform(input)
 
 	if !strings.Contains(result, "| Dips") {
 		t.Errorf("Expected Dips in table, got: %s", result)
 	}
-	// Bodyweight - no @ symbol
-	if strings.Contains(result, "@") {
-		t.Errorf("Expected bodyweight (no @), got: %s", result)
+	// Dips row should have no @ symbol
+	for _, line := range strings.Split(result, "\n") {
+		if strings.Contains(line, "Dips") && strings.Contains(line, "@") {
+			t.Errorf("Bodyweight should not have @ symbol, got: %s", line)
+		}
 	}
 }
 
@@ -409,5 +412,49 @@ func TestTransformSingleLineMultiWordExercise(t *testing.T) {
 	}
 	if !strings.Contains(result, "| Bench Press") {
 		t.Errorf("Expected Bench Press in table, got: %s", result)
+	}
+}
+
+func TestHeuristicRejectsProseWithNumber(t *testing.T) {
+	cases := []struct {
+		name  string
+		input string
+	}{
+		{"ran 5 miles", "I ran 5 miles today"},
+		{"ate 3 eggs", "ate 3 eggs"},
+		{"rested 10 min", "rested 10 minutes between sets"},
+		{"single bodyweight", "dips 8"},
+		{"single weight", "squat 135"},
+		{"single explicit", "bench 8x135"},
+		{"bodyweight only", "dips 8 8 8"},
+		{"rested 30 min", "rested 30 minutes"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := transform(tc.input)
+			if strings.Contains(result, "|") {
+				t.Errorf("Should NOT be treated as workout, got: %s", result)
+			}
+		})
+	}
+}
+
+func TestHeuristicAcceptsWorkout(t *testing.T) {
+	cases := []struct {
+		name  string
+		input string
+	}{
+		{"multiple weighted sets", "squat 135 135 135"},
+		{"explicit multi set", "bench 8x135 8x130 8x125"},
+		{"multi exercise", "squat 135 bench 95"},
+		{"full notation", "squat 3x8x135"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := transform(tc.input)
+			if !strings.Contains(result, "|") {
+				t.Errorf("Should be treated as workout, got: %s", result)
+			}
+		})
 	}
 }

@@ -73,7 +73,7 @@ func transformParagraph(para string) string {
 		return para
 	}
 
-	if !parseResult.HasExercises() {
+	if !isWorkout(parseResult) {
 		return para
 	}
 
@@ -207,6 +207,23 @@ func parseDescList(lines []string) map[string]string {
 		}
 	}
 	return notes
+}
+
+func isWorkout(result *workoutliner.ParseResult) bool {
+	if !result.HasExercises() {
+		return false
+	}
+	totalSets := 0
+	hasWeight := false
+	for _, ex := range result.Exercises {
+		totalSets += len(ex.Sets)
+		for _, s := range ex.Sets {
+			if s.Weight > 0 {
+				hasWeight = true
+			}
+		}
+	}
+	return totalSets >= 2 && hasWeight
 }
 
 func parseInt(s string) int {
