@@ -361,6 +361,14 @@ class WorkoutlinerASTVisitor: WorkoutlinerBaseVisitor<Any> {
     }
 
     private func buildSetsFromResultsWithInitialWeight(_ results: [TokenResult], initialWeight: Int) -> [WorkoutSet] {
+        return buildSetsFromResultsImpl(results, initialWeight: initialWeight)
+    }
+
+    private func buildSetsFromResults(_ results: [TokenResult]) -> [WorkoutSet] {
+        return buildSetsFromResultsImpl(results, initialWeight: 0)
+    }
+
+    private func buildSetsFromResultsImpl(_ results: [TokenResult], initialWeight: Int) -> [WorkoutSet] {
         var sets: [WorkoutSet] = []
         var pendingReps: [Int] = []
         var lastWeight = initialWeight
@@ -387,48 +395,13 @@ class WorkoutlinerASTVisitor: WorkoutlinerBaseVisitor<Any> {
             case .reps(let r):
                 pendingReps.append(r)
             case .note(let text):
-                if !sets.isEmpty {
-                    var lastSet = sets.removeLast()
-                    lastSet.note = joinNotes(lastSet.note, text)
-                    sets.append(lastSet)
-                }
-            }
-        }
-
-        for r in pendingReps {
-            sets.append(WorkoutSet(reps: r, weight: lastWeight))
-        }
-
-        return sets
-    }
-
-    private func buildSetsFromResults(_ results: [TokenResult]) -> [WorkoutSet] {
-        var sets: [WorkoutSet] = []
-        var pendingReps: [Int] = []
-        var lastWeight = 0
-
-        for result in results {
-            switch result {
-            case .sets(let newSets):
-                sets.append(contentsOf: newSets)
-                if let last = newSets.last {
-                    lastWeight = last.weight
-                }
-            case .pendingReps(let pending):
-                pendingReps.append(contentsOf: pending)
-            case .weight(let w):
+                // Resolve pending reps before attaching note
                 if !pendingReps.isEmpty {
                     for r in pendingReps {
-                        sets.append(WorkoutSet(reps: r, weight: w))
+                        sets.append(WorkoutSet(reps: r, weight: lastWeight))
                     }
                     pendingReps.removeAll()
-                } else {
-                    sets.append(WorkoutSet(reps: defaultReps, weight: w))
                 }
-                lastWeight = w
-            case .reps(let r):
-                pendingReps.append(r)
-            case .note(let text):
                 if !sets.isEmpty {
                     var lastSet = sets.removeLast()
                     lastSet.note = joinNotes(lastSet.note, text)

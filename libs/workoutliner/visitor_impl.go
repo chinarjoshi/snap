@@ -407,6 +407,14 @@ func (v *WorkoutlinerASTVisitor) VisitNote(ctx *NoteContext) interface{} {
 }
 
 func (v *WorkoutlinerASTVisitor) buildSetsFromResultsWithInitialWeight(tokenResults []tokenResult, initialWeight int) []Set {
+	return v.buildSetsFromResultsImpl(tokenResults, initialWeight)
+}
+
+func (v *WorkoutlinerASTVisitor) buildSetsFromResults(tokenResults []tokenResult) []Set {
+	return v.buildSetsFromResultsImpl(tokenResults, 0)
+}
+
+func (v *WorkoutlinerASTVisitor) buildSetsFromResultsImpl(tokenResults []tokenResult, initialWeight int) []Set {
 	var sets []Set
 	var pendingReps []int
 	lastWeight := initialWeight
@@ -433,46 +441,13 @@ func (v *WorkoutlinerASTVisitor) buildSetsFromResultsWithInitialWeight(tokenResu
 		case "reps":
 			pendingReps = append(pendingReps, tok.value)
 		case "note":
-			if len(sets) > 0 {
-				sets[len(sets)-1].Note = joinNotes(sets[len(sets)-1].Note, tok.text)
-			}
-		}
-	}
-
-	for _, r := range pendingReps {
-		sets = append(sets, Set{Reps: r, Weight: lastWeight})
-	}
-
-	return sets
-}
-
-func (v *WorkoutlinerASTVisitor) buildSetsFromResults(tokenResults []tokenResult) []Set {
-	var sets []Set
-	var pendingReps []int
-	var lastWeight int
-
-	for _, tok := range tokenResults {
-		switch tok.kind {
-		case "sets":
-			sets = append(sets, tok.sets...)
-			if len(tok.sets) > 0 {
-				lastWeight = tok.sets[len(tok.sets)-1].Weight
-			}
-		case "pending_reps":
-			pendingReps = append(pendingReps, tok.pendingReps...)
-		case "weight":
+			// Resolve pending reps before attaching note
 			if len(pendingReps) > 0 {
 				for _, r := range pendingReps {
-					sets = append(sets, Set{Reps: r, Weight: tok.value})
+					sets = append(sets, Set{Reps: r, Weight: lastWeight})
 				}
 				pendingReps = nil
-			} else {
-				sets = append(sets, Set{Reps: defaultReps, Weight: tok.value})
 			}
-			lastWeight = tok.value
-		case "reps":
-			pendingReps = append(pendingReps, tok.value)
-		case "note":
 			if len(sets) > 0 {
 				sets[len(sets)-1].Note = joinNotes(sets[len(sets)-1].Note, tok.text)
 			}

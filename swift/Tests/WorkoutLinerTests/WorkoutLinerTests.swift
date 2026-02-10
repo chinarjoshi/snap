@@ -291,4 +291,14 @@ final class WorkoutLinerTests: XCTestCase {
             XCTAssertTrue(result.contains("|"), "'\(input)' should be treated as workout, got: \(result)")
         }
     }
+
+    func testTransformMultiLineNotesPreserved() {
+        let input = "Squat\n8x225 ouch\n7 dang\n5 fuck"
+        let result = transform(input)
+
+        XCTAssertTrue(result.contains("8@225"), "Expected 8@225, got: \(result)")
+        XCTAssertTrue(result.contains("7@225"), "Expected 7@225, got: \(result)")
+        XCTAssertTrue(result.contains("5@225"), "Expected 5@225, got: \(result)")
+        XCTAssertTrue(result.contains("Squat :: ouch. dang. fuck"), "Expected all notes preserved, got: \(result)")
+    }
 }

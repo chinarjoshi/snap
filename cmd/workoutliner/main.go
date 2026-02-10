@@ -345,7 +345,7 @@ func collectNotes(sets []workoutliner.Set) string {
 			notes = append(notes, s.Note)
 		}
 	}
-	return strings.Join(notes, ", ")
+	return strings.Join(notes, ". ")
 }
 
 func padRight(s string, length int) string {

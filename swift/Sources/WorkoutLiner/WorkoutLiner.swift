@@ -242,7 +242,7 @@ private func formatExercises(_ exercises: [Exercise]) -> String {
     // Notes as description list
     var notes: [String] = []
     for exercise in exercises {
-        let noteText = exercise.sets.compactMap { $0.note.isEmpty ? nil : $0.note }.joined(separator: ", ")
+        let noteText = exercise.sets.compactMap { $0.note.isEmpty ? nil : $0.note }.joined(separator: ". ")
         if !noteText.isEmpty {
             notes.append("- \(exercise.name) :: \(noteText)")
         }

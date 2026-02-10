@@ -458,3 +458,22 @@ func TestHeuristicAcceptsWorkout(t *testing.T) {
 		})
 	}
 }
+
+func TestTransformMultiLineNotesPreserved(t *testing.T) {
+	input := "Squat\n8x225 ouch\n7 dang\n5 fuck"
+	result := transform(input)
+
+	if !strings.Contains(result, "8@225") {
+		t.Errorf("Expected 8@225, got: %s", result)
+	}
+	if !strings.Contains(result, "7@225") {
+		t.Errorf("Expected 7@225, got: %s", result)
+	}
+	if !strings.Contains(result, "5@225") {
+		t.Errorf("Expected 5@225, got: %s", result)
+	}
+	// All notes should be preserved, joined by period
+	if !strings.Contains(result, "Squat :: ouch. dang. fuck") {
+		t.Errorf("Expected all notes preserved, got: %s", result)
+	}
+}
