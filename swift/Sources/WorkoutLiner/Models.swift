@@ -22,7 +22,7 @@ public struct Exercise: Equatable {
     }
 }
 
-public struct ParseResult {
+public struct WorkoutResult: Equatable {
     public var proseLines: [String]
     public var exercises: [Exercise]
 

@@ -138,7 +138,7 @@ func transformTableWithTrailing(lines []string) string {
 	allExercises := append(existingExercises, parseResult.Exercises...)
 
 	// Format combined result
-	result := &workoutliner.ParseResult{
+	result := &workoutliner.WorkoutResult{
 		ProseLines: parseResult.ProseLines,
 		Exercises:  allExercises,
 	}
@@ -209,7 +209,7 @@ func parseDescList(lines []string) map[string]string {
 	return notes
 }
 
-func isWorkout(result *workoutliner.ParseResult) bool {
+func isWorkout(result *workoutliner.WorkoutResult) bool {
 	if !result.HasExercises() {
 		return false
 	}
@@ -232,7 +232,7 @@ func parseInt(s string) int {
 	return n
 }
 
-func formatResult(result *workoutliner.ParseResult) string {
+func formatResult(result *workoutliner.WorkoutResult) string {
 	var parts []string
 
 	if len(result.ProseLines) > 0 {

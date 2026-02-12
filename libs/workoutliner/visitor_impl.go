@@ -13,12 +13,12 @@ const (
 	repThreshold = 20
 )
 
-type ParseResult struct {
+type WorkoutResult struct {
 	ProseLines []string
 	Exercises  []Exercise
 }
 
-func (r *ParseResult) HasExercises() bool {
+func (r *WorkoutResult) HasExercises() bool {
 	return len(r.Exercises) > 0
 }
 
@@ -35,7 +35,7 @@ func (v *WorkoutlinerASTVisitor) Visit(tree antlr.ParseTree) interface{} {
 }
 
 func (v *WorkoutlinerASTVisitor) VisitParagraph(ctx *ParagraphContext) interface{} {
-	result := &ParseResult{}
+	result := &WorkoutResult{}
 
 	// State for handling continuation lines
 	var lastExercise *Exercise  // Currently being built

@@ -16,7 +16,7 @@ enum TokenResult {
 class WorkoutlinerASTVisitor: WorkoutlinerBaseVisitor<Any> {
 
     override func visitParagraph(_ ctx: WorkoutlinerParser.ParagraphContext) -> Any? {
-        var result = ParseResult()
+        var result = WorkoutResult()
 
         // State for handling continuation lines
         var lastExercise: Exercise? = nil

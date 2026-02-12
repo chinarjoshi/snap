@@ -4,7 +4,7 @@ import (
 	"github.com/antlr4-go/antlr/v4"
 )
 
-func Parse(input string) (*ParseResult, error) {
+func Parse(input string) (*WorkoutResult, error) {
 	lexer := NewWorkoutlinerLexer(antlr.NewInputStream(input))
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	p := NewWorkoutlinerParser(stream)
@@ -22,7 +22,7 @@ func Parse(input string) (*ParseResult, error) {
 	visitor := NewWorkoutlinerASTVisitor()
 	result := visitor.Visit(tree)
 
-	return result.(*ParseResult), nil
+	return result.(*WorkoutResult), nil
 }
 
 type errorCollector struct {
