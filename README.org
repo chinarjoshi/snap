@@ -1,6 +1,10 @@
-When did the world unanimously accept buttons as an acceptable a way to operate software? When I'm sweaty and achy the last thing I want is to navigate some shitty overengineered AI-generated slop. Whatever. Here's a shitty overengineered AI-generated ANTLR grammar to parse natural workout descriptions into org-mode tables.
+ASAP (Annoyingly Simple ANTLR Parsers). Domain-specific parsers that turn natural language into structured data. Each parser takes a paragraph of plain text and returns a typed result or nil.
 
-** Example
+** Workout Parser
+
+Parses natural workout descriptions into structured exercise data.
+
+*** Example
 
 Input:
 #+begin_example
@@ -9,17 +13,9 @@ squat 8 8 8 225
 bench 3x8 155
 #+end_example
 
-Output:
-#+begin_example
-ate a banana beforehand
+Output: =WorkoutResult= with exercises =[Exercise(name: "Squat", sets: [8@225, 8@225, 8@225]), Exercise(name: "Bench", sets: [8@155, 8@155, 8@155])]= and prose =["ate a banana beforehand"]=.
 
-|      | 0     | 1     | 2     |
-|-------|-------|-------|-------|
-| Squat| 8@225 | 8@225 | 8@225 |
-| Bench| 8@155 | 8@155 | 8@155 |
-#+end_example
-
-** Syntax
+*** Syntax
 
 | Notation         | Meaning                        |
 |------------------+--------------------------------|
@@ -30,7 +26,7 @@ ate a banana beforehand
 | =squat 8 by 225= | 3 sets of 8 reps @ 225         |
 | =squat 3 by 8 by 225= | 3 sets of 8 reps @ 225    |
 
-Prose lines (no numbers) appear above the table. Inline notes (words after numbers) go in a Notes column.
+Prose lines (no numbers) are preserved in =proseLines=. Inline notes (words after numbers) attach to the preceding set.
 
 ** Go CLI
 
@@ -39,9 +35,9 @@ Prose lines (no numbers) appear above the table. Inline notes (words after numbe
 make build
 
 # Usage
-echo "squat 3x8 225" | ./workoutliner
-./workoutliner < workout.txt
-./workoutliner workout.txt
+echo "squat 3x8 225" | ./asap
+./asap < workout.txt
+./asap workout.txt
 #+end_src
 
 ** Swift Library
@@ -50,23 +46,24 @@ Add to Xcode project (/cough cough/ [[https://github.com/chinarjoshi/omfg][omfg]
 
 #+begin_src swift
 dependencies: [
-    .package(path: "path/to/workoutliner/swift")
+    .package(path: "path/to/asap/swift")
 ]
 #+end_src
 
 Usage:
 
 #+begin_src swift
-import WorkoutLiner
+import WorkoutParser
 
-let output = transform("squat 3x8 225")
+let result = parse("squat 3x8 225")
+// result: WorkoutResult? with exercises and proseLines
 #+end_src
 
 ** Structure
 
 #+begin_example
-Workoutliner.g4          # ANTLR grammar
-libs/workoutliner/       # Go parser library
-cmd/workoutliner/        # Go CLI
+Workoutliner.g4          # ANTLR grammar (workout)
+libs/workout/            # Go parser library
+cmd/asap/                # Go CLI
 swift/                   # Swift library
 #+end_example

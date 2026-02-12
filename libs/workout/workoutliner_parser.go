@@ -1,6 +1,6 @@
 // Code generated from Workoutliner.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
-package workoutliner // Workoutliner
+package workout // Workoutliner
 import (
 	"fmt"
 	"strconv"

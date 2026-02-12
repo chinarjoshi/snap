@@ -1,5 +1,5 @@
 import XCTest
-@testable import WorkoutLiner
+@testable import WorkoutParser
 
 final class WorkoutLinerTests: XCTestCase {
 

@@ -1,4 +1,4 @@
-package workoutliner
+package workout
 
 import (
 	"testing"

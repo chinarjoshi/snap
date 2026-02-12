@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/chijoshi/workoutliner/libs/workoutliner"
+	"github.com/chijoshi/asap/libs/workout"
 )
 
 func main() {
@@ -68,7 +68,7 @@ func transformParagraph(para string) string {
 		return transformTableWithTrailing(lines)
 	}
 
-	parseResult, err := workoutliner.Parse(para)
+	parseResult, err := workout.Parse(para)
 	if err != nil {
 		return para
 	}
@@ -129,7 +129,7 @@ func transformTableWithTrailing(lines []string) string {
 
 	// Parse trailing lines as new exercises
 	trailingPara := strings.Join(trailingLines, "\n")
-	parseResult, err := workoutliner.Parse(trailingPara)
+	parseResult, err := workout.Parse(trailingPara)
 	if err != nil || !parseResult.HasExercises() {
 		return strings.Join(lines, "\n")
 	}
@@ -138,7 +138,7 @@ func transformTableWithTrailing(lines []string) string {
 	allExercises := append(existingExercises, parseResult.Exercises...)
 
 	// Format combined result
-	result := &workoutliner.WorkoutResult{
+	result := &workout.WorkoutResult{
 		ProseLines: parseResult.ProseLines,
 		Exercises:  allExercises,
 	}
@@ -146,8 +146,8 @@ func transformTableWithTrailing(lines []string) string {
 	return formatResult(result)
 }
 
-func parseTableLines(lines []string) []workoutliner.Exercise {
-	var exercises []workoutliner.Exercise
+func parseTableLines(lines []string) []workout.Exercise {
+	var exercises []workout.Exercise
 
 	for _, line := range lines {
 		// Skip header and separator
@@ -166,7 +166,7 @@ func parseTableLines(lines []string) []workoutliner.Exercise {
 			continue // Skip header row
 		}
 
-		var sets []workoutliner.Set
+		var sets []workout.Set
 		for _, cell := range cells[2:] {
 			cell = strings.TrimSpace(cell)
 			if cell == "" {
@@ -179,14 +179,14 @@ func parseTableLines(lines []string) []workoutliner.Exercise {
 					reps := parseInt(parts[0])
 					weight := parseInt(parts[1])
 					if reps > 0 && weight > 0 {
-						sets = append(sets, workoutliner.Set{Reps: reps, Weight: weight})
+						sets = append(sets, workout.Set{Reps: reps, Weight: weight})
 					}
 				}
 			}
 		}
 
 		if len(sets) > 0 {
-			exercises = append(exercises, workoutliner.Exercise{Name: name, Sets: sets})
+			exercises = append(exercises, workout.Exercise{Name: name, Sets: sets})
 		}
 	}
 
@@ -209,7 +209,7 @@ func parseDescList(lines []string) map[string]string {
 	return notes
 }
 
-func isWorkout(result *workoutliner.WorkoutResult) bool {
+func isWorkout(result *workout.WorkoutResult) bool {
 	if !result.HasExercises() {
 		return false
 	}
@@ -232,7 +232,7 @@ func parseInt(s string) int {
 	return n
 }
 
-func formatResult(result *workoutliner.WorkoutResult) string {
+func formatResult(result *workout.WorkoutResult) string {
 	var parts []string
 
 	if len(result.ProseLines) > 0 {
@@ -245,7 +245,7 @@ func formatResult(result *workoutliner.WorkoutResult) string {
 	return strings.Join(parts, "\n\n")
 }
 
-func formatExercises(exercises []workoutliner.Exercise) string {
+func formatExercises(exercises []workout.Exercise) string {
 	if len(exercises) == 0 {
 		return ""
 	}
@@ -310,14 +310,14 @@ func formatExercises(exercises []workoutliner.Exercise) string {
 	return strings.TrimSuffix(sb.String(), "\n")
 }
 
-func formatSet(s workoutliner.Set) string {
+func formatSet(s workout.Set) string {
 	if s.Weight == 0 {
 		return fmt.Sprintf("%d", s.Reps)
 	}
 	return fmt.Sprintf("%d@%d", s.Reps, s.Weight)
 }
 
-func maxSetsInExercises(exercises []workoutliner.Exercise) int {
+func maxSetsInExercises(exercises []workout.Exercise) int {
 	max := 0
 	for _, ex := range exercises {
 		if len(ex.Sets) > max {
@@ -327,7 +327,7 @@ func maxSetsInExercises(exercises []workoutliner.Exercise) int {
 	return max
 }
 
-func maxExerciseNameLen(exercises []workoutliner.Exercise) int {
+func maxExerciseNameLen(exercises []workout.Exercise) int {
 	max := 0
 	for _, ex := range exercises {
 		if len(ex.Name) > max {
@@ -338,7 +338,7 @@ func maxExerciseNameLen(exercises []workoutliner.Exercise) int {
 }
 
 
-func collectNotes(sets []workoutliner.Set) string {
+func collectNotes(sets []workout.Set) string {
 	var notes []string
 	for _, s := range sets {
 		if s.Note != "" {

@@ -1,4 +1,4 @@
-module github.com/chijoshi/workoutliner
+module github.com/chijoshi/asap
 
 go 1.25.5
 

@@ -2,22 +2,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "WorkoutLiner",
+    name: "WorkoutParser",
     platforms: [
         .iOS(.v15),
         .macOS(.v12)
     ],
     products: [
         .library(
-            name: "WorkoutLiner",
-            targets: ["WorkoutLiner"]),
+            name: "WorkoutParser",
+            targets: ["WorkoutParser"]),
     ],
     dependencies: [
         .package(url: "https://github.com/antlr/antlr4", from: "4.13.0"),
     ],
     targets: [
         .target(
-            name: "WorkoutLiner",
+            name: "WorkoutParser",
             dependencies: [
                 .product(name: "Antlr4", package: "antlr4"),
             ],
@@ -28,7 +28,7 @@ let package = Package(
                 "Parser/ParagraphLexer.tokens",
             ]),
         .testTarget(
-            name: "WorkoutLinerTests",
-            dependencies: ["WorkoutLiner"]),
+            name: "WorkoutParserTests",
+            dependencies: ["WorkoutParser"]),
     ]
 )
