@@ -15,8 +15,8 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "STRING",
-                "value": "\n"
+                "type": "SYMBOL",
+                "name": "_separator"
               },
               {
                 "type": "CHOICE",
@@ -32,6 +32,19 @@
               }
             ]
           }
+        }
+      ]
+    },
+    "_separator": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\n"
+        },
+        {
+          "type": "STRING",
+          "value": "."
         }
       ]
     },

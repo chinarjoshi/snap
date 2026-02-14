@@ -14,8 +14,10 @@ module.exports = grammar({
     paragraph: ($) =>
       seq(
         $._line_content,
-        repeat(seq("\n", optional($._line_content))),
+        repeat(seq($._separator, optional($._line_content))),
       ),
+
+    _separator: (_) => choice("\n", "."),
 
     // A line's content (without the newline) is one of these forms.
     _line_content: ($) =>
