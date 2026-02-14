@@ -1,5 +1,5 @@
 import XCTest
-@testable import SnapParsers
+@testable import Snap
 
 final class WorkoutTests: XCTestCase {
 

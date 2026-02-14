@@ -2,10 +2,10 @@
 import PackageDescription
 
 let package = Package(
-    name: "SnapParsers",
+    name: "Snap",
     platforms: [.iOS(.v15), .macOS(.v12)],
     products: [
-        .library(name: "SnapParsers", targets: ["SnapParsers"]),
+        .library(name: "Snap", targets: ["Snap"]),
     ],
     targets: [
         .target(
@@ -40,13 +40,13 @@ let package = Package(
             ]
         ),
         .target(
-            name: "SnapParsers",
+            name: "Snap",
             dependencies: ["CSnap"],
-            path: "swift/Sources/SnapParsers"
+            path: "swift/Sources/Snap"
         ),
         .testTarget(
             name: "SnapTests",
-            dependencies: ["SnapParsers"],
+            dependencies: ["Snap"],
             path: "swift/Tests/SnapTests"
         ),
     ]
