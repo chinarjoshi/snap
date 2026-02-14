@@ -5,6 +5,15 @@ final class WorkoutTests: XCTestCase {
 
     // MARK: - Helpers
 
+    private func workout(_ input: String, file: StaticString = #file, line: UInt = #line) -> WorkoutResult? {
+        guard let result = snap(input) else { return nil }
+        guard case .workout(let w) = result else {
+            XCTFail("Expected .workout, got \(result)", file: file, line: line)
+            return nil
+        }
+        return w
+    }
+
     private func exercise(_ result: WorkoutResult, named name: String, file: StaticString = #file, line: UInt = #line) -> Exercise? {
         guard let ex = result.exercises.first(where: { $0.name == name }) else {
             XCTFail("Expected exercise '\(name)', found: \(result.exercises.map { $0.name })", file: file, line: line)
@@ -16,7 +25,7 @@ final class WorkoutTests: XCTestCase {
     // MARK: - Basic Parsing
 
     func testParsePureWorkout() {
-        guard let w = parse("squat 8 8 8 135\nbench 3x8 95") else {
+        guard let w = workout("squat 8 8 8 135\nbench 3x8 95") else {
             return XCTFail("Expected workout")
         }
 
@@ -30,7 +39,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseProseBeforeWorkout() {
-        guard let w = parse("ate a banana beforehand\nsquat 8 8 8 135") else {
+        guard let w = workout("ate a banana beforehand\nsquat 8 8 8 135") else {
             return XCTFail("Expected workout")
         }
 
@@ -39,7 +48,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseMultipleProseLines() {
-        guard let w = parse("morning workout\nfelt strong\nsquat 8 8 8 135") else {
+        guard let w = workout("morning workout\nfelt strong\nsquat 8 8 8 135") else {
             return XCTFail("Expected workout")
         }
 
@@ -49,7 +58,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseInlineNotes() {
-        guard let w = parse("squat 8 8 8 135 light headed\nbench 3x8 95") else {
+        guard let w = workout("squat 8 8 8 135 light headed\nbench 3x8 95") else {
             return XCTFail("Expected workout")
         }
 
@@ -67,7 +76,7 @@ final class WorkoutTests: XCTestCase {
         ]
 
         for (input, expectedReps, expectedWeight) in cases {
-            guard let w = parse(input) else {
+            guard let w = workout(input) else {
                 XCTFail("Expected workout for: \(input)")
                 continue
             }
@@ -78,14 +87,14 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseTitleCase() {
-        guard let w = parse("BARBELL SQUAT 8 8 8 135") else {
+        guard let w = workout("BARBELL SQUAT 8 8 8 135") else {
             return XCTFail("Expected workout")
         }
         XCTAssertNotNil(exercise(w, named: "Barbell Squat"))
     }
 
     func testParseTrailingReps() {
-        guard let w = parse("squat 8 8 8 135 8 8") else {
+        guard let w = workout("squat 8 8 8 135 8 8") else {
             return XCTFail("Expected workout")
         }
         guard let squat = exercise(w, named: "Squat") else { return }
@@ -97,7 +106,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseDefaultSetsForBySyntax() {
-        guard let w = parse("squat 8 by 135") else {
+        guard let w = workout("squat 8 by 135") else {
             return XCTFail("Expected workout")
         }
         guard let squat = exercise(w, named: "Squat") else { return }
@@ -105,7 +114,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseDefaultRepsForWeight() {
-        guard let w = parse("squat 135 135") else {
+        guard let w = workout("squat 135 135") else {
             return XCTFail("Expected workout")
         }
         guard let squat = exercise(w, named: "Squat") else { return }
@@ -113,7 +122,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseMultipleExercises() {
-        guard let w = parse("squat 8 8 8 135\nbench 3x8 95\npress 8 by 35") else {
+        guard let w = workout("squat 8 8 8 135\nbench 3x8 95\npress 8 by 35") else {
             return XCTFail("Expected workout")
         }
 
@@ -126,21 +135,21 @@ final class WorkoutTests: XCTestCase {
     // MARK: - Returns nil
 
     func testParseReturnsNilForEmpty() {
-        XCTAssertNil(parse(""))
+        XCTAssertNil(snap(""))
     }
 
     func testParseReturnsNilForPureProse() {
-        XCTAssertNil(parse("Just some notes today.\nNothing special."))
+        XCTAssertNil(snap("Just some notes today.\nNothing special."))
     }
 
     func testParseReturnsNilForNoDigits() {
-        XCTAssertNil(parse("Just words here\nno numbers at all"))
+        XCTAssertNil(snap("Just words here\nno numbers at all"))
     }
 
     // MARK: - Bodyweight
 
     func testParseBodyweight() {
-        guard let w = parse("dips 8 8 8\nbench 8x135 8x130") else {
+        guard let w = workout("dips 8 8 8\nbench 8x135 8x130") else {
             return XCTFail("Expected workout")
         }
 
@@ -153,7 +162,7 @@ final class WorkoutTests: XCTestCase {
     // MARK: - Supersets
 
     func testParseSupersetBasic() {
-        guard let w = parse("dips* press* 8 135 8 135 8 135") else {
+        guard let w = workout("dips* press* 8 135 8 135 8 135") else {
             return XCTFail("Expected workout")
         }
 
@@ -162,7 +171,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseSupersetMixedBodyweightWeighted() {
-        guard let w = parse("dips* shoulder press* 8 8x135 8 8x125 8 8x100") else {
+        guard let w = workout("dips* shoulder press* 8 8x135 8 8x125 8 8x100") else {
             return XCTFail("Expected workout")
         }
 
@@ -180,7 +189,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseSupersetOddSets() {
-        guard let w = parse("dips* press* 8 135 8 135 8") else {
+        guard let w = workout("dips* press* 8 135 8 135 8") else {
             return XCTFail("Expected workout")
         }
 
@@ -194,7 +203,7 @@ final class WorkoutTests: XCTestCase {
     // MARK: - Multi-Line
 
     func testParseMultiLineBasic() {
-        guard let w = parse("Bench\n8x135\n8\n8\n8") else {
+        guard let w = workout("Bench\n8x135\n8\n8\n8") else {
             return XCTFail("Expected workout")
         }
 
@@ -206,7 +215,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseMultiLineInlinePlusContinuation() {
-        guard let w = parse("shoulder press 7x100\n6\n5") else {
+        guard let w = workout("shoulder press 7x100\n6\n5") else {
             return XCTFail("Expected workout")
         }
 
@@ -218,7 +227,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseMultiLineBodyweight() {
-        guard let w = parse("Dips\n8\n8\n8\nbench 8x135 8x130") else {
+        guard let w = workout("Dips\n8\n8\n8\nbench 8x135 8x130") else {
             return XCTFail("Expected workout")
         }
 
@@ -229,7 +238,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseMultiLineMixedExercises() {
-        guard let w = parse("Bench\n8x135\nshoulder press 7x100\n6") else {
+        guard let w = workout("Bench\n8x135\nshoulder press 7x100\n6") else {
             return XCTFail("Expected workout")
         }
 
@@ -245,7 +254,7 @@ final class WorkoutTests: XCTestCase {
     // MARK: - Single-Line Multi-Exercise
 
     func testParseSingleLineMultipleExercises() {
-        guard let w = parse("squat 8x135 bench 8x95 press 8x45") else {
+        guard let w = workout("squat 8x135 bench 8x95 press 8x45") else {
             return XCTFail("Expected workout")
         }
 
@@ -256,7 +265,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseSingleLineMultiWordWithModifier() {
-        guard let w = parse("squat 8x135 heavy bench 8x95") else {
+        guard let w = workout("squat 8x135 heavy bench 8x95") else {
             return XCTFail("Expected workout")
         }
 
@@ -265,7 +274,7 @@ final class WorkoutTests: XCTestCase {
     }
 
     func testParseSingleLineMultiWordExercise() {
-        guard let w = parse("squat 8x135 bench press 8x95") else {
+        guard let w = workout("squat 8x135 bench press 8x95") else {
             return XCTFail("Expected workout")
         }
 
@@ -287,7 +296,7 @@ final class WorkoutTests: XCTestCase {
             "rested 30 minutes",
         ]
         for input in cases {
-            XCTAssertNil(parse(input), "'\(input)' should not parse as workout")
+            XCTAssertNil(snap(input), "'\(input)' should not parse as workout")
         }
     }
 
@@ -299,14 +308,14 @@ final class WorkoutTests: XCTestCase {
             "squat 3x8x135",
         ]
         for input in cases {
-            XCTAssertNotNil(parse(input), "'\(input)' should parse as workout")
+            XCTAssertNotNil(snap(input), "'\(input)' should parse as workout")
         }
     }
 
     // MARK: - Notes
 
     func testParseMultiLineNotesPreserved() {
-        guard let w = parse("Squat\n8x225 ouch\n7 dang\n5 fuck") else {
+        guard let w = workout("Squat\n8x225 ouch\n7 dang\n5 fuck") else {
             return XCTFail("Expected workout")
         }
 

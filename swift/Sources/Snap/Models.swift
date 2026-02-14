@@ -1,5 +1,9 @@
 import Foundation
 
+public enum SnapResult: Equatable {
+    case workout(WorkoutResult)
+}
+
 public struct WorkoutSet: Equatable {
     public let reps: Int
     public let weight: Int

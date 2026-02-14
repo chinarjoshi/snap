@@ -1,8 +1,11 @@
 import CSnap
 
-/// Parse a workout string into a structured WorkoutResult.
-/// Returns nil if the input is not recognized as a workout.
-public func parse(_ input: String) -> WorkoutResult? {
+public func snap(_ input: String) -> SnapResult? {
+    guard let result = parseWorkout(input) else { return nil }
+    return .workout(result)
+}
+
+func parseWorkout(_ input: String) -> WorkoutResult? {
     // Heap-allocate the C result struct (~544KB) to avoid stack overflow
     let cResult = UnsafeMutablePointer<CSnap.WorkoutResult>.allocate(capacity: 1)
     UnsafeMutableRawPointer(cResult)
