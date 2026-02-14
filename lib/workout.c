@@ -484,58 +484,20 @@ static void extract_superset_name(TSNode superset_name_node, const char *src,
     }
 }
 
-/* ---- Split exercise line tokens into multiple exercises ---- */
-/* Returns number of exercises found */
+/* ---- Build exercises from tokens on a single line ---- */
+/* Notes are attached to the preceding set, not treated as new exercise names.
+   Exercises are only split by period delimiters. */
 static int split_into_exercises(const char *first_name,
                                 const TokenResult *tokens, int token_count,
                                 Exercise *out_exercises, int max_exercises) {
-    int ex_count = 0;
-    char current_name[WORKOUT_NAME_MAX];
-    strncpy(current_name, first_name, WORKOUT_NAME_MAX - 1);
-    current_name[WORKOUT_NAME_MAX - 1] = '\0';
+    if (max_exercises < 1) return 0;
 
-    TokenResult *current_tokens = (TokenResult *)calloc(MAX_TOKEN_RESULTS, sizeof(TokenResult));
-    if (!current_tokens) return 0;
-    int current_token_count = 0;
-
-    for (int i = 0; i < token_count; i++) {
-        const TokenResult *tok = &tokens[i];
-
-        /* Check if this note starts a new exercise (note followed by numeric token) */
-        if (tok->kind == TR_NOTE &&
-            i + 1 < token_count &&
-            is_numeric_result(&tokens[i + 1])) {
-            /* Flush current exercise */
-            if (current_name[0] != '\0' && ex_count < max_exercises) {
-                Exercise *ex = &out_exercises[ex_count];
-                strncpy(ex->name, current_name, WORKOUT_NAME_MAX - 1);
-                ex->name[WORKOUT_NAME_MAX - 1] = '\0';
-                ex->set_count = build_sets(current_tokens, current_token_count, 0,
-                                           ex->sets, WORKOUT_MAX_SETS);
-                ex_count++;
-            }
-            /* Start new exercise with this note as name */
-            title_case(tok->data.note, current_name, WORKOUT_NAME_MAX);
-            current_token_count = 0;
-        } else {
-            if (current_token_count < MAX_TOKEN_RESULTS) {
-                current_tokens[current_token_count++] = *tok;
-            }
-        }
-    }
-
-    /* Flush last exercise */
-    if (current_name[0] != '\0' && ex_count < max_exercises) {
-        Exercise *ex = &out_exercises[ex_count];
-        strncpy(ex->name, current_name, WORKOUT_NAME_MAX - 1);
-        ex->name[WORKOUT_NAME_MAX - 1] = '\0';
-        ex->set_count = build_sets(current_tokens, current_token_count, 0,
-                                   ex->sets, WORKOUT_MAX_SETS);
-        ex_count++;
-    }
-
-    free(current_tokens);
-    return ex_count;
+    Exercise *ex = &out_exercises[0];
+    strncpy(ex->name, first_name, WORKOUT_NAME_MAX - 1);
+    ex->name[WORKOUT_NAME_MAX - 1] = '\0';
+    ex->set_count = build_sets(tokens, token_count, 0,
+                               ex->sets, WORKOUT_MAX_SETS);
+    return 1;
 }
 
 /* ---- Extract prose text from a prose_line node ---- */
