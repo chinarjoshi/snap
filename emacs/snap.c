@@ -129,9 +129,9 @@ recipe_to_elisp(emacs_env *env, const RecipeResult *r)
     return list;
 }
 
-/* (snap-workout-parse STRING) -> alist or nil */
+/* (snap-workout STRING) -> alist or nil */
 static emacs_value
-Fsnap_workout_parse(emacs_env *env, ptrdiff_t nargs,
+Fsnap_workout(emacs_env *env, ptrdiff_t nargs,
                     emacs_value *args, void *data)
 {
     (void)nargs; (void)data;
@@ -147,9 +147,9 @@ Fsnap_workout_parse(emacs_env *env, ptrdiff_t nargs,
     return env->intern(env, "nil");
 }
 
-/* (snap-recipe-parse STRING) -> alist or nil */
+/* (snap-recipe STRING) -> alist or nil */
 static emacs_value
-Fsnap_recipe_parse(emacs_env *env, ptrdiff_t nargs,
+Fsnap_recipe(emacs_env *env, ptrdiff_t nargs,
                    emacs_value *args, void *data)
 {
     (void)nargs; (void)data;
@@ -174,17 +174,17 @@ emacs_module_init(struct emacs_runtime *runtime)
     if (env->size < (ptrdiff_t)sizeof(*env))
         return 2;
 
-    /* Register snap-workout-parse */
-    emacs_value wfunc = env->make_function(env, 1, 1, Fsnap_workout_parse,
+    /* Register snap-workout */
+    emacs_value wfunc = env->make_function(env, 1, 1, Fsnap_workout,
                                            "Parse workout text.", NULL);
     env->funcall(env, env->intern(env, "defalias"), 2,
-                 (emacs_value[]){env->intern(env, "snap-workout-parse"), wfunc});
+                 (emacs_value[]){env->intern(env, "snap-workout"), wfunc});
 
-    /* Register snap-recipe-parse */
-    emacs_value rfunc = env->make_function(env, 1, 1, Fsnap_recipe_parse,
+    /* Register snap-recipe */
+    emacs_value rfunc = env->make_function(env, 1, 1, Fsnap_recipe,
                                            "Parse recipe text.", NULL);
     env->funcall(env, env->intern(env, "defalias"), 2,
-                 (emacs_value[]){env->intern(env, "snap-recipe-parse"), rfunc});
+                 (emacs_value[]){env->intern(env, "snap-recipe"), rfunc});
 
     /* (provide 'snap-core) */
     env->funcall(env, env->intern(env, "provide"), 1,

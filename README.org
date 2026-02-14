@@ -1,6 +1,8 @@
-SNAP (Semantic Note Auto-Parsers). You type plain text. You hit enter twice. If the paragraph has semantic meaning — a workout, a recipe, anything — SNAP parses it into a typed result. If not, nothing happens.
+When did the world unanimously concede to buttons as an acceptable way to operate software? When I'm sweaty and tired the last thing I want is to navigate some overengineered dilute AI-slop. So here's some overengineered concentrated AI-slop:
 
-One interface across platforms: tree-sitter grammars compile to C. Swift (iOS) and Emacs call the same parser, get the same results.
+You type plain text. You hit enter twice. If the paragraph has semantic meaning, like a workout, a recipe, anything, SNAP parses it into a typed result. If not, nothing happens.
+
+One interface across platforms. Tree-sitter grammars compile to C. Swift (iOS) and Emacs call the same parser, get the same results.
 
 #+begin_src swift
 import Snap
@@ -16,11 +18,11 @@ let result = snap("just a normal paragraph")
 #+end_src
 
 #+begin_src elisp
-(snap-workout-parse "squat 3x8x225")   ;; => alist or nil
-(snap-recipe-parse "biryani:\n1 cup rice\n1 tsp salt") ;; => alist or nil
+(snap-workout "squat 3x8x225")   ;; => alist or nil
+(snap-recipe "biryani:\n1 cup rice\n1 tsp salt") ;; => alist or nil
 #+end_src
 
-** Parsers
+** Current Parsers
 
 *** Workout
 
