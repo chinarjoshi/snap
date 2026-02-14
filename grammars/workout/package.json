@@ -1,8 +1,0 @@
-{
-  "name": "tree-sitter-workout",
-  "version": "0.1.0",
-  "main": "grammar.js",
-  "dependencies": {
-    "tree-sitter-cli": "^0.25.0"
-  }
-}

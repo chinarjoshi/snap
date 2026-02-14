@@ -1,5 +1,5 @@
-CFLAGS = -I../vendor/tree-sitter/include -I../vendor/tree-sitter/src -I../grammars/workout/src -I../lib
-SRCS = snap.c ../lib/workout.c ../grammars/workout/src/parser.c ../vendor/tree-sitter/src/lib.c
+CFLAGS = -I../vendor/tree-sitter/lib/include -I../vendor/tree-sitter/lib/src -I../grammars/workout/src -I../lib
+SRCS = snap.c ../lib/workout.c ../grammars/workout/src/parser.c ../vendor/tree-sitter/lib/src/lib.c
 
 # Find emacs-module.h: try Emacs.app, then Homebrew, then system paths
 EMACS_INCLUDE := $(shell \

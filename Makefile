@@ -1,14 +1,14 @@
 .PHONY: grammar test test-c test-swift emacs clean
 
 grammar:
-	cd grammars/workout && npx tree-sitter generate
+	cd grammars/workout && tree-sitter generate
 
 test: test-c test-swift
 
 test-c:
-	cc -I vendor/tree-sitter/include -I vendor/tree-sitter/src \
+	cc -I vendor/tree-sitter/lib/include -I vendor/tree-sitter/lib/src \
 	   -I grammars/workout/src -I lib \
-	   grammars/workout/src/parser.c vendor/tree-sitter/src/lib.c lib/workout.c lib/workout_test.c \
+	   grammars/workout/src/parser.c vendor/tree-sitter/lib/src/lib.c lib/workout.c lib/workout_test.c \
 	   -o workout_test && ./workout_test && rm workout_test
 
 test-swift:
