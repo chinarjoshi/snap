@@ -1,0 +1,415 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "workout",
+  "rules": {
+    "paragraph": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_line_content"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "\n"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_line_content"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "_line_content": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "superset_line"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "exercise_line"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "continuation_line"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "prose_line"
+        }
+      ]
+    },
+    "continuation_line": {
+      "type": "PREC_LEFT",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "numeric_token"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "token"
+            }
+          }
+        ]
+      }
+    },
+    "superset_line": {
+      "type": "PREC_LEFT",
+      "value": 3,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "superset_name"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "superset_name"
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "token"
+            }
+          }
+        ]
+      }
+    },
+    "superset_name": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "word"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "star"
+          }
+        ]
+      }
+    },
+    "exercise_line": {
+      "type": "PREC_LEFT",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "word"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "numeric_token"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "token"
+            }
+          }
+        ]
+      }
+    },
+    "prose_line": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "REPEAT1",
+        "content": {
+          "type": "SYMBOL",
+          "name": "word"
+        }
+      }
+    },
+    "numeric_token": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "by_expr"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "multiplier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number"
+        }
+      ]
+    },
+    "token": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "numeric_token"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "note"
+        }
+      ]
+    },
+    "by_expr": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "three_part_by"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "two_part_by"
+        }
+      ]
+    },
+    "two_part_by": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "reps",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "by_keyword"
+          },
+          {
+            "type": "FIELD",
+            "name": "weight",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          }
+        ]
+      }
+    },
+    "three_part_by": {
+      "type": "PREC",
+      "value": 3,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "sets",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "by_keyword"
+          },
+          {
+            "type": "FIELD",
+            "name": "reps",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "by_keyword"
+          },
+          {
+            "type": "FIELD",
+            "name": "weight",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          }
+        ]
+      }
+    },
+    "multiplier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "full_multiplier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "partial_multiplier"
+        }
+      ]
+    },
+    "partial_multiplier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "sets",
+          "content": {
+            "type": "SYMBOL",
+            "name": "number_literal"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "x_separator"
+        },
+        {
+          "type": "FIELD",
+          "name": "reps",
+          "content": {
+            "type": "SYMBOL",
+            "name": "number_literal"
+          }
+        }
+      ]
+    },
+    "full_multiplier": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "sets",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "x_separator"
+          },
+          {
+            "type": "FIELD",
+            "name": "reps",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "x_separator"
+          },
+          {
+            "type": "FIELD",
+            "name": "weight",
+            "content": {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            }
+          }
+        ]
+      }
+    },
+    "number": {
+      "type": "SYMBOL",
+      "name": "number_literal"
+    },
+    "note": {
+      "type": "PREC",
+      "value": -1,
+      "content": {
+        "type": "REPEAT1",
+        "content": {
+          "type": "SYMBOL",
+          "name": "word"
+        }
+      }
+    },
+    "number_literal": {
+      "type": "PATTERN",
+      "value": "[0-9]+"
+    },
+    "x_separator": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "[xX]"
+        }
+      }
+    },
+    "by_keyword": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "[bB][yY]"
+        }
+      }
+    },
+    "star": {
+      "type": "STRING",
+      "value": "*"
+    },
+    "word": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z]+"
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "[ \\t]"
+    }
+  ],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": [],
+  "reserved": {}
+}
