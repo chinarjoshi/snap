@@ -1,62 +1,55 @@
-SNAP (Semantic Note Auto-Parsers). Domain-specific parsers that turn natural language into structured data. Each parser takes a paragraph of plain text and returns a typed result or nil. All parsing logic is in C via tree-sitter, with thin wrappers for Swift (iOS) and Emacs.
+SNAP (Semantic Note Auto-Parsers). You type plain text. You hit enter twice. If the paragraph has semantic meaning — a workout, a recipe, anything — SNAP parses it into a typed result. If not, nothing happens.
 
-** Workout Parser
+One interface across platforms: tree-sitter grammars compile to C. Swift (iOS) and Emacs call the same parser, get the same results.
 
-Parses natural workout descriptions into structured exercise data.
+#+begin_src swift
+import Snap
 
-*** Example
+let result = snap("squat 3x8x225")
+// .workout(WorkoutResult(exercises: [Exercise(name: "Squat", ...)]))
 
-Input:
-#+begin_example
-squat 8 8 8 225
-bench 3x8 155
-#+end_example
+let result = snap("chicken biryani:\n1 tbsp jeera\n1 bay leaf")
+// .recipe(RecipeResult(title: "Chicken Biryani", sections: [...]))
 
-Output: =WorkoutResult= with exercises and prose lines.
+let result = snap("just a normal paragraph")
+// nil
+#+end_src
 
-*** Syntax
+#+begin_src elisp
+(snap-workout-parse "squat 3x8x225")   ;; => alist or nil
+(snap-recipe-parse "biryani:\n1 cup rice\n1 tsp salt") ;; => alist or nil
+#+end_src
+
+** Parsers
+
+*** Workout
 
 | Notation         | Meaning                        |
 |------------------+--------------------------------|
 | =squat 225=      | 1 set of 8 reps @ 225          |
 | =squat 8 8 225=  | 2 sets of 8 reps @ 225         |
-| =squat 3x8 225=  | 3 sets of 8 reps @ 225         |
 | =squat 3x8x225=  | 3 sets of 8 reps @ 225         |
 | =squat 8 by 225= | 3 sets of 8 reps @ 225         |
 
-** Swift
+*** Recipe
 
-#+begin_src swift
-dependencies: [
-    .package(path: "path/to/snap")
-]
-#+end_src
+#+begin_example
+dish name:
+section name:
+1 tbsp ingredient
+3-5 pieces ingredient
+Free-form instruction text
+#+end_example
 
-#+begin_src swift
-import SnapParsers
-
-let result = parse("squat 3x8 225")
-// result: WorkoutResult?
-#+end_src
-
-** Emacs
-
-#+begin_src bash
-cd emacs && make
-#+end_src
-
-#+begin_src elisp
-(add-to-list 'load-path "/path/to/snap/emacs")
-(require 'snap)
-(snap-workout-parse "squat 3x8 225")
-#+end_src
+Title and sections identified by trailing =:=. Ingredient lines start with a number. Everything else is an instruction.
 
 ** Structure
 
 #+begin_example
-grammars/workout/    # tree-sitter grammar + generated parser
-lib/                 # C domain logic
-vendor/tree-sitter/  # vendored tree-sitter runtime
+grammars/workout/    # tree-sitter grammar
+grammars/recipe/     # tree-sitter grammar
+lib/                 # C parsers (shared by all platforms)
+vendor/tree-sitter/  # tree-sitter runtime (submodule)
 swift/               # Swift wrapper + tests
 emacs/               # Emacs dynamic module
 #+end_example
@@ -64,6 +57,7 @@ emacs/               # Emacs dynamic module
 ** Adding a Parser
 
 1. Write =grammars/<type>/grammar.js=, run =tree-sitter generate=
-2. Write =lib/<type>.c= + =lib/<type>.h= (C domain logic)
-3. Add Swift wrapper in =swift/Sources/SnapParsers/=
-4. Register C function in =emacs/snap.c=
+2. Write =lib/<type>.c= + =lib/<type>.h=
+3. Add Swift wrapper in =swift/Sources/Snap/=
+4. Add =.type(TypeResult)= case to =SnapResult=
+5. Register C function in =emacs/snap.c=
