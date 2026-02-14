@@ -24,24 +24,44 @@ let result = snap("just a normal paragraph")
 
 *** Workout
 
-| Notation         | Meaning                        |
-|------------------+--------------------------------|
-| =squat 225=      | 1 set of 8 reps @ 225          |
-| =squat 8 8 225=  | 2 sets of 8 reps @ 225         |
-| =squat 3x8x225=  | 3 sets of 8 reps @ 225         |
-| =squat 8 by 225= | 3 sets of 8 reps @ 225         |
+| Notation                          | Meaning                                |
+|-----------------------------------+----------------------------------------|
+| =squat 225=                       | 1 set of 8 reps @ 225                  |
+| =squat 8 8 225=                   | 2 sets of 8 reps @ 225                 |
+| =squat 3x8x225=                   | 3 sets of 8 reps @ 225                 |
+| =squat 3x8 225=                   | 3 sets of 8 reps @ 225                 |
+| =squat 8 by 225=                  | 3 sets of 8 reps @ 225                 |
+| =squat 3 by 8 by 225=             | 3 sets of 8 reps @ 225                 |
+| =squat 135 135 135=               | 3 sets of 8 reps @ 135 (default reps)  |
+| =dips 8 8 8=                      | 3 bodyweight sets                      |
+| =squat 8x135 bench 8x95=          | multiple exercises on one line         |
+| =dips* press* 8 135 8 135 8 135=  | superset, alternating sets             |
+| =Bench\n8x135\n8\n8=              | multi-line, weight carries over        |
+| =squat 8 8 135 felt heavy 8=      | inline note attached to second set     |
 
 *** Recipe
 
 #+begin_example
-dish name:
-section name:
-1 tbsp ingredient
-3-5 pieces ingredient
-Free-form instruction text
+chicken biryani:
+chicken marinade:
+1 tbsp jeera
+1 bay leaf
+3-5 pieces cardamon
+8 cloves
+1 tsp turmeric
+rice water:
+2 cups rice
+Less salt in rice BUT STILL SALT IT
+Add some water to the curry
+Cook for 8 min med-high, then 10 mins low
 #+end_example
 
-Title and sections identified by trailing =:=. Ingredient lines start with a number. Everything else is an instruction.
+- First line ending with =:= is the title
+- Subsequent lines ending with =:= start named sections
+- Lines starting with a number are ingredients (quantity + text)
+- =3-5 pieces= is a range quantity
+- Everything else is an instruction or note
+- No sections needed — =smoothie:\n1 banana\n2 cups milk= works fine
 
 ** Structure
 
