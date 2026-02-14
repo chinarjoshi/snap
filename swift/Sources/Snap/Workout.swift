@@ -1,8 +1,9 @@
 import CSnap
 
 public func snap(_ input: String) -> SnapResult? {
-    guard let result = parseWorkout(input) else { return nil }
-    return .workout(result)
+    if let w = parseWorkout(input) { return .workout(w) }
+    if let r = parseRecipe(input) { return .recipe(r) }
+    return nil
 }
 
 func parseWorkout(_ input: String) -> WorkoutResult? {

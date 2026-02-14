@@ -2,6 +2,7 @@ import Foundation
 
 public enum SnapResult: Equatable {
     case workout(WorkoutResult)
+    case recipe(RecipeResult)
 }
 
 public struct WorkoutSet: Equatable {
@@ -36,4 +37,36 @@ public struct WorkoutResult: Equatable {
     }
 
     public var hasExercises: Bool { !exercises.isEmpty }
+}
+
+public struct Ingredient: Equatable {
+    public let quantity: String
+    public let text: String
+
+    public init(quantity: String, text: String) {
+        self.quantity = quantity
+        self.text = text
+    }
+}
+
+public struct RecipeSection: Equatable {
+    public let name: String
+    public var ingredients: [Ingredient]
+    public var instructions: [String]
+
+    public init(name: String, ingredients: [Ingredient] = [], instructions: [String] = []) {
+        self.name = name
+        self.ingredients = ingredients
+        self.instructions = instructions
+    }
+}
+
+public struct RecipeResult: Equatable {
+    public let title: String
+    public var sections: [RecipeSection]
+
+    public init(title: String, sections: [RecipeSection] = []) {
+        self.title = title
+        self.sections = sections
+    }
 }
