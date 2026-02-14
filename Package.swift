@@ -16,6 +16,7 @@ let package = Package(
                 "emacs",
                 "swift",
                 "Makefile",
+                "README.org",
                 "grammars/workout/grammar.js",
                 "grammars/workout/package.json",
                 "grammars/workout/src/grammar.json",
