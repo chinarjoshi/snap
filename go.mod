@@ -1,4 +1,4 @@
-module github.com/chijoshi/asap
+module github.com/chijoshi/snap
 
 go 1.25.5
 

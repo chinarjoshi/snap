@@ -1,4 +1,4 @@
-ASAP (Annoyingly Simple ANTLR Parsers). Domain-specific parsers that turn natural language into structured data. Each parser takes a paragraph of plain text and returns a typed result or nil.
+SNAP (Structured Notes ANTLR Parsers). Domain-specific parsers that turn natural language into structured data. Each parser takes a paragraph of plain text and returns a typed result or nil.
 
 ** Workout Parser
 
@@ -35,9 +35,9 @@ Prose lines (no numbers) are preserved in =proseLines=. Inline notes (words afte
 make build
 
 # Usage
-echo "squat 3x8 225" | ./asap
-./asap < workout.txt
-./asap workout.txt
+echo "squat 3x8 225" | ./snap
+./snap < workout.txt
+./snap workout.txt
 #+end_src
 
 ** Swift Library
@@ -46,7 +46,7 @@ Add to Xcode project (/cough cough/ [[https://github.com/chinarjoshi/omfg][omfg]
 
 #+begin_src swift
 dependencies: [
-    .package(path: "path/to/asap/swift")
+    .package(path: "path/to/snap/swift")
 ]
 #+end_src
 
@@ -64,6 +64,6 @@ let result = parse("squat 3x8 225")
 #+begin_example
 Workoutliner.g4          # ANTLR grammar (workout)
 libs/workout/            # Go parser library
-cmd/asap/                # Go CLI
+cmd/snap/                # Go CLI
 swift/                   # Swift library
 #+end_example

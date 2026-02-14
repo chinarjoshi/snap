@@ -9,9 +9,9 @@ test:
 	cd swift && swift test
 
 build:
-	go build -o asap ./cmd/asap
+	go build -o snap ./cmd/snap
 
 clean:
-	rm -f asap
+	rm -f snap
 	rm -f libs/workout/*.interp libs/workout/*.tokens
 	rm -f swift/Sources/WorkoutParser/Parser/*.interp swift/Sources/WorkoutParser/Parser/*.tokens

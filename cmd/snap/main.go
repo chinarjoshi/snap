@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/chijoshi/asap/libs/workout"
+	"github.com/chijoshi/snap/libs/workout"
 )
 
 func main() {
