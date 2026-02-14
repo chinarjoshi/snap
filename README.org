@@ -1,4 +1,4 @@
-When did the world unanimously concede to buttons as an acceptable way to operate software? When I'm sweaty and tired the last thing I want is to navigate some overengineered dilute AI-slop. So here's some overengineered concentrated AI-slop:
+When did the world unanimously concede to buttons as an acceptable way to operate software? When I'm sweaty and tired the last thing I want is to navigate some dilute overengineered AI-slop. So here's some concentrated overengineered AI-slop:
 
 You type plain text. You hit enter twice. If the paragraph has semantic meaning, like a workout, a recipe, anything, SNAP parses it into a typed result. If not, nothing happens.
 

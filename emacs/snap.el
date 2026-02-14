@@ -1,6 +1,6 @@
 ;;; snap.el --- Semantic Note Auto-Parsers -*- lexical-binding: t; -*-
 
-(require 'snap-core)  ;; loads the dynamic module
+(require 'snap-core nil t)  ;; loaded by use-package :config if missing
 
 (defun snap-workout-result-exercises (result)
   "Extract exercises from a workout parse result."
