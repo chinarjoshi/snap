@@ -494,7 +494,8 @@ static int split_into_exercises(const char *first_name,
     strncpy(current_name, first_name, WORKOUT_NAME_MAX - 1);
     current_name[WORKOUT_NAME_MAX - 1] = '\0';
 
-    TokenResult current_tokens[MAX_TOKEN_RESULTS];
+    TokenResult *current_tokens = (TokenResult *)calloc(MAX_TOKEN_RESULTS, sizeof(TokenResult));
+    if (!current_tokens) return 0;
     int current_token_count = 0;
 
     for (int i = 0; i < token_count; i++) {
@@ -533,6 +534,7 @@ static int split_into_exercises(const char *first_name,
         ex_count++;
     }
 
+    free(current_tokens);
     return ex_count;
 }
 
@@ -709,13 +711,14 @@ int workout_parse(const char *input, WorkoutResult *result) {
             char name[WORKOUT_NAME_MAX];
             extract_exercise_name(line, input, name, sizeof(name));
 
-            /* Collect token results */
-            TokenResult token_results[MAX_TOKEN_RESULTS];
+            /* Collect token results (heap-allocated to avoid stack overflow) */
+            TokenResult *token_results = (TokenResult *)calloc(MAX_TOKEN_RESULTS, sizeof(TokenResult));
+            if (!token_results) { ts_tree_delete(tree); ts_parser_delete(parser); return 0; }
             int tr_count = collect_token_results(line, input, token_results, MAX_TOKEN_RESULTS, 1);
 
             /* Split into multiple exercises if needed */
-            Exercise temp_exercises[WORKOUT_MAX_EXERCISES];
-            memset(temp_exercises, 0, sizeof(temp_exercises));
+            Exercise *temp_exercises = (Exercise *)calloc(WORKOUT_MAX_EXERCISES, sizeof(Exercise));
+            if (!temp_exercises) { free(token_results); ts_tree_delete(tree); ts_parser_delete(parser); return 0; }
             int ex_count = split_into_exercises(name, token_results, tr_count,
                                                 temp_exercises, WORKOUT_MAX_EXERCISES);
 
@@ -745,9 +748,13 @@ int workout_parse(const char *input, WorkoutResult *result) {
                 }
             }
 
+            free(token_results);
+            free(temp_exercises);
+
         } else if (strcmp(line_type, "continuation_line") == 0) {
-            /* Collect token results from continuation line */
-            TokenResult token_results[MAX_TOKEN_RESULTS];
+            /* Collect token results from continuation line (heap-allocated) */
+            TokenResult *token_results = (TokenResult *)calloc(MAX_TOKEN_RESULTS, sizeof(TokenResult));
+            if (!token_results) { ts_tree_delete(tree); ts_parser_delete(parser); return 0; }
             int tr_count = collect_token_results(line, input, token_results, MAX_TOKEN_RESULTS, 0);
 
             if (has_last_exercise) {
@@ -773,6 +780,8 @@ int workout_parse(const char *input, WorkoutResult *result) {
             }
             /* else: no context, ignore */
 
+            free(token_results);
+
         } else if (strcmp(line_type, "superset_line") == 0) {
             FLUSH();
 
@@ -793,13 +802,15 @@ int workout_parse(const char *input, WorkoutResult *result) {
                 }
             }
 
-            /* Collect all token results */
-            TokenResult token_results[MAX_TOKEN_RESULTS];
+            /* Collect all token results (heap-allocated) */
+            TokenResult *token_results = (TokenResult *)calloc(MAX_TOKEN_RESULTS, sizeof(TokenResult));
+            if (!token_results) { ts_tree_delete(tree); ts_parser_delete(parser); return 0; }
             int tr_count = collect_token_results(line, input, token_results, MAX_TOKEN_RESULTS, 1);
 
             /* Build all sets */
             WorkoutSet all_sets[WORKOUT_MAX_SETS];
             int total = build_superset_sets(token_results, tr_count, all_sets, WORKOUT_MAX_SETS);
+            free(token_results);
 
             /* Alternate between two exercises */
             Exercise ex1, ex2;
