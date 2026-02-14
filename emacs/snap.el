@@ -1,4 +1,4 @@
-;;; snap.el --- Structured Note Auto-Parsers -*- lexical-binding: t; -*-
+;;; snap.el --- Semantic Note Auto-Parsers -*- lexical-binding: t; -*-
 
 (require 'snap-core)  ;; loads the dynamic module
 

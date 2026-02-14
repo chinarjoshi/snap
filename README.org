@@ -1,4 +1,4 @@
-SNAP (Structured Note Auto-Parsers). Domain-specific parsers that turn natural language into structured data. Each parser takes a paragraph of plain text and returns a typed result or nil. All parsing logic is in C via tree-sitter, with thin wrappers for Swift (iOS) and Emacs.
+SNAP (Semantic Note Auto-Parsers). Domain-specific parsers that turn natural language into structured data. Each parser takes a paragraph of plain text and returns a typed result or nil. All parsing logic is in C via tree-sitter, with thin wrappers for Swift (iOS) and Emacs.
 
 ** Workout Parser
 
